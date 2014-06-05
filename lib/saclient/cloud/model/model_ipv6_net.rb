@@ -12,18 +12,21 @@ module Saclient
         
         # @private
         # @return [String]
+        protected
         def _api_path()
           "/ipv6net"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key()
           "IPv6Net"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key_m()
           "IPv6Nets"
         end
@@ -32,6 +35,7 @@ module Saclient
         # 
         # @param [Integer] offset オフセット
         # @return [Model_IPv6Net] this
+        public
         def offset(offset)
           _offset(offset)
         end
@@ -40,6 +44,7 @@ module Saclient
         # 
         # @param [Integer] count 上限レコード数
         # @return [Model_IPv6Net] this
+        public
         def limit(count)
           _limit(count)
         end
@@ -47,6 +52,7 @@ module Saclient
         # 次のリクエストのために設定されているステートをすべて破棄します.
         # 
         # @return [Model_IPv6Net] this
+        public
         def reset()
           _reset()
         end
@@ -55,6 +61,7 @@ module Saclient
         # 
         # @param [String] id
         # @return [Saclient::Cloud::Resource::IPv6Net] リソースオブジェクト
+        public
         def get(id)
           _get(id)
         end
@@ -62,6 +69,7 @@ module Saclient
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
         # 
         # @return [Array<Saclient::Cloud::Resource::IPv6Net>] リソースオブジェクトの配列
+        public
         def find()
           _find()
         end

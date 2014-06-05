@@ -2,6 +2,7 @@
 
 require_relative '../client.rb'
 require_relative 'resource.rb'
+require_relative 'icon.rb'
 require_relative 'disk_plan.rb'
 require_relative 'server.rb'
 
@@ -14,78 +15,82 @@ module Saclient
         
         # ID
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_id
         
         # スコープ
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_scope
         
         # 名前
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_name
         
         # 説明
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_description
         
         # タグ
         # 
-        # @private
         # @return [Array<String>]
+        protected
         attr_accessor :m_tags
         
         # アイコン
         # 
-        # @private
         # @return [Icon]
+        protected
         attr_accessor :m_icon
         
         # サイズ[MiB]
         # 
-        # @private
         # @return [Integer]
+        protected
         attr_accessor :m_size_mib
         
         # サービスクラス
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_service_class
         
         # プラン
         # 
-        # @private
         # @return [DiskPlan]
+        protected
         attr_accessor :m_plan
         
         # @private
         # @return [String]
+        protected
         def _api_path()
           "/archive"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key()
           "Archive"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key_m()
           "Archives"
         end
         
         # @private
         # @return [String]
+        public
         def _id()
           get_id()
         end
@@ -93,6 +98,7 @@ module Saclient
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 新しいインスタンスを作成します.
         # 
         # @return [Archive] this
+        public
         def create()
           _create()
         end
@@ -100,6 +106,7 @@ module Saclient
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         # 
         # @return [Archive] this
+        public
         def save()
           _save()
         end
@@ -107,6 +114,7 @@ module Saclient
         # 最新のリソース情報を再取得します.
         # 
         # @return [Archive] this
+        public
         def reload()
           _reload()
         end
@@ -114,13 +122,14 @@ module Saclient
         # @private
         # @param [Saclient::Cloud::Client] client
         # @param [any] r
+        public
         def initialize(client, r)
           super(client)
           api_deserialize(r)
         end
         
-        # @private
         # @return [Integer]
+        protected
         def get_size_gib()
           get_size_mib() >> 10
         end
@@ -128,17 +137,18 @@ module Saclient
         # サイズ[GiB]
         # 
         # @return [Integer]
+        public
         attr_reader :size_gib
         def size_gib() get_size_gib end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_id
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_id()
           @m_id
         end
@@ -146,26 +156,27 @@ module Saclient
         # ID
         # 
         # @return [String]
+        public
         attr_reader :id
         def id() get_id end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_scope
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_scope()
           @m_scope
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [String] v
         # @return [String]
+        protected
         def set_scope(v)
           @m_scope = v
           @n_scope = true
@@ -175,27 +186,28 @@ module Saclient
         # スコープ
         # 
         # @return [String]
+        public
         attr_accessor :scope
         def scope() get_scope end
         def scope=(v) set_scope(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_name
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_name()
           @m_name
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [String] v
         # @return [String]
+        protected
         def set_name(v)
           @m_name = v
           @n_name = true
@@ -205,27 +217,28 @@ module Saclient
         # 名前
         # 
         # @return [String]
+        public
         attr_accessor :name
         def name() get_name end
         def name=(v) set_name(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_description
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_description()
           @m_description
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [String] v
         # @return [String]
+        protected
         def set_description(v)
           @m_description = v
           @n_description = true
@@ -235,27 +248,28 @@ module Saclient
         # 説明
         # 
         # @return [String]
+        public
         attr_accessor :description
         def description() get_description end
         def description=(v) set_description(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_tags
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Array<String>]
+        protected
         def get_tags()
           @m_tags
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [Array<String>] v
         # @return [Array<String>]
+        protected
         def set_tags(v)
           @m_tags = v
           @n_tags = true
@@ -265,27 +279,28 @@ module Saclient
         # タグ
         # 
         # @return [Array<String>]
+        public
         attr_accessor :tags
         def tags() get_tags end
         def tags=(v) set_tags(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_icon
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Icon]
+        protected
         def get_icon()
           @m_icon
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [Icon] v
         # @return [Icon]
+        protected
         def set_icon(v)
           @m_icon = v
           @n_icon = true
@@ -295,18 +310,19 @@ module Saclient
         # アイコン
         # 
         # @return [Icon]
+        public
         attr_accessor :icon
         def icon() get_icon end
         def icon=(v) set_icon(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_size_mib
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Integer]
+        protected
         def get_size_mib()
           @m_size_mib
         end
@@ -314,17 +330,18 @@ module Saclient
         # サイズ[MiB]
         # 
         # @return [Integer]
+        public
         attr_reader :size_mib
         def size_mib() get_size_mib end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_service_class
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_service_class()
           @m_service_class
         end
@@ -332,17 +349,18 @@ module Saclient
         # サービスクラス
         # 
         # @return [String]
+        public
         attr_reader :service_class
         def service_class() get_service_class end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_plan
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [DiskPlan]
+        protected
         def get_plan()
           @m_plan
         end
@@ -350,12 +368,14 @@ module Saclient
         # プラン
         # 
         # @return [DiskPlan]
+        public
         attr_reader :plan
         def plan() get_plan end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
         # @param [any] r
+        public
         def api_deserialize(r)
           @is_incomplete = true
           if (!r.nil? and r.key?("ID".to_sym))
@@ -398,7 +418,7 @@ module Saclient
             @is_incomplete = false
           end
           if (!r.nil? and r.key?("Icon".to_sym))
-            @m_icon = (r["Icon".to_sym]).nil? ? nil : Icon.new(@_client, r["Icon".to_sym])
+            @m_icon = (r["Icon".to_sym]).nil? ? nil : Saclient::Cloud::Resource::Icon.new(@_client, r["Icon".to_sym])
             @n_icon = false
           else
             @is_incomplete = false
@@ -427,6 +447,7 @@ module Saclient
         # 
         # @param [bool] withClean
         # @return [any]
+        public
         def api_serialize(withClean=false)
           ret = {}
           if withClean || @n_id

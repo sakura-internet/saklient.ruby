@@ -1,6 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
 require_relative '../client.rb'
+require_relative 'resource.rb'
 require_relative 'icon.rb'
 require_relative 'iface.rb'
 
@@ -13,72 +14,76 @@ module Saclient
         
         # ID
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_id
         
         # クラス
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_clazz
         
         # 名前
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_name
         
         # 説明
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_description
         
         # タグ
         # 
-        # @private
         # @return [Array<String>]
+        protected
         attr_accessor :m_tags
         
         # アイコン
         # 
-        # @private
         # @return [Icon]
+        protected
         attr_accessor :m_icon
         
         # プラン
         # 
-        # @private
         # @return [Array<Iface>]
+        protected
         attr_accessor :m_ifaces
         
         # サービスクラス
         # 
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_service_class
         
         # @private
         # @return [String]
+        protected
         def _api_path()
           "/appliance"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key()
           "Appliance"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key_m()
           "Appliances"
         end
         
         # @private
         # @return [String]
+        public
         def _id()
           get_id()
         end
@@ -86,6 +91,7 @@ module Saclient
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 新しいインスタンスを作成します.
         # 
         # @return [Appliance] this
+        public
         def create()
           _create()
         end
@@ -93,6 +99,7 @@ module Saclient
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         # 
         # @return [Appliance] this
+        public
         def save()
           _save()
         end
@@ -100,6 +107,7 @@ module Saclient
         # 最新のリソース情報を再取得します.
         # 
         # @return [Appliance] this
+        public
         def reload()
           _reload()
         end
@@ -107,6 +115,7 @@ module Saclient
         # @private
         # @param [Saclient::Cloud::Client] client
         # @param [any] r
+        public
         def initialize(client, r)
           super(client)
           api_deserialize(r)
@@ -115,6 +124,7 @@ module Saclient
         # アプライアンスを起動します.
         # 
         # @return [Appliance]
+        public
         def boot()
           @_client.request("PUT", _api_path() + "/" + Saclient::Cloud::Util.url_encode(_id()) + "/power")
           self
@@ -123,6 +133,7 @@ module Saclient
         # アプライアンスをシャットダウンします.
         # 
         # @return [Appliance]
+        public
         def shutdown()
           @_client.request("DELETE", _api_path() + "/" + Saclient::Cloud::Util.url_encode(_id()) + "/power")
           self
@@ -131,6 +142,7 @@ module Saclient
         # アプライアンスを強制停止します.
         # 
         # @return [Appliance]
+        public
         def stop()
           @_client.request("DELETE", _api_path() + "/" + Saclient::Cloud::Util.url_encode(_id()) + "/power", {Force: true})
           self
@@ -139,19 +151,20 @@ module Saclient
         # アプライアンスを強制再起動します.
         # 
         # @return [Appliance]
+        public
         def reboot()
           @_client.request("PUT", _api_path() + "/" + Saclient::Cloud::Util.url_encode(_id()) + "/reset")
           self
         end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_id
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_id()
           @m_id
         end
@@ -159,26 +172,27 @@ module Saclient
         # ID
         # 
         # @return [String]
+        public
         attr_reader :id
         def id() get_id end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_clazz
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_clazz()
           @m_clazz
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [String] v
         # @return [String]
+        protected
         def set_clazz(v)
           @m_clazz = v
           @n_clazz = true
@@ -188,27 +202,28 @@ module Saclient
         # クラス
         # 
         # @return [String]
+        public
         attr_accessor :clazz
         def clazz() get_clazz end
         def clazz=(v) set_clazz(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_name
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_name()
           @m_name
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [String] v
         # @return [String]
+        protected
         def set_name(v)
           @m_name = v
           @n_name = true
@@ -218,27 +233,28 @@ module Saclient
         # 名前
         # 
         # @return [String]
+        public
         attr_accessor :name
         def name() get_name end
         def name=(v) set_name(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_description
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_description()
           @m_description
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [String] v
         # @return [String]
+        protected
         def set_description(v)
           @m_description = v
           @n_description = true
@@ -248,27 +264,28 @@ module Saclient
         # 説明
         # 
         # @return [String]
+        public
         attr_accessor :description
         def description() get_description end
         def description=(v) set_description(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_tags
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Array<String>]
+        protected
         def get_tags()
           @m_tags
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [Array<String>] v
         # @return [Array<String>]
+        protected
         def set_tags(v)
           @m_tags = v
           @n_tags = true
@@ -278,27 +295,28 @@ module Saclient
         # タグ
         # 
         # @return [Array<String>]
+        public
         attr_accessor :tags
         def tags() get_tags end
         def tags=(v) set_tags(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_icon
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Icon]
+        protected
         def get_icon()
           @m_icon
         end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @param [Icon] v
         # @return [Icon]
+        protected
         def set_icon(v)
           @m_icon = v
           @n_icon = true
@@ -308,18 +326,19 @@ module Saclient
         # アイコン
         # 
         # @return [Icon]
+        public
         attr_accessor :icon
         def icon() get_icon end
         def icon=(v) set_icon(v) end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_ifaces
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Array<Iface>]
+        protected
         def get_ifaces()
           @m_ifaces
         end
@@ -327,17 +346,18 @@ module Saclient
         # プラン
         # 
         # @return [Array<Iface>]
+        public
         attr_reader :ifaces
         def ifaces() get_ifaces end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_service_class
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_service_class()
           @m_service_class
         end
@@ -345,12 +365,14 @@ module Saclient
         # サービスクラス
         # 
         # @return [String]
+        public
         attr_reader :service_class
         def service_class() get_service_class end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
         # @param [any] r
+        public
         def api_deserialize(r)
           @is_incomplete = true
           if (!r.nil? and r.key?("ID".to_sym))
@@ -425,6 +447,7 @@ module Saclient
         # 
         # @param [bool] withClean
         # @return [any]
+        public
         def api_serialize(withClean=false)
           ret = {}
           if withClean || @n_id

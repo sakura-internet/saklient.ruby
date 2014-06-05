@@ -1,6 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
 require_relative '../client.rb'
+require_relative 'resource.rb'
 
 module Saclient
   module Cloud
@@ -9,28 +10,29 @@ module Saclient
       # サーバのプラン情報へのアクセス機能を備えたクラス.
       class ServerPlan < Saclient::Cloud::Resource::Resource
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_id
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_name
         
-        # @private
         # @return [Integer]
+        protected
         attr_accessor :m_cpu
         
-        # @private
         # @return [Integer]
+        protected
         attr_accessor :m_memory_mib
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_service_class
         
         # @private
         # @return [String]
+        public
         def _id()
           get_id()
         end
@@ -38,104 +40,112 @@ module Saclient
         # @private
         # @param [Saclient::Cloud::Client] client
         # @param [any] r
+        public
         def initialize(client, r)
           super(client)
           api_deserialize(r)
         end
         
-        # @private
         # @return [Integer]
+        protected
         def get_memory_gib()
           get_memory_mib() >> 10
         end
         
         # @return [Integer]
+        public
         attr_reader :memory_gib
         def memory_gib() get_memory_gib end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_id
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_id()
           @m_id
         end
         
         # @return [String]
+        public
         attr_reader :id
         def id() get_id end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_name
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_name()
           @m_name
         end
         
         # @return [String]
+        public
         attr_reader :name
         def name() get_name end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_cpu
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Integer]
+        protected
         def get_cpu()
           @m_cpu
         end
         
         # @return [Integer]
+        public
         attr_reader :cpu
         def cpu() get_cpu end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_memory_mib
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Integer]
+        protected
         def get_memory_mib()
           @m_memory_mib
         end
         
         # @return [Integer]
+        public
         attr_reader :memory_mib
         def memory_mib() get_memory_mib end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_service_class
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_service_class()
           @m_service_class
         end
         
         # @return [String]
+        public
         attr_reader :service_class
         def service_class() get_service_class end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
         # @param [any] r
+        public
         def api_deserialize(r)
           @is_incomplete = true
           if (!r.nil? and r.key?("ID".to_sym))
@@ -174,6 +184,7 @@ module Saclient
         # 
         # @param [bool] withClean
         # @return [any]
+        public
         def api_serialize(withClean=false)
           ret = {}
           if withClean || @n_id

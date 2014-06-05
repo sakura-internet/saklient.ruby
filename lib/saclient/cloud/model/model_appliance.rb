@@ -12,18 +12,21 @@ module Saclient
         
         # @private
         # @return [String]
+        protected
         def _api_path()
           "/appliance"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key()
           "Appliance"
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key_m()
           "Appliances"
         end
@@ -32,6 +35,7 @@ module Saclient
         # 
         # @param [Integer] offset オフセット
         # @return [Model_Appliance] this
+        public
         def offset(offset)
           _offset(offset)
         end
@@ -40,6 +44,7 @@ module Saclient
         # 
         # @param [Integer] count 上限レコード数
         # @return [Model_Appliance] this
+        public
         def limit(count)
           _limit(count)
         end
@@ -47,6 +52,7 @@ module Saclient
         # 次のリクエストのために設定されているステートをすべて破棄します.
         # 
         # @return [Model_Appliance] this
+        public
         def reset()
           _reset()
         end
@@ -55,6 +61,7 @@ module Saclient
         # 
         # @param [String] id
         # @return [Saclient::Cloud::Resource::Appliance] リソースオブジェクト
+        public
         def get(id)
           _get(id)
         end
@@ -62,6 +69,7 @@ module Saclient
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
         # 
         # @return [Array<Saclient::Cloud::Resource::Appliance>] リソースオブジェクトの配列
+        public
         def find()
           _find()
         end
@@ -70,6 +78,7 @@ module Saclient
         # 
         # @param [String] name
         # @return [Model_Appliance]
+        public
         def with_name_like(name)
           _filter_by("Name", name)
           self
@@ -79,6 +88,7 @@ module Saclient
         # 
         # @param [String] tag
         # @return [Model_Appliance]
+        public
         def with_tag(tag)
           _filter_by("Tags.Name", tag, true)
           self

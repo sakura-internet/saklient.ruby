@@ -2,6 +2,7 @@
 
 require_relative '../client.rb'
 require_relative '../util.rb'
+require_relative 'resource.rb'
 
 module Saclient
   module Cloud
@@ -10,77 +11,82 @@ module Saclient
       # サーバインスタンスのリソース情報へのアクセス機能や操作機能を備えたクラス.
       class ServerInstance < Saclient::Cloud::Resource::Resource
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_status
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_before_status
         
-        # @private
         # @return [NativeDate]
+        protected
         attr_accessor :m_status_changed_at
         
         # @private
         # @param [Saclient::Cloud::Client] client
         # @param [any] r
+        public
         def initialize(client, r)
           super(client)
           api_deserialize(r)
         end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_status
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_status()
           @m_status
         end
         
         # @return [String]
+        public
         attr_reader :status
         def status() get_status end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_before_status
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_before_status()
           @m_before_status
         end
         
         # @return [String]
+        public
         attr_reader :before_status
         def before_status() get_before_status end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_status_changed_at
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [NativeDate]
+        protected
         def get_status_changed_at()
           @m_status_changed_at
         end
         
         # @return [NativeDate]
+        public
         attr_reader :status_changed_at
         def status_changed_at() get_status_changed_at end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
         # @param [any] r
+        public
         def api_deserialize(r)
           @is_incomplete = true
           if (!r.nil? and r.key?("Status".to_sym))
@@ -107,6 +113,7 @@ module Saclient
         # 
         # @param [bool] withClean
         # @return [any]
+        public
         def api_serialize(withClean=false)
           ret = {}
           if withClean || @n_status

@@ -1,6 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
 require_relative '../client.rb'
+require_relative 'resource.rb'
 
 module Saclient
   module Cloud
@@ -9,24 +10,25 @@ module Saclient
       # IPv6ネットワークのリソース情報へのアクセス機能や操作機能を備えたクラス.
       class IPv6Net < Saclient::Cloud::Resource::Resource
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_id
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_ipv6_prefix
         
-        # @private
         # @return [Integer]
+        protected
         attr_accessor :m_ipv6_prefix_len
         
-        # @private
         # @return [String]
+        protected
         attr_accessor :m_ipv6_prefix_tail
         
         # @private
         # @return [String]
+        public
         def _id()
           get_id()
         end
@@ -34,78 +36,84 @@ module Saclient
         # @private
         # @param [Saclient::Cloud::Client] client
         # @param [any] r
+        public
         def initialize(client, r)
           super(client)
           api_deserialize(r)
         end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_id
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_id()
           @m_id
         end
         
         # @return [String]
+        public
         attr_reader :id
         def id() get_id end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_ipv6_prefix
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_ipv6_prefix()
           @m_ipv6_prefix
         end
         
         # @return [String]
+        public
         attr_reader :ipv6_prefix
         def ipv6_prefix() get_ipv6_prefix end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_ipv6_prefix_len
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [Integer]
+        protected
         def get_ipv6_prefix_len()
           @m_ipv6_prefix_len
         end
         
         # @return [Integer]
+        public
         attr_reader :ipv6_prefix_len
         def ipv6_prefix_len() get_ipv6_prefix_len end
         
-        # @private
         # @return [bool]
+        protected
         attr_accessor :n_ipv6_prefix_tail
         
         # (This method is generated in Translator_default#buildImpl)
         # 
-        # @private
         # @return [String]
+        protected
         def get_ipv6_prefix_tail()
           @m_ipv6_prefix_tail
         end
         
         # @return [String]
+        public
         attr_reader :ipv6_prefix_tail
         def ipv6_prefix_tail() get_ipv6_prefix_tail end
         
         # (This method is generated in Translator_default#buildImpl)
         # 
         # @param [any] r
+        public
         def api_deserialize(r)
           @is_incomplete = true
           if (!r.nil? and r.key?("ID".to_sym))
@@ -138,6 +146,7 @@ module Saclient
         # 
         # @param [bool] withClean
         # @return [any]
+        public
         def api_serialize(withClean=false)
           ret = {}
           if withClean || @n_id

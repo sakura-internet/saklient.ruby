@@ -7,12 +7,13 @@ module Saclient
     
     class Util
       
-      # @param [Array] arguments
       # @param [String] classPath
+      # @param [Array] args
       # @return [any]
-      def self.create_class_instance(classPath, arguments)
+      public
+      def self.create_class_instance(classPath, args)
         ret = nil
-        ret = classPath.split('.').inject(Object){ |obj, name| obj.const_get(name[0].upcase+name[1..-1]) }.new(*arguments)
+        ret = classPath.split('.').inject(Object){ |obj, name| obj.const_get(name[0].upcase+name[1..-1]) }.new(*args)
         if (ret).nil?
           raise Exception.new("Could not create class instance of " + classPath)
         end
@@ -21,6 +22,7 @@ module Saclient
       
       # @param [String] s
       # @return [NativeDate]
+      public
       def self.str2date(s)
         if (s).nil?
           nil
@@ -30,6 +32,7 @@ module Saclient
       
       # @param [NativeDate] d
       # @return [String]
+      public
       def self.date2str(d)
         if (d).nil?
           nil
@@ -39,6 +42,7 @@ module Saclient
       
       # @param [String] s
       # @return [String]
+      public
       def self.url_encode(s)
         URI.encode(s)
       end
@@ -46,6 +50,7 @@ module Saclient
       # @param [U] clazz
       # @param [Array<T>] a
       # @return [Array<U>]
+      public
       def self.cast_array(a, clazz)
         a
       end

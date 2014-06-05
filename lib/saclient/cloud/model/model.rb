@@ -12,79 +12,91 @@ module Saclient
         
         # @private
         # @return [Saclient::Cloud::Client]
+        protected
         attr_accessor :_client
         
-        # @private
         # @return [Saclient::Cloud::Client]
+        protected
         def get_client()
           @_client
         end
         
         # @return [Saclient::Cloud::Client]
+        public
         attr_reader :client
         def client() get_client end
         
         # @private
         # @return [TQueryParams]
+        protected
         attr_accessor :_params
         
-        # @private
         # @return [TQueryParams]
+        protected
         def get_params()
           @_params
         end
         
         # @return [TQueryParams]
+        public
         attr_reader :params
         def params() get_params end
         
         # @private
         # @return [Integer]
+        protected
         attr_accessor :_total
         
-        # @private
         # @return [Integer]
+        protected
         def get_total()
           @_total
         end
         
         # @return [Integer]
+        public
         attr_reader :total
         def total() get_total end
         
         # @private
         # @return [Integer]
+        protected
         attr_accessor :_count
         
-        # @private
         # @return [Integer]
+        protected
         def get_count()
           @_count
         end
         
         # @return [Integer]
+        public
         attr_reader :count
         def count() get_count end
         
         # @private
         # @return [String]
+        protected
         def _api_path()
           nil
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key()
           nil
         end
         
         # @private
         # @return [String]
+        protected
         def _root_key_m()
           nil
         end
         
         # @param [Saclient::Cloud::Client] client
+        public
         def initialize(client)
           @_client = client
           @_params = {}
@@ -97,6 +109,7 @@ module Saclient
         # @private
         # @param [Integer] offset オフセット
         # @return [Model] this
+        protected
         def _offset(offset)
           @_params[:_begin] = offset
           self
@@ -107,6 +120,7 @@ module Saclient
         # @private
         # @param [Integer] count 上限レコード数
         # @return [Model] this
+        protected
         def _limit(count)
           @_params[:_count] = count
           self
@@ -116,6 +130,7 @@ module Saclient
         # 
         # @private
         # @return [Model] this
+        protected
         def _reset()
           @_params = {}
           @_total = 0
@@ -128,6 +143,7 @@ module Saclient
         # @private
         # @param [String] id
         # @return [Saclient::Cloud::Resource::Resource] リソースオブジェクト
+        protected
         def _get(id)
           params = @_params
           _reset()
@@ -142,6 +158,7 @@ module Saclient
         # 
         # @private
         # @return [Array<Saclient::Cloud::Resource::Resource>] リソースオブジェクトの配列
+        protected
         def _find()
           params = @_params
           _reset()
@@ -161,6 +178,7 @@ module Saclient
         # 
         # @private
         # @return [Saclient::Cloud::Resource::Resource] リソースオブジェクト
+        protected
         def _find_one()
           params = @_params
           _reset()
@@ -178,6 +196,7 @@ module Saclient
         # @param [any] value
         # @param [bool] multiple
         # @param [String] key
+        protected
         def _filter_by(key, value, multiple=false)
           if !(!@_params.nil? and @_params.key?("Filter".to_sym))
             @_params["Filter".to_sym] = {}
