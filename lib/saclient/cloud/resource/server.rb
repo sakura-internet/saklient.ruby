@@ -7,6 +7,7 @@ require_relative 'disk.rb'
 require_relative 'iface.rb'
 require_relative 'server_plan.rb'
 require_relative 'server_instance.rb'
+require_relative '../enums/eserver_instance_status.rb'
 
 module Saclient
   module Cloud
@@ -122,6 +123,14 @@ module Saclient
         def initialize(client, r)
           super(client)
           api_deserialize(r)
+        end
+        
+        # サーバが起動しているときtrueを返します.
+        # 
+        # @return [bool]
+        public
+        def is_up()
+          !(@instance[:status]).nil? && Saclient::Cloud::Enums::EServerInstanceStatus.compare(@instance[:status], Saclient::Cloud::Enums::EServerInstanceStatus[:up]) == 0
         end
         
         # サーバを起動します.

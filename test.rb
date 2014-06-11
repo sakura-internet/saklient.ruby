@@ -4,6 +4,12 @@ require 'JSON'
 
 api = Saclient::Cloud::API.authorize(ARGV[0], ARGV[1])
 
+# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.down
+# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("aaa", "down").nil?
+# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("up", "down")
+# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("down", "up")
+
+
 # # 停止中のサーバに接続されているディスクを一覧
 # servers = api.server.with_instance_status("down").find
 # for server in servers
