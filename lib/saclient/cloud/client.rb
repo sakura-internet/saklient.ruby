@@ -16,7 +16,7 @@ module Saclient
           api_root: 'https://secure.sakura.ad.jp/cloud/',
           api_root_suffix: nil
         }
-        setAccessKey token, secret
+        set_access_key token, secret
         self
       end
 
@@ -24,30 +24,30 @@ module Saclient
         $stderr.puts msg
       end
 
-      def cloneInstance
+      def clone_instance
         instance = self.class.new(@config[:token], @config[:secret])
-        instance.setApiRoot @config[:api_root]
-        instance.setApiRootSuffix @config[:api_root_suffix]
+        instance.set_api_root @config[:api_root]
+        instance.set_api_root_suffix @config[:api_root_suffix]
 
         instance
       end
 
-      def setApiRoot(url)
+      def set_api_root(url)
         @config[:api_root] = url
       end
 
-      def setApiRootSuffix(suffix)
+      def set_api_root_suffix(suffix)
         @config[:api_root_suffix] = suffix
       end
 
-      def setAccessKey(token, secret)
+      def set_access_key(token, secret)
         @config[:token]  = token
         @config[:secret] = secret
       end
 
       def request(method, path, params={})
         json = params.to_json
-        
+
         unless path =~ /^http/
           url_root = @config[:api_root]
           if @config[:api_root_suffix]
@@ -59,10 +59,10 @@ module Saclient
           end
           url = url_root + 'api/cloud/1.1' + path
         end
-        
+
         url += '?' + URI.escape(json) if method == 'GET' and !params.empty?
 
-        #println "// APIリクエスト中: #{method} #{path}"
+        #println '// APIリクエスト中: #{method} #{path}'
 
         parsed_url = URI.parse url
 
@@ -91,7 +91,7 @@ module Saclient
         extra_headers.each do |key, value|
           req[key] = value
         end
-        
+
         http = Net::HTTP.new parsed_url.host, parsed_url.scheme == 'https' ? 443 : 80
         # http.set_debug_output($stderr) # for debugging
         if parsed_url.scheme == 'https'
@@ -99,9 +99,8 @@ module Saclient
           # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
         res = http.start {|conn| conn.request req }
-        
-        data = JSON.parse(res.body, {:symbolize_names => true})
-        data
+
+        JSON.parse(res.body, {:symbolize_names => true})
       end
     end
   end

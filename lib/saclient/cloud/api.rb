@@ -11,142 +11,175 @@ require_relative 'model/model_ipv6_net.rb'
 
 module Saclient
   module Cloud
-    
+
     # さくらのクラウドAPIクライアントを利用する際, 最初にアクセスすべきルートとなるクラス.
-    # 
+    #
     # @see API.authorize
     class API
-      
+
+      protected
+
       # @private
       # @return [Client]
-      protected
       attr_accessor :_client
-      
+
       # @return [Client]
-      protected
-      def get_client()
+      def get_client
         @_client
       end
-      
-      # @return [Client]
+
       public
+
+      # @return [Client]
       attr_reader :client
-      def client() get_client end
-      
+
+      def client
+        get_client
+      end
+
+      protected
+
       # @private
       # @return [Product]
-      protected
       attr_accessor :_product
-      
+
       # @return [Product]
-      protected
-      def get_product()
+      def get_product
         @_product
       end
-      
-      # @return [Product]
+
       public
+
+      # @return [Product]
       attr_reader :product
-      def product() get_product end
-      
+
+      def product
+        get_product
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_Icon]
-      protected
       attr_accessor :_icon
-      
+
       # @return [Saclient::Cloud::Model::Model_Icon]
-      protected
-      def get_icon()
+      def get_icon
         @_icon
       end
-      
-      # @return [Saclient::Cloud::Model::Model_Icon]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_Icon]
       attr_reader :icon
-      def icon() get_icon end
-      
+
+      def icon
+        get_icon
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_Server]
-      protected
       attr_accessor :_server
-      
+
       # @return [Saclient::Cloud::Model::Model_Server]
-      protected
-      def get_server()
+      def get_server
         @_server
       end
-      
-      # @return [Saclient::Cloud::Model::Model_Server]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_Server]
       attr_reader :server
-      def server() get_server end
-      
+
+      def server
+        get_server
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_Disk]
-      protected
       attr_accessor :_disk
-      
+
       # @return [Saclient::Cloud::Model::Model_Disk]
-      protected
-      def get_disk()
+      def get_disk
         @_disk
       end
-      
-      # @return [Saclient::Cloud::Model::Model_Disk]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_Disk]
       attr_reader :disk
-      def disk() get_disk end
-      
+
+      def disk
+        get_disk
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_Appliance]
-      protected
       attr_accessor :_appliance
-      
+
       # @return [Saclient::Cloud::Model::Model_Appliance]
-      protected
-      def get_appliance()
+      def get_appliance
         @_appliance
       end
-      
-      # @return [Saclient::Cloud::Model::Model_Appliance]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_Appliance]
       attr_reader :appliance
-      def appliance() get_appliance end
-      
+
+      def appliance
+        get_appliance
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_Archive]
-      protected
       attr_accessor :_archive
-      
+
       # @return [Saclient::Cloud::Model::Model_Archive]
-      protected
-      def get_archive()
+      def get_archive
         @_archive
       end
-      
-      # @return [Saclient::Cloud::Model::Model_Archive]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_Archive]
       attr_reader :archive
-      def archive() get_archive end
-      
+
+      def archive
+        get_archive
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_IPv6Net]
-      protected
       attr_accessor :_ipv6net
-      
+
       # @return [Saclient::Cloud::Model::Model_IPv6Net]
-      protected
-      def get_ipv6net()
+      def get_ipv6net
         @_ipv6net
       end
-      
-      # @return [Saclient::Cloud::Model::Model_IPv6Net]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_IPv6Net]
       attr_reader :ipv6net
-      def ipv6net() get_ipv6net end
-      
-      # @param [Client] client
+
+      def ipv6net
+        get_ipv6net
+      end
+
       protected
+
+      # @param [Client] client
       def initialize(client)
         @_client = client
         @_product = Saclient::Cloud::Product.new(client)
@@ -157,32 +190,32 @@ module Saclient
         @_archive = Saclient::Cloud::Model::Model_Archive.new(client)
         @_ipv6net = Saclient::Cloud::Model::Model_IPv6Net.new(client)
       end
-      
+
+      public
+
       # 指定した認証情報を用いてアクセスを行うAPIクライアントを作成します.
       # 必要な認証情報は, コントロールパネル右上にあるアカウントのプルダウンから
       # 「設定」を選択し, 「APIキー」のページにて作成できます.
-      # 
+      #
       # @param [String] token ACCESS TOKEN
       # @param [String] secret ACCESS TOKEN SECRET
       # @return [API] APIクライアント
-      public
       def self.authorize(token, secret)
         c = Saclient::Cloud::Client.new(token, secret)
         Saclient::Cloud::API.new(c)
       end
-      
+
       # 認証情報を引き継ぎ, 指定したゾーンへのアクセスを行うAPIクライアントを作成します.
-      # 
+      #
       # @param [String] name ゾーン名
       # @return [API] APIクライアント
-      public
       def in_zone(name)
-        ret = Saclient::Cloud::API.new(@_client.clone_instance())
-        ret[:_client].set_api_root_suffix("zone/" + name)
+        ret = Saclient::Cloud::API.new(@_client.clone_instance)
+        ret[:_client].set_api_root_suffix('zone/' + name)
         ret
       end
-      
+
     end
-    
+
   end
 end

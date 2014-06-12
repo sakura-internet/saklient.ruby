@@ -38,17 +38,17 @@ api = Saclient::Cloud::API.authorize(ARGV[0], ARGV[1])
 # end
 
 
-icons = api.icon.with_name_like("cent").limit(1).find
-abort "icon not found" if icons.empty?
+icons = api.icon.with_name_like('cent').limit(1).find
+abort 'icon not found' if icons.empty?
 icon = icons[0]
 printf "icon [%s] %s\n\n", icon.id, icon.name
 
-servers = api.server.with_name_like("cent").find
+servers = api.server.with_name_like('cent').find
 for server in servers
     printf "server [%s] %s\n", server.id, server.name
     server.icon = nil
     server.save
-    printf "  changed icon to nothing: %s\n", (server.icon.nil? ? "OK" : "NG")
+    printf "  changed icon to nothing: %s\n", (server.icon.nil? ? 'OK' : 'NG')
     server.icon = icon
     server.save
     printf "  changed icon to: [%s] %s\n\n", server.icon.id, server.icon.name

@@ -7,66 +7,77 @@ require_relative 'client.rb'
 
 module Saclient
   module Cloud
-    
+
     class Product
-      
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_ServerPlan]
-      protected
       attr_accessor :_server
-      
+
       # @return [Saclient::Cloud::Model::Model_ServerPlan]
-      protected
-      def get_server()
+      def get_server
         @_server
       end
-      
-      # @return [Saclient::Cloud::Model::Model_ServerPlan]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_ServerPlan]
       attr_reader :server
-      def server() get_server end
-      
+
+      def server
+        get_server
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_DiskPlan]
-      protected
       attr_accessor :_disk
-      
+
       # @return [Saclient::Cloud::Model::Model_DiskPlan]
-      protected
-      def get_disk()
+      def get_disk
         @_disk
       end
-      
-      # @return [Saclient::Cloud::Model::Model_DiskPlan]
+
       public
+
+      # @return [Saclient::Cloud::Model::Model_DiskPlan]
       attr_reader :disk
-      def disk() get_disk end
-      
+
+      def disk
+        get_disk
+      end
+
+      protected
+
       # @private
       # @return [Saclient::Cloud::Model::Model_InternetPlan]
-      protected
       attr_accessor :_internet
-      
+
       # @return [Saclient::Cloud::Model::Model_InternetPlan]
-      protected
-      def get_internet()
+      def get_internet
         @_internet
       end
-      
+
+      public
+
       # @return [Saclient::Cloud::Model::Model_InternetPlan]
-      public
       attr_reader :internet
-      def internet() get_internet end
-      
+
+      def internet
+        get_internet
+      end
+
       # @param [Client] client
-      public
       def initialize(client)
         @_server = Saclient::Cloud::Model::Model_ServerPlan.new(client)
         @_disk = Saclient::Cloud::Model::Model_DiskPlan.new(client)
         @_internet = Saclient::Cloud::Model::Model_InternetPlan.new(client)
       end
-      
+
     end
-    
+
   end
 end
