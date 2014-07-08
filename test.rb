@@ -6,10 +6,14 @@ api = Saclient::Cloud::API.authorize(ARGV[0], ARGV[1])
 
 server = api.server.create
 server.name = 'saclient.rb'
+server.description = 'This instance was created by saclient.rb example'
+server.tags = ['saclient-test']
 server.plan = api.product.server.get_by_spec(1, 1)
 server.save
 servers = api.server.with_name_like('saclient.rb').find
 printf "%s\n", servers[0].name
+printf "%s\n", servers[0].description
+printf "%s\n", servers[0].tags[0]
 server.destroy
 
 
