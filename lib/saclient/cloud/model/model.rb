@@ -153,6 +153,14 @@ module Saclient
           self
         end
 
+        #  *
+        #
+        # @private
+        # @return [Saclient::Cloud::Resource::Resource]
+        def _create
+          Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, nil])
+        end
+
         # 指定したIDを持つ唯一のリソースを取得します.
         #
         # @private

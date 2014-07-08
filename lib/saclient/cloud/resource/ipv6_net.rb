@@ -128,31 +128,37 @@ module Saclient
         #
         # @param [any] r
         def api_deserialize(r)
-          @is_incomplete = true
+          @is_new = (r).nil?
+          r = {} if @is_new
+          @is_incomplete = false
           if !r.nil? && r.key?(:ID)
             @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
-            @n_id = false
           else
-            @is_incomplete = false
+            @m_id = nil
+            @is_incomplete = true
           end
+          @n_id = false
           if !r.nil? && r.key?(:IPv6Prefix)
             @m_ipv6_prefix = (r[:IPv6Prefix]).nil? ? nil : r[:IPv6Prefix].to_s
-            @n_ipv6_prefix = false
           else
-            @is_incomplete = false
+            @m_ipv6_prefix = nil
+            @is_incomplete = true
           end
+          @n_ipv6_prefix = false
           if !r.nil? && r.key?(:IPv6PrefixLen)
             @m_ipv6_prefix_len = (r[:IPv6PrefixLen]).nil? ? nil : (r[:IPv6PrefixLen].to_s).to_i(10)
-            @n_ipv6_prefix_len = false
           else
-            @is_incomplete = false
+            @m_ipv6_prefix_len = nil
+            @is_incomplete = true
           end
+          @n_ipv6_prefix_len = false
           if !r.nil? && r.key?(:IPv6PrefixTail)
             @m_ipv6_prefix_tail = (r[:IPv6PrefixTail]).nil? ? nil : r[:IPv6PrefixTail].to_s
-            @n_ipv6_prefix_tail = false
           else
-            @is_incomplete = false
+            @m_ipv6_prefix_tail = nil
+            @is_incomplete = true
           end
+          @n_ipv6_prefix_tail = false
         end
 
         # (This method is generated in Translator_default#buildImpl)

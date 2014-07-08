@@ -6,6 +6,7 @@ require 'saclient/version'
 Gem::Specification.new do |gem|
   gem.name          = 'saclient'
   gem.version       = Saclient::VERSION
+  gem.licenses      = ['MIT']
   gem.authors       = ['townewgokgok']
   gem.email         = ['townewgokgok@gmail.com']
   gem.description   = %q{An easy interface to control your resources on SAKURA Cloud.}

@@ -50,13 +50,6 @@ module Saclient
           get_id
         end
 
-        # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 新しいインスタンスを作成します.
-        #
-        # @return [Iface] this
-        def create
-          _create
-        end
-
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Iface] this
@@ -181,31 +174,37 @@ module Saclient
         #
         # @param [any] r
         def api_deserialize(r)
-          @is_incomplete = true
+          @is_new = (r).nil?
+          r = {} if @is_new
+          @is_incomplete = false
           if !r.nil? && r.key?(:ID)
             @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
-            @n_id = false
           else
-            @is_incomplete = false
+            @m_id = nil
+            @is_incomplete = true
           end
+          @n_id = false
           if !r.nil? && r.key?(:MACAddress)
             @m_mac_address = (r[:MACAddress]).nil? ? nil : r[:MACAddress].to_s
-            @n_mac_address = false
           else
-            @is_incomplete = false
+            @m_mac_address = nil
+            @is_incomplete = true
           end
+          @n_mac_address = false
           if !r.nil? && r.key?(:IPAddress)
             @m_ip_address = (r[:IPAddress]).nil? ? nil : r[:IPAddress].to_s
-            @n_ip_address = false
           else
-            @is_incomplete = false
+            @m_ip_address = nil
+            @is_incomplete = true
           end
+          @n_ip_address = false
           if !r.nil? && r.key?(:UserIPAddress)
             @m_user_ip_address = (r[:UserIPAddress]).nil? ? nil : r[:UserIPAddress].to_s
-            @n_user_ip_address = false
           else
-            @is_incomplete = false
+            @m_user_ip_address = nil
+            @is_incomplete = true
           end
+          @n_user_ip_address = false
         end
 
         # (This method is generated in Translator_default#buildImpl)

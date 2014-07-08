@@ -128,31 +128,37 @@ module Saclient
         #
         # @param [any] r
         def api_deserialize(r)
-          @is_incomplete = true
+          @is_new = (r).nil?
+          r = {} if @is_new
+          @is_incomplete = false
           if !r.nil? && r.key?(:ID)
             @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
-            @n_id = false
           else
-            @is_incomplete = false
+            @m_id = nil
+            @is_incomplete = true
           end
+          @n_id = false
           if !r.nil? && r.key?(:Name)
             @m_name = (r[:Name]).nil? ? nil : r[:Name].to_s
-            @n_name = false
           else
-            @is_incomplete = false
+            @m_name = nil
+            @is_incomplete = true
           end
+          @n_name = false
           if !r.nil? && r.key?(:BandWidthMbps)
             @m_band_width_mbps = (r[:BandWidthMbps]).nil? ? nil : (r[:BandWidthMbps].to_s).to_i(10)
-            @n_band_width_mbps = false
           else
-            @is_incomplete = false
+            @m_band_width_mbps = nil
+            @is_incomplete = true
           end
+          @n_band_width_mbps = false
           if !r.nil? && r.key?(:ServiceClass)
             @m_service_class = (r[:ServiceClass]).nil? ? nil : r[:ServiceClass].to_s
-            @n_service_class = false
           else
-            @is_incomplete = false
+            @m_service_class = nil
+            @is_incomplete = true
           end
+          @n_service_class = false
         end
 
         # (This method is generated in Translator_default#buildImpl)

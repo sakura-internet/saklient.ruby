@@ -47,13 +47,6 @@ module Saclient
           get_id
         end
 
-        # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 新しいインスタンスを作成します.
-        #
-        # @return [Icon] this
-        def create
-          _create
-        end
-
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Icon] this
@@ -143,25 +136,30 @@ module Saclient
         #
         # @param [any] r
         def api_deserialize(r)
-          @is_incomplete = true
+          @is_new = (r).nil?
+          r = {} if @is_new
+          @is_incomplete = false
           if !r.nil? && r.key?(:ID)
             @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
-            @n_id = false
           else
-            @is_incomplete = false
+            @m_id = nil
+            @is_incomplete = true
           end
+          @n_id = false
           if !r.nil? && r.key?(:Name)
             @m_name = (r[:Name]).nil? ? nil : r[:Name].to_s
-            @n_name = false
           else
-            @is_incomplete = false
+            @m_name = nil
+            @is_incomplete = true
           end
+          @n_name = false
           if !r.nil? && r.key?(:URL)
             @m_url = (r[:URL]).nil? ? nil : r[:URL].to_s
-            @n_url = false
           else
-            @is_incomplete = false
+            @m_url = nil
+            @is_incomplete = true
           end
+          @n_url = false
         end
 
         # (This method is generated in Translator_default#buildImpl)

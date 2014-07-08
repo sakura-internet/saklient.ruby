@@ -86,13 +86,6 @@ module Saclient
           get_id
         end
 
-        # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 新しいインスタンスを作成します.
-        #
-        # @return [Archive] this
-        def create
-          _create
-        end
-
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Archive] this
@@ -414,31 +407,37 @@ module Saclient
         #
         # @param [any] r
         def api_deserialize(r)
-          @is_incomplete = true
+          @is_new = (r).nil?
+          r = {} if @is_new
+          @is_incomplete = false
           if !r.nil? && r.key?(:ID)
             @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
-            @n_id = false
           else
-            @is_incomplete = false
+            @m_id = nil
+            @is_incomplete = true
           end
+          @n_id = false
           if !r.nil? && r.key?(:Scope)
             @m_scope = (r[:Scope]).nil? ? nil : r[:Scope].to_s
-            @n_scope = false
           else
-            @is_incomplete = false
+            @m_scope = nil
+            @is_incomplete = true
           end
+          @n_scope = false
           if !r.nil? && r.key?(:Name)
             @m_name = (r[:Name]).nil? ? nil : r[:Name].to_s
-            @n_name = false
           else
-            @is_incomplete = false
+            @m_name = nil
+            @is_incomplete = true
           end
+          @n_name = false
           if !r.nil? && r.key?(:Description)
             @m_description = (r[:Description]).nil? ? nil : r[:Description].to_s
-            @n_description = false
           else
-            @is_incomplete = false
+            @m_description = nil
+            @is_incomplete = true
           end
+          @n_description = false
           if !r.nil? && r.key?(:Tags)
             if (r[:Tags]).nil?
               @m_tags = []
@@ -450,34 +449,39 @@ module Saclient
                 @m_tags << v
               end
             end
-            @n_tags = false
           else
-            @is_incomplete = false
+            @m_tags = nil
+            @is_incomplete = true
           end
+          @n_tags = false
           if !r.nil? && r.key?(:Icon)
             @m_icon = (r[:Icon]).nil? ? nil : Saclient::Cloud::Resource::Icon.new(@_client, r[:Icon])
-            @n_icon = false
           else
-            @is_incomplete = false
+            @m_icon = nil
+            @is_incomplete = true
           end
+          @n_icon = false
           if !r.nil? && r.key?(:SizeMB)
             @m_size_mib = (r[:SizeMB]).nil? ? nil : (r[:SizeMB].to_s).to_i(10)
-            @n_size_mib = false
           else
-            @is_incomplete = false
+            @m_size_mib = nil
+            @is_incomplete = true
           end
+          @n_size_mib = false
           if !r.nil? && r.key?(:ServiceClass)
             @m_service_class = (r[:ServiceClass]).nil? ? nil : r[:ServiceClass].to_s
-            @n_service_class = false
           else
-            @is_incomplete = false
+            @m_service_class = nil
+            @is_incomplete = true
           end
+          @n_service_class = false
           if !r.nil? && r.key?(:Plan)
             @m_plan = (r[:Plan]).nil? ? nil : Saclient::Cloud::Resource::DiskPlan.new(@_client, r[:Plan])
-            @n_plan = false
           else
-            @is_incomplete = false
+            @m_plan = nil
+            @is_incomplete = true
           end
+          @n_plan = false
         end
 
         # (This method is generated in Translator_default#buildImpl)

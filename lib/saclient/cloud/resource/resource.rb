@@ -67,6 +67,9 @@ module Saclient
         protected
 
         # @return [bool]
+        attr_accessor :is_new
+
+        # @return [bool]
         attr_accessor :is_incomplete
 
         public
@@ -92,14 +95,6 @@ module Saclient
           r
         end
 
-        # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 新しいインスタンスを作成します.
-        #
-        # @private
-        # @return [Resource] this
-        def _create
-          self
-        end
-
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @private
@@ -107,10 +102,24 @@ module Saclient
         def _save
           r = {}
           r[_root_key.to_sym] = api_serialize
-          result = @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id), r)
+          method = @is_new ? 'POST' : 'PUT'
+          path = _api_path
+          path += '/' + Saclient::Cloud::Util.url_encode(_id) if !@is_new
+          result = @_client.request(method, path, r)
           api_deserialize(result[_root_key.to_sym])
           self
         end
+
+        public
+
+        # このローカルオブジェクトのIDと対応するリソースの削除リクエストをAPIに送信します.
+        def destroy
+          nil if @is_new
+          path = _api_path + '/' + Saclient::Cloud::Util.url_encode(_id)
+          @_client.request('DELETE', path)
+        end
+
+        protected
 
         # 最新のリソース情報を再取得します.
         #

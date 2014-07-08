@@ -56,6 +56,13 @@ module Saclient
           _reset
         end
 
+        # *
+        #
+        # @return [Saclient::Cloud::Resource::Server]
+        def create
+          _create
+        end
+
         # 指定したIDを持つ唯一のリソースを取得します.
         #
         # @param [String] id

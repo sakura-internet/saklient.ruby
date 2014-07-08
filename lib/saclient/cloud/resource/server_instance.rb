@@ -99,25 +99,30 @@ module Saclient
         #
         # @param [any] r
         def api_deserialize(r)
-          @is_incomplete = true
+          @is_new = (r).nil?
+          r = {} if @is_new
+          @is_incomplete = false
           if !r.nil? && r.key?(:Status)
             @m_status = (r[:Status]).nil? ? nil : r[:Status].to_s
-            @n_status = false
           else
-            @is_incomplete = false
+            @m_status = nil
+            @is_incomplete = true
           end
+          @n_status = false
           if !r.nil? && r.key?(:BeforeStatus)
             @m_before_status = (r[:BeforeStatus]).nil? ? nil : r[:BeforeStatus].to_s
-            @n_before_status = false
           else
-            @is_incomplete = false
+            @m_before_status = nil
+            @is_incomplete = true
           end
+          @n_before_status = false
           if !r.nil? && r.key?(:StatusChangedAt)
             @m_status_changed_at = (r[:StatusChangedAt]).nil? ? nil : r[:StatusChangedAt].to_s
-            @n_status_changed_at = false
           else
-            @is_incomplete = false
+            @m_status_changed_at = nil
+            @is_incomplete = true
           end
+          @n_status_changed_at = false
         end
 
         # (This method is generated in Translator_default#buildImpl)

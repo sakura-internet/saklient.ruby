@@ -4,6 +4,15 @@ require 'JSON'
 
 api = Saclient::Cloud::API.authorize(ARGV[0], ARGV[1])
 
+server = api.server.create
+server.name = 'saclient.rb'
+server.plan = api.product.server.get_by_spec(1, 1)
+server.save
+servers = api.server.with_name_like('saclient.rb').find
+printf "%s\n", servers[0].name
+server.destroy
+
+
 # printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.down
 # printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("aaa", "down").nil?
 # printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("up", "down")
@@ -38,21 +47,21 @@ api = Saclient::Cloud::API.authorize(ARGV[0], ARGV[1])
 # end
 
 
-icons = api.icon.with_name_like('cent').limit(1).find
-abort 'icon not found' if icons.empty?
-icon = icons[0]
-printf "icon [%s] %s\n\n", icon.id, icon.name
-
-servers = api.server.with_name_like('cent').find
-for server in servers
-    printf "server [%s] %s\n", server.id, server.name
-    server.icon = nil
-    server.save
-    printf "  changed icon to nothing: %s\n", (server.icon.nil? ? 'OK' : 'NG')
-    server.icon = icon
-    server.save
-    printf "  changed icon to: [%s] %s\n\n", server.icon.id, server.icon.name
-end
+# icons = api.icon.with_name_like('cent').limit(1).find
+# abort 'icon not found' if icons.empty?
+# icon = icons[0]
+# printf "icon [%s] %s\n\n", icon.id, icon.name
+# 
+# servers = api.server.with_name_like('cent').find
+# for server in servers
+#     printf "server [%s] %s\n", server.id, server.name
+#     server.icon = nil
+#     server.save
+#     printf "  changed icon to nothing: %s\n", (server.icon.nil? ? 'OK' : 'NG')
+#     server.icon = icon
+#     server.save
+#     printf "  changed icon to: [%s] %s\n\n", server.icon.id, server.icon.name
+# end
 
 
 # plan_from = api.product.server.get_by_spec(2, 4)
