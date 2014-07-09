@@ -1,0 +1,16 @@
+# -*- encoding: UTF-8 -*-
+
+module Saclient
+  module Cloud
+    module Errors
+
+      # 要求された操作を行えません. 同一アカウント名で複数のアカウントを作成することはできません.
+      class DuplicateAccountCodeException < Saclient::Cloud::Errors::HttpConflictException
+
+        # (static var) @@default_message = '要求された操作を行えません。同一アカウント名で複数のアカウントを作成することはできません。'
+
+      end
+
+    end
+  end
+end

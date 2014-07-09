@@ -4,6 +4,7 @@ require_relative '../client.rb'
 require_relative 'resource.rb'
 require_relative 'icon.rb'
 require_relative 'iface.rb'
+require_relative '../enums/eappliance_class.rb'
 
 module Saclient
   module Cloud

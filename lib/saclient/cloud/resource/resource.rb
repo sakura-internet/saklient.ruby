@@ -135,7 +135,7 @@ module Saclient
 
         # @return [any]
         def dump
-          api_serialize
+          api_serialize(true)
         end
 
       end

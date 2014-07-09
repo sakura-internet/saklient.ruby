@@ -5,6 +5,7 @@ require_relative 'resource.rb'
 require_relative 'icon.rb'
 require_relative 'disk_plan.rb'
 require_relative 'server.rb'
+require_relative '../enums/edisk_connection.rb'
 
 module Saclient
   module Cloud

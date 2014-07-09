@@ -22,14 +22,6 @@ module Saclient
           'alive'
         end
 
-        def self.suspended
-          'suspended'
-        end
-
-        def self.running
-          'running'
-        end
-
         def self.active
           'active'
         end
@@ -43,6 +35,7 @@ module Saclient
         end
 
         def self.compare(lhs, rhs)
+          return nil if lhs.nil? || rhs.nil?
           l = @@_map[lhs.to_sym]
           r = @@_map[rhs.to_sym]
           return nil if l.nil? || r.nil?
@@ -55,8 +48,6 @@ module Saclient
           cleaning:5,
           starting:10,
           alive:49,
-          suspended:70,
-          running:80,
           active:89,
           migrating:90,
           up:100
