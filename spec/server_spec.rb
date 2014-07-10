@@ -1,24 +1,20 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'minitest/unit'
-require 'minitest/autorun'
 require 'saclient/cloud/api'
 require 'date'
 require 'SecureRandom'
 
-
-
-class TestServer < MiniTest::Unit::TestCase
+describe 'Server' do
   
   
   
-  def setup
+  before do
     
     # load config file
     root = File.dirname(__dir__)
     test_ok_file = root + '/testok';
-    assert File.exist?(test_ok_file), test_ok_file+" is not found (You must 'touch' this file to confirm that the tests can make your expenses)"
+    expect(File).to exist(test_ok_file)
     config_file = root + '/config.sh'
-    assert File.exist?(config_file), test_ok_file+" is not found (Read README.md)"
+    expect(File).to exist(config_file)
     @config = {}
     fh = open(config_file)
     fh.each {|line|
@@ -31,35 +27,35 @@ class TestServer < MiniTest::Unit::TestCase
       end
     }
     fh.close
-    assert @config[:SACLOUD_TOKEN], 'SACLOUD_TOKEN must be defined in config.sh'
-    assert @config[:SACLOUD_SECRET], 'SACLOUD_SECRET must be defined in config.sh'
-    #assert @config[:SACLOUD_ZONE], 'SACLOUD_ZONE must be defined in config.sh'
+    expect(@config[:SACLOUD_TOKEN]).not_to be_empty #'SACLOUD_TOKEN must be defined in config.sh'
+    expect(@config[:SACLOUD_SECRET]).not_to be_empty #'SACLOUD_SECRET must be defined in config.sh'
+    #expect(@config[:SACLOUD_ZONE]).not_to be_empty #'SACLOUD_ZONE must be defined in config.sh'
     
     # authorize
     @api = Saclient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
     @api = @api.inZone(@config[:SACLOUD_ZONE]) if @config[:SACLOUD_ZONE]
-    assert_instance_of Saclient::Cloud::API, @api
+    expect(@api).to be_an_instance_of Saclient::Cloud::API
     
   end
   
   
   
-  def test_find
+  it 'should be found' do
     
     servers = @api.server.find
-    assert_instance_of Array, servers
-    assert 1 <= servers.length
+    expect(servers).to be_an_instance_of Array
+    expect(servers.length).to be >= 1
     
     servers.each {|server|
-      assert_instance_of Saclient::Cloud::Resource::Server, server
-      assert_instance_of Saclient::Cloud::Resource::ServerPlan, server.plan
-      assert 1 <= server.plan.cpu
-      assert 1 <= server.plan.memory_mib
-      assert 1 <= server.plan.memory_gib
-      assert server.plan.memory_mib / server.plan.memory_gib == 1024
-      assert_instance_of Array, server.tags
+      expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
+      expect(server.plan).to be_an_instance_of Saclient::Cloud::Resource::ServerPlan
+      expect(server.plan.cpu).to be >= 1
+      expect(server.plan.memory_mib).to be >= 1
+      expect(server.plan.memory_gib).to be >= 1
+      expect(server.plan.memory_mib / server.plan.memory_gib).to eq 1024
+      expect(server.tags).to be_an_instance_of Array
       server.tags.each {|tag|
-        assert_instance_of String, tag
+        expect(tag).to be_an_instance_of String
       }
     }
     
@@ -67,7 +63,7 @@ class TestServer < MiniTest::Unit::TestCase
   
   
   
-  def test_create
+  it 'should be created, booted and stopped' do
     name = '!ruby_minitest-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
     description = 'This instance was created by saclient.ruby minitest'
     tag = 'saclient-test'
@@ -75,21 +71,21 @@ class TestServer < MiniTest::Unit::TestCase
     mem = 2
     #
     server = @api.server.create
-    assert_instance_of Saclient::Cloud::Resource::Server, server
+    expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
     server.name = name
     server.description = description
     server.tags = [tag]
     server.plan = @api.product.server.get_by_spec(cpu, mem)
     server.save
     #
-    assert 1 <= server.id.to_i
-    assert server.name == name
-    assert server.description == description
-    assert_instance_of Array, server.tags
-    assert server.tags.length == 1
-    assert server.tags[0] == tag
-    assert server.plan.cpu == cpu
-    assert server.plan.memory_gib == mem
+    expect(server.id.to_i).to be >= 1
+    expect(server.name).to eq name
+    expect(server.description).to eq description
+    expect(server.tags).to be_an_instance_of Array
+    expect(server.tags.length).to eq 1
+    expect(server.tags[0]).to eq tag
+    expect(server.plan.cpu).to eq cpu
+    expect(server.plan.memory_gib).to eq mem
     
     # test_boot
     server.boot
@@ -111,7 +107,7 @@ class TestServer < MiniTest::Unit::TestCase
   
   
   
-  def teardown
+  after do
     @config = nil
     @api = nil
   end

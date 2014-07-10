@@ -19,9 +19,6 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
   
-  gem.add_development_dependency 'minitest', "~> 2.6.1"
-  gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'mocha'
-  gem.add_development_dependency 'fakeweb'
+  gem.add_development_dependency 'rspec'
   
 end
