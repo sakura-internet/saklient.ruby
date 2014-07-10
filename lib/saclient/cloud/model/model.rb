@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative '../resource/resource.rb'
+require_relative '../client'
+require_relative '../resource/resource'
 
 module Saclient
   module Cloud
@@ -18,7 +18,7 @@ module Saclient
 
         # @return [Saclient::Cloud::Client]
         def get_client
-          @_client
+          return @_client
         end
 
         public
@@ -38,7 +38,7 @@ module Saclient
 
         # @return [TQueryParams]
         def get_params
-          @_params
+          return @_params
         end
 
         public
@@ -58,7 +58,7 @@ module Saclient
 
         # @return [Integer]
         def get_total
-          @_total
+          return @_total
         end
 
         public
@@ -78,7 +78,7 @@ module Saclient
 
         # @return [Integer]
         def get_count
-          @_count
+          return @_count
         end
 
         public
@@ -95,19 +95,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          nil
+          return nil
         end
 
         # @private
         # @return [String]
         def _root_key
-          nil
+          return nil
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          nil
+          return nil
         end
 
         public
@@ -129,7 +129,7 @@ module Saclient
         # @return [Model] this
         def _offset(offset)
           @_params[:_begin] = offset
-          self
+          return self
         end
 
         # 次に取得するリストの上限レコード数を指定します.
@@ -139,7 +139,7 @@ module Saclient
         # @return [Model] this
         def _limit(count)
           @_params[:_count] = count
-          self
+          return self
         end
 
         # 次のリクエストのために設定されているステートをすべて破棄します.
@@ -150,7 +150,7 @@ module Saclient
           @_params = {}
           @_total = 0
           @_count = 0
-          self
+          return self
         end
 
         #  *
@@ -158,7 +158,7 @@ module Saclient
         # @private
         # @return [Saclient::Cloud::Resource::Resource]
         def _create
-          Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, nil])
+          return Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, nil])
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.
@@ -173,7 +173,7 @@ module Saclient
           @_total = 1
           @_count = 1
           record = result[_root_key.to_sym]
-          Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, record])
+          return Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, record])
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
@@ -192,7 +192,7 @@ module Saclient
             i = Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, record])
             data << i
           end
-          data
+          return data
         end
 
         # リソースの検索リクエストを実行し, 唯一のリソースを取得します.
@@ -205,9 +205,9 @@ module Saclient
           result = @_client.request('GET', _api_path, params)
           @_total = result[:Total]
           @_count = result[:Count]
-          nil if @_total == 0
+          return nil if @_total == 0
           records = result[_root_key_m.to_sym]
-          Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, records[0]])
+          return Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, records[0]])
         end
 
         # @private

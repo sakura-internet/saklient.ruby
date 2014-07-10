@@ -1,11 +1,11 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
-require_relative 'icon.rb'
-require_relative 'disk_plan.rb'
-require_relative 'server.rb'
-require_relative '../enums/escope.rb'
+require_relative '../client'
+require_relative 'resource'
+require_relative 'icon'
+require_relative 'disk_plan'
+require_relative 'server'
+require_relative '../enums/escope'
 
 module Saclient
   module Cloud
@@ -64,19 +64,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          '/archive'
+          return '/archive'
         end
 
         # @private
         # @return [String]
         def _root_key
-          'Archive'
+          return 'Archive'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          'Archives'
+          return 'Archives'
         end
 
         public
@@ -84,21 +84,21 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Archive] this
         def save
-          _save
+          return _save
         end
 
         # 最新のリソース情報を再取得します.
         #
         # @return [Archive] this
         def reload
-          _reload
+          return _reload
         end
 
         # @private
@@ -113,7 +113,7 @@ module Saclient
 
         # @return [Integer]
         def get_size_gib
-          get_size_mib >> 10
+          return get_size_mib >> 10
         end
 
         public
@@ -136,7 +136,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -159,7 +159,7 @@ module Saclient
         #
         # @return [String]
         def get_scope
-          @m_scope
+          return @m_scope
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -169,7 +169,7 @@ module Saclient
         def set_scope(v)
           @m_scope = v
           @n_scope = true
-          @m_scope
+          return @m_scope
         end
 
         public
@@ -196,7 +196,7 @@ module Saclient
         #
         # @return [String]
         def get_name
-          @m_name
+          return @m_name
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -206,7 +206,7 @@ module Saclient
         def set_name(v)
           @m_name = v
           @n_name = true
-          @m_name
+          return @m_name
         end
 
         public
@@ -233,7 +233,7 @@ module Saclient
         #
         # @return [String]
         def get_description
-          @m_description
+          return @m_description
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -243,7 +243,7 @@ module Saclient
         def set_description(v)
           @m_description = v
           @n_description = true
-          @m_description
+          return @m_description
         end
 
         public
@@ -270,7 +270,7 @@ module Saclient
         #
         # @return [Array<String>]
         def get_tags
-          @m_tags
+          return @m_tags
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -280,7 +280,7 @@ module Saclient
         def set_tags(v)
           @m_tags = v
           @n_tags = true
-          @m_tags
+          return @m_tags
         end
 
         public
@@ -307,7 +307,7 @@ module Saclient
         #
         # @return [Icon]
         def get_icon
-          @m_icon
+          return @m_icon
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -317,7 +317,7 @@ module Saclient
         def set_icon(v)
           @m_icon = v
           @n_icon = true
-          @m_icon
+          return @m_icon
         end
 
         public
@@ -344,7 +344,7 @@ module Saclient
         #
         # @return [Integer]
         def get_size_mib
-          @m_size_mib
+          return @m_size_mib
         end
 
         public
@@ -367,7 +367,7 @@ module Saclient
         #
         # @return [String]
         def get_service_class
-          @m_service_class
+          return @m_service_class
         end
 
         public
@@ -390,7 +390,7 @@ module Saclient
         #
         # @return [DiskPlan]
         def get_plan
-          @m_plan
+          return @m_plan
         end
 
         public
@@ -507,7 +507,7 @@ module Saclient
           ret[:SizeMB] = @m_size_mib if withClean || @n_size_mib
           ret[:ServiceClass] = @m_service_class if withClean || @n_service_class
           ret[:Plan] = withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id) if withClean || @n_plan
-          ret
+          return ret
         end
 
       end

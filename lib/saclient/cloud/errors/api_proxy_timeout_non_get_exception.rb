@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative 'http_gateway_timeout_exception'
+
 module Saclient
   module Cloud
     module Errors

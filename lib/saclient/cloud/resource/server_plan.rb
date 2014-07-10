@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
+require_relative '../client'
+require_relative 'resource'
 
 module Saclient
   module Cloud
@@ -32,7 +32,7 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # @private
@@ -47,7 +47,7 @@ module Saclient
 
         # @return [Integer]
         def get_memory_gib
-          get_memory_mib >> 10
+          return get_memory_mib >> 10
         end
 
         public
@@ -68,7 +68,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -89,7 +89,7 @@ module Saclient
         #
         # @return [String]
         def get_name
-          @m_name
+          return @m_name
         end
 
         public
@@ -110,7 +110,7 @@ module Saclient
         #
         # @return [Integer]
         def get_cpu
-          @m_cpu
+          return @m_cpu
         end
 
         public
@@ -131,7 +131,7 @@ module Saclient
         #
         # @return [Integer]
         def get_memory_mib
-          @m_memory_mib
+          return @m_memory_mib
         end
 
         public
@@ -152,7 +152,7 @@ module Saclient
         #
         # @return [String]
         def get_service_class
-          @m_service_class
+          return @m_service_class
         end
 
         public
@@ -219,7 +219,7 @@ module Saclient
           ret[:CPU] = @m_cpu if withClean || @n_cpu
           ret[:MemoryMB] = @m_memory_mib if withClean || @n_memory_mib
           ret[:ServiceClass] = @m_service_class if withClean || @n_service_class
-          ret
+          return ret
         end
 
       end

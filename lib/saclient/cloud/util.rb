@@ -17,34 +17,34 @@ module Saclient
           ret = apath.inject(Object) { |obj, name| obj.const_get(name[0].upcase + name[1..-1]) }.new(*args)
         end
         raise Exception.new('Could not create class instance of ' + classPath) if (ret).nil?
-        ret
+        return ret
       end
 
       # @param [String] s
       # @return [NativeDate]
       def self.str2date(s)
-        nil if (s).nil?
-        DateTime.parse(s)
+        return nil if (s).nil?
+        return DateTime.parse(s)
       end
 
       # @param [NativeDate] d
       # @return [String]
       def self.date2str(d)
-        nil if (d).nil?
-        d.to_s
+        return nil if (d).nil?
+        return d.to_s
       end
 
       # @param [String] s
       # @return [String]
       def self.url_encode(s)
-        URI.encode(s)
+        return URI.encode(s)
       end
 
       # @param [U] clazz
       # @param [Array<T>] a
       # @return [Array<U>]
       def self.cast_array(a, clazz)
-        a
+        return a
       end
 
     end

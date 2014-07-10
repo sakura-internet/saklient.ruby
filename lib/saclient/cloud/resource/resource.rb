@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative '../util.rb'
+require_relative '../client'
+require_relative '../util'
 
 module Saclient
   module Cloud
@@ -18,7 +18,7 @@ module Saclient
 
         # @return [Saclient::Cloud::Client]
         def get_client
-          @_client
+          return @_client
         end
 
         public
@@ -35,19 +35,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          nil
+          return nil
         end
 
         # @private
         # @return [String]
         def _root_key
-          nil
+          return nil
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          nil
+          return nil
         end
 
         public
@@ -55,7 +55,7 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          nil
+          return nil
         end
 
         # @private
@@ -81,7 +81,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize(withClean = false)
-          nil
+          return nil
         end
 
         protected
@@ -89,10 +89,10 @@ module Saclient
         # @return [any]
         def api_serialize_id
           id = _id
-          nil if (id).nil?
+          return nil if (id).nil?
           r = {}
           r[:ID] = id
-          r
+          return r
         end
 
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
@@ -107,14 +107,14 @@ module Saclient
           path += '/' + Saclient::Cloud::Util.url_encode(_id) if !@is_new
           result = @_client.request(method, path, r)
           api_deserialize(result[_root_key.to_sym])
-          self
+          return self
         end
 
         public
 
         # このローカルオブジェクトのIDと対応するリソースの削除リクエストをAPIに送信します.
         def destroy
-          nil if @is_new
+          return nil if @is_new
           path = _api_path + '/' + Saclient::Cloud::Util.url_encode(_id)
           @_client.request('DELETE', path)
         end
@@ -128,14 +128,14 @@ module Saclient
         def _reload
           result = @_client.request('GET', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id))
           api_deserialize(result[_root_key.to_sym])
-          self
+          return self
         end
 
         public
 
         # @return [any]
         def dump
-          api_serialize(true)
+          return api_serialize(true)
         end
 
       end

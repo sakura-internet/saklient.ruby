@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
+require_relative '../client'
+require_relative 'resource'
 
 module Saclient
   module Cloud
@@ -29,7 +29,7 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # @private
@@ -49,7 +49,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -70,7 +70,7 @@ module Saclient
         #
         # @return [String]
         def get_ipv6_prefix
-          @m_ipv6_prefix
+          return @m_ipv6_prefix
         end
 
         public
@@ -91,7 +91,7 @@ module Saclient
         #
         # @return [Integer]
         def get_ipv6_prefix_len
-          @m_ipv6_prefix_len
+          return @m_ipv6_prefix_len
         end
 
         public
@@ -112,7 +112,7 @@ module Saclient
         #
         # @return [String]
         def get_ipv6_prefix_tail
-          @m_ipv6_prefix_tail
+          return @m_ipv6_prefix_tail
         end
 
         public
@@ -171,7 +171,7 @@ module Saclient
           ret[:IPv6Prefix] = @m_ipv6_prefix if withClean || @n_ipv6_prefix
           ret[:IPv6PrefixLen] = @m_ipv6_prefix_len if withClean || @n_ipv6_prefix_len
           ret[:IPv6PrefixTail] = @m_ipv6_prefix_tail if withClean || @n_ipv6_prefix_tail
-          ret
+          return ret
         end
 
       end

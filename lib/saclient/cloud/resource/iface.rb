@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
+require_relative '../client'
+require_relative 'resource'
 
 module Saclient
   module Cloud
@@ -27,19 +27,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          '/interface'
+          return '/interface'
         end
 
         # @private
         # @return [String]
         def _root_key
-          'Interface'
+          return 'Interface'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          'Interfaces'
+          return 'Interfaces'
         end
 
         public
@@ -47,21 +47,21 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Iface] this
         def save
-          _save
+          return _save
         end
 
         # 最新のリソース情報を再取得します.
         #
         # @return [Iface] this
         def reload
-          _reload
+          return _reload
         end
 
         # @private
@@ -81,7 +81,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -102,7 +102,7 @@ module Saclient
         #
         # @return [String]
         def get_mac_address
-          @m_mac_address
+          return @m_mac_address
         end
 
         public
@@ -123,7 +123,7 @@ module Saclient
         #
         # @return [String]
         def get_ip_address
-          @m_ip_address
+          return @m_ip_address
         end
 
         public
@@ -144,7 +144,7 @@ module Saclient
         #
         # @return [String]
         def get_user_ip_address
-          @m_user_ip_address
+          return @m_user_ip_address
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -154,7 +154,7 @@ module Saclient
         def set_user_ip_address(v)
           @m_user_ip_address = v
           @n_user_ip_address = true
-          @m_user_ip_address
+          return @m_user_ip_address
         end
 
         public
@@ -217,7 +217,7 @@ module Saclient
           ret[:MACAddress] = @m_mac_address if withClean || @n_mac_address
           ret[:IPAddress] = @m_ip_address if withClean || @n_ip_address
           ret[:UserIPAddress] = @m_user_ip_address if withClean || @n_user_ip_address
-          ret
+          return ret
         end
 
       end

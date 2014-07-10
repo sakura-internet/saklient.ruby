@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative 'model.rb'
-require_relative '../resource/server_plan.rb'
+require_relative 'model'
+require_relative '../resource/server_plan'
 
 module Saclient
   module Cloud
@@ -15,19 +15,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          '/product/server'
+          return '/product/server'
         end
 
         # @private
         # @return [String]
         def _root_key
-          'ServerPlan'
+          return 'ServerPlan'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          'ServerPlans'
+          return 'ServerPlans'
         end
 
         public
@@ -37,7 +37,7 @@ module Saclient
         # @param [Integer] offset オフセット
         # @return [Model_ServerPlan] this
         def offset(offset)
-          _offset(offset)
+          return _offset(offset)
         end
 
         # 次に取得するリストの上限レコード数を指定します.
@@ -45,14 +45,14 @@ module Saclient
         # @param [Integer] count 上限レコード数
         # @return [Model_ServerPlan] this
         def limit(count)
-          _limit(count)
+          return _limit(count)
         end
 
         # 次のリクエストのために設定されているステートをすべて破棄します.
         #
         # @return [Model_ServerPlan] this
         def reset
-          _reset
+          return _reset
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.
@@ -60,14 +60,14 @@ module Saclient
         # @param [String] id
         # @return [Saclient::Cloud::Resource::ServerPlan] リソースオブジェクト
         def get(id)
-          _get(id)
+          return _get(id)
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
         #
         # @return [Array<Saclient::Cloud::Resource::ServerPlan>] リソースオブジェクトの配列
         def find
-          _find
+          return _find
         end
 
         # 指定したスペックのプランを取得します.
@@ -78,7 +78,7 @@ module Saclient
         def get_by_spec(cores, memoryGib)
           _filter_by('CPU', cores, true)
           _filter_by('MemoryMB', memoryGib * 1024, true)
-          _find_one
+          return _find_one
         end
 
       end

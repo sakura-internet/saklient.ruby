@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
+require_relative '../client'
+require_relative 'resource'
 
 module Saclient
   module Cloud
@@ -26,7 +26,7 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # @private
@@ -46,7 +46,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -67,7 +67,7 @@ module Saclient
         #
         # @return [String]
         def get_name
-          @m_name
+          return @m_name
         end
 
         public
@@ -88,7 +88,7 @@ module Saclient
         #
         # @return [String]
         def get_storage_class
-          @m_storage_class
+          return @m_storage_class
         end
 
         public
@@ -139,7 +139,7 @@ module Saclient
           ret[:ID] = @m_id if withClean || @n_id
           ret[:Name] = @m_name if withClean || @n_name
           ret[:StorageClass] = @m_storage_class if withClean || @n_storage_class
-          ret
+          return ret
         end
 
       end

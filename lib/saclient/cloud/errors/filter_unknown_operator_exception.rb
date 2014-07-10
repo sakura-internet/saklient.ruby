@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative 'http_bad_request_exception'
+
 module Saclient
   module Cloud
     module Errors

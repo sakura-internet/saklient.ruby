@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
+require_relative '../client'
+require_relative 'resource'
 
 module Saclient
   module Cloud
@@ -24,19 +24,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          '/icon'
+          return '/icon'
         end
 
         # @private
         # @return [String]
         def _root_key
-          'Icon'
+          return 'Icon'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          'Icons'
+          return 'Icons'
         end
 
         public
@@ -44,21 +44,21 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Icon] this
         def save
-          _save
+          return _save
         end
 
         # 最新のリソース情報を再取得します.
         #
         # @return [Icon] this
         def reload
-          _reload
+          return _reload
         end
 
         # @private
@@ -78,7 +78,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -99,7 +99,7 @@ module Saclient
         #
         # @return [String]
         def get_name
-          @m_name
+          return @m_name
         end
 
         public
@@ -120,7 +120,7 @@ module Saclient
         #
         # @return [String]
         def get_url
-          @m_url
+          return @m_url
         end
 
         public
@@ -171,7 +171,7 @@ module Saclient
           ret[:ID] = @m_id if withClean || @n_id
           ret[:Name] = @m_name if withClean || @n_name
           ret[:URL] = @m_url if withClean || @n_url
-          ret
+          return ret
         end
 
       end

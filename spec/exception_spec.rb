@@ -1,0 +1,20 @@
+$: << File.dirname(__dir__) + '/lib'
+require 'saclient/cloud/errors/exception_factory'
+
+ExceptionFactory = Saclient::Cloud::Errors::ExceptionFactory
+HttpNotFoundException = Saclient::Cloud::Errors::HttpNotFoundException
+ServerPowerMustBeUpException = Saclient::Cloud::Errors::ServerPowerMustBeUpException
+
+describe 'Exception' do
+  
+  it 'should be created' do
+    
+    x = ExceptionFactory.create(404)
+    expect(x).to be_an_instance_of HttpNotFoundException
+    
+    x = ExceptionFactory.create(409, 'server_power_must_be_up')
+    expect(x).to be_an_instance_of ServerPowerMustBeUpException
+    
+ 	end
+  
+end

@@ -1,10 +1,10 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
-require_relative 'icon.rb'
-require_relative 'iface.rb'
-require_relative '../enums/eappliance_class.rb'
+require_relative '../client'
+require_relative 'resource'
+require_relative 'icon'
+require_relative 'iface'
+require_relative '../enums/eappliance_class'
 
 module Saclient
   module Cloud
@@ -58,19 +58,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          '/appliance'
+          return '/appliance'
         end
 
         # @private
         # @return [String]
         def _root_key
-          'Appliance'
+          return 'Appliance'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          'Appliances'
+          return 'Appliances'
         end
 
         public
@@ -78,21 +78,21 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Appliance] this
         def save
-          _save
+          return _save
         end
 
         # 最新のリソース情報を再取得します.
         #
         # @return [Appliance] this
         def reload
-          _reload
+          return _reload
         end
 
         # @private
@@ -108,7 +108,7 @@ module Saclient
         # @return [Appliance]
         def boot
           @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
-          self
+          return self
         end
 
         # アプライアンスをシャットダウンします.
@@ -116,7 +116,7 @@ module Saclient
         # @return [Appliance]
         def shutdown
           @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
-          self
+          return self
         end
 
         # アプライアンスを強制停止します.
@@ -124,7 +124,7 @@ module Saclient
         # @return [Appliance]
         def stop
           @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power', { Force: true })
-          self
+          return self
         end
 
         # アプライアンスを強制再起動します.
@@ -132,7 +132,7 @@ module Saclient
         # @return [Appliance]
         def reboot
           @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/reset')
-          self
+          return self
         end
 
         protected
@@ -144,7 +144,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -167,7 +167,7 @@ module Saclient
         #
         # @return [String]
         def get_clazz
-          @m_clazz
+          return @m_clazz
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -177,7 +177,7 @@ module Saclient
         def set_clazz(v)
           @m_clazz = v
           @n_clazz = true
-          @m_clazz
+          return @m_clazz
         end
 
         public
@@ -204,7 +204,7 @@ module Saclient
         #
         # @return [String]
         def get_name
-          @m_name
+          return @m_name
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -214,7 +214,7 @@ module Saclient
         def set_name(v)
           @m_name = v
           @n_name = true
-          @m_name
+          return @m_name
         end
 
         public
@@ -241,7 +241,7 @@ module Saclient
         #
         # @return [String]
         def get_description
-          @m_description
+          return @m_description
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -251,7 +251,7 @@ module Saclient
         def set_description(v)
           @m_description = v
           @n_description = true
-          @m_description
+          return @m_description
         end
 
         public
@@ -278,7 +278,7 @@ module Saclient
         #
         # @return [Array<String>]
         def get_tags
-          @m_tags
+          return @m_tags
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -288,7 +288,7 @@ module Saclient
         def set_tags(v)
           @m_tags = v
           @n_tags = true
-          @m_tags
+          return @m_tags
         end
 
         public
@@ -315,7 +315,7 @@ module Saclient
         #
         # @return [Icon]
         def get_icon
-          @m_icon
+          return @m_icon
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -325,7 +325,7 @@ module Saclient
         def set_icon(v)
           @m_icon = v
           @n_icon = true
-          @m_icon
+          return @m_icon
         end
 
         public
@@ -352,7 +352,7 @@ module Saclient
         #
         # @return [Array<Iface>]
         def get_ifaces
-          @m_ifaces
+          return @m_ifaces
         end
 
         public
@@ -375,7 +375,7 @@ module Saclient
         #
         # @return [String]
         def get_service_class
-          @m_service_class
+          return @m_service_class
         end
 
         public
@@ -500,7 +500,7 @@ module Saclient
             end
           end
           ret[:ServiceClass] = @m_service_class if withClean || @n_service_class
-          ret
+          return ret
         end
 
       end

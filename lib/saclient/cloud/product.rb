@@ -1,9 +1,9 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative 'model/model_server_plan.rb'
-require_relative 'model/model_disk_plan.rb'
-require_relative 'model/model_internet_plan.rb'
-require_relative 'client.rb'
+require_relative 'model/model_server_plan'
+require_relative 'model/model_disk_plan'
+require_relative 'model/model_internet_plan'
+require_relative 'client'
 
 module Saclient
   module Cloud
@@ -18,7 +18,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_ServerPlan]
       def get_server
-        @_server
+        return @_server
       end
 
       public
@@ -38,7 +38,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_DiskPlan]
       def get_disk
-        @_disk
+        return @_disk
       end
 
       public
@@ -58,7 +58,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_InternetPlan]
       def get_internet
-        @_internet
+        return @_internet
       end
 
       public

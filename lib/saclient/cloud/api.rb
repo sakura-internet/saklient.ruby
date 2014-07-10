@@ -1,13 +1,13 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative 'client.rb'
-require_relative 'product.rb'
-require_relative 'model/model_icon.rb'
-require_relative 'model/model_server.rb'
-require_relative 'model/model_disk.rb'
-require_relative 'model/model_appliance.rb'
-require_relative 'model/model_archive.rb'
-require_relative 'model/model_ipv6_net.rb'
+require_relative 'client'
+require_relative 'product'
+require_relative 'model/model_icon'
+require_relative 'model/model_server'
+require_relative 'model/model_disk'
+require_relative 'model/model_appliance'
+require_relative 'model/model_archive'
+require_relative 'model/model_ipv6_net'
 
 module Saclient
   module Cloud
@@ -25,7 +25,7 @@ module Saclient
 
       # @return [Client]
       def get_client
-        @_client
+        return @_client
       end
 
       public
@@ -45,7 +45,7 @@ module Saclient
 
       # @return [Product]
       def get_product
-        @_product
+        return @_product
       end
 
       public
@@ -65,7 +65,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_Icon]
       def get_icon
-        @_icon
+        return @_icon
       end
 
       public
@@ -85,7 +85,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_Server]
       def get_server
-        @_server
+        return @_server
       end
 
       public
@@ -105,7 +105,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_Disk]
       def get_disk
-        @_disk
+        return @_disk
       end
 
       public
@@ -125,7 +125,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_Appliance]
       def get_appliance
-        @_appliance
+        return @_appliance
       end
 
       public
@@ -145,7 +145,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_Archive]
       def get_archive
-        @_archive
+        return @_archive
       end
 
       public
@@ -165,7 +165,7 @@ module Saclient
 
       # @return [Saclient::Cloud::Model::Model_IPv6Net]
       def get_ipv6net
-        @_ipv6net
+        return @_ipv6net
       end
 
       public
@@ -202,7 +202,7 @@ module Saclient
       # @return [API] APIクライアント
       def self.authorize(token, secret)
         c = Saclient::Cloud::Client.new(token, secret)
-        Saclient::Cloud::API.new(c)
+        return Saclient::Cloud::API.new(c)
       end
 
       # 認証情報を引き継ぎ, 指定したゾーンへのアクセスを行うAPIクライアントを作成します.
@@ -213,7 +213,7 @@ module Saclient
         ret = Saclient::Cloud::API.new(@_client.clone_instance)
         ret[:_client].set_api_root('https://secure.sakura.ad.jp/cloud/')
         ret[:_client].set_api_root_suffix('zone/' + name)
-        ret
+        return ret
       end
 
     end

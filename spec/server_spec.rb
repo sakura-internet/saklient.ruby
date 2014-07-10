@@ -64,8 +64,8 @@ describe 'Server' do
   
   
   it 'should be created, booted and stopped' do
-    name = '!ruby_minitest-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    description = 'This instance was created by saclient.ruby minitest'
+    name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
+    description = 'This instance was created by saclient.ruby rspec'
     tag = 'saclient-test'
     cpu = 1
     mem = 2

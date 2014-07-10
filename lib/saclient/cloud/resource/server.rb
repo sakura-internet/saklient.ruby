@@ -1,13 +1,13 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative 'resource.rb'
-require_relative 'icon.rb'
-require_relative 'disk.rb'
-require_relative 'iface.rb'
-require_relative 'server_plan.rb'
-require_relative 'server_instance.rb'
-require_relative '../enums/eserver_instance_status.rb'
+require_relative '../client'
+require_relative 'resource'
+require_relative 'icon'
+require_relative 'disk'
+require_relative 'iface'
+require_relative 'server_plan'
+require_relative 'server_instance'
+require_relative '../enums/eserver_instance_status'
 
 module Saclient
   module Cloud
@@ -61,19 +61,19 @@ module Saclient
         # @private
         # @return [String]
         def _api_path
-          '/server'
+          return '/server'
         end
 
         # @private
         # @return [String]
         def _root_key
-          'Server'
+          return 'Server'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          'Servers'
+          return 'Servers'
         end
 
         public
@@ -81,21 +81,21 @@ module Saclient
         # @private
         # @return [String]
         def _id
-          get_id
+          return get_id
         end
 
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @return [Server] this
         def save
-          _save
+          return _save
         end
 
         # 最新のリソース情報を再取得します.
         #
         # @return [Server] this
         def reload
-          _reload
+          return _reload
         end
 
         # @private
@@ -110,7 +110,7 @@ module Saclient
         #
         # @return [bool]
         def is_up
-          !(@instance[:status]).nil? && Saclient::Cloud::Enums::EServerInstanceStatus.compare(@instance[:status], Saclient::Cloud::Enums::EServerInstanceStatus[:up]) == 0
+          return !(@instance[:status]).nil? && Saclient::Cloud::Enums::EServerInstanceStatus.compare(@instance[:status], Saclient::Cloud::Enums::EServerInstanceStatus[:up]) == 0
         end
 
         # サーバを起動します.
@@ -118,7 +118,7 @@ module Saclient
         # @return [Server]
         def boot
           @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
-          self
+          return self
         end
 
         # サーバをシャットダウンします.
@@ -126,7 +126,7 @@ module Saclient
         # @return [Server]
         def shutdown
           @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
-          self
+          return self
         end
 
         # サーバを強制停止します.
@@ -134,7 +134,7 @@ module Saclient
         # @return [Server]
         def stop
           @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power', { Force: true })
-          self
+          return self
         end
 
         # サーバを強制再起動します.
@@ -142,7 +142,7 @@ module Saclient
         # @return [Server]
         def reboot
           @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/reset')
-          self
+          return self
         end
 
         # サーバのプランを変更します.
@@ -153,7 +153,7 @@ module Saclient
           path = _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/to/plan/' + Saclient::Cloud::Util.url_encode(planTo._id)
           result = @_client.request('PUT', path)
           api_deserialize(result[_root_key.to_sym])
-          self
+          return self
         end
 
         # サーバに接続されているディスクのリストを取得します.
@@ -161,7 +161,7 @@ module Saclient
         # @return [Array<Disk>]
         def find_disks
           model = Saclient::Cloud::Util.create_class_instance('saclient.cloud.model.Model_Disk', [@_client])
-          model.with_server_id(_id).find
+          return model.with_server_id(_id).find
         end
 
         protected
@@ -173,7 +173,7 @@ module Saclient
         #
         # @return [String]
         def get_id
-          @m_id
+          return @m_id
         end
 
         public
@@ -196,7 +196,7 @@ module Saclient
         #
         # @return [String]
         def get_name
-          @m_name
+          return @m_name
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -206,7 +206,7 @@ module Saclient
         def set_name(v)
           @m_name = v
           @n_name = true
-          @m_name
+          return @m_name
         end
 
         public
@@ -233,7 +233,7 @@ module Saclient
         #
         # @return [String]
         def get_description
-          @m_description
+          return @m_description
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -243,7 +243,7 @@ module Saclient
         def set_description(v)
           @m_description = v
           @n_description = true
-          @m_description
+          return @m_description
         end
 
         public
@@ -270,7 +270,7 @@ module Saclient
         #
         # @return [Array<String>]
         def get_tags
-          @m_tags
+          return @m_tags
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -280,7 +280,7 @@ module Saclient
         def set_tags(v)
           @m_tags = v
           @n_tags = true
-          @m_tags
+          return @m_tags
         end
 
         public
@@ -307,7 +307,7 @@ module Saclient
         #
         # @return [Icon]
         def get_icon
-          @m_icon
+          return @m_icon
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -317,7 +317,7 @@ module Saclient
         def set_icon(v)
           @m_icon = v
           @n_icon = true
-          @m_icon
+          return @m_icon
         end
 
         public
@@ -344,7 +344,7 @@ module Saclient
         #
         # @return [ServerPlan]
         def get_plan
-          @m_plan
+          return @m_plan
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -354,7 +354,7 @@ module Saclient
         def set_plan(v)
           @m_plan = v
           @n_plan = true
-          @m_plan
+          return @m_plan
         end
 
         public
@@ -381,7 +381,7 @@ module Saclient
         #
         # @return [Array<Iface>]
         def get_ifaces
-          @m_ifaces
+          return @m_ifaces
         end
 
         public
@@ -404,7 +404,7 @@ module Saclient
         #
         # @return [ServerInstance]
         def get_instance
-          @m_instance
+          return @m_instance
         end
 
         public
@@ -529,7 +529,7 @@ module Saclient
             end
           end
           ret[:Instance] = withClean ? ((@m_instance).nil? ? nil : @m_instance.api_serialize(withClean)) : ((@m_instance).nil? ? { ID: '0' } : @m_instance.api_serialize_id) if withClean || @n_instance
-          ret
+          return ret
         end
 
       end

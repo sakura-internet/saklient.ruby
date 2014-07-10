@@ -1,8 +1,8 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative '../client.rb'
-require_relative '../util.rb'
-require_relative 'resource.rb'
+require_relative '../client'
+require_relative '../util'
+require_relative 'resource'
 
 module Saclient
   module Cloud
@@ -41,7 +41,7 @@ module Saclient
         #
         # @return [String]
         def get_status
-          @m_status
+          return @m_status
         end
 
         public
@@ -62,7 +62,7 @@ module Saclient
         #
         # @return [String]
         def get_before_status
-          @m_before_status
+          return @m_before_status
         end
 
         public
@@ -83,7 +83,7 @@ module Saclient
         #
         # @return [NativeDate]
         def get_status_changed_at
-          @m_status_changed_at
+          return @m_status_changed_at
         end
 
         public
@@ -134,7 +134,7 @@ module Saclient
           ret[:Status] = @m_status if withClean || @n_status
           ret[:BeforeStatus] = @m_before_status if withClean || @n_before_status
           ret[:StatusChangedAt] = (@m_status_changed_at).nil? ? nil : Saclient::Cloud::Util.date2str(@m_status_changed_at) if withClean || @n_status_changed_at
-          ret
+          return ret
         end
 
       end
