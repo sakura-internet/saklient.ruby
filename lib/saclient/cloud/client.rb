@@ -2,6 +2,7 @@
 require 'net/https'
 require 'json'
 require 'uri'
+require_relative 'errors/exception_factory'
 
 # example
 #
@@ -100,7 +101,13 @@ module Saclient
         end
         res = http.start {|conn| conn.request req }
 
-        JSON.parse(res.body, {:symbolize_names => true})
+        ret = JSON.parse(res.body, {:symbolize_names => true})
+        status = res.code.to_i
+        unless 200 <= status && status < 300 then
+          raise Saclient::Cloud::Errors::ExceptionFactory.create(status, ret[:error_code], ret[:error_msg])
+        end
+        
+        ret
       end
     end
   end

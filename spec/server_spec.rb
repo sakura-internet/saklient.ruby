@@ -91,17 +91,20 @@ describe 'Server' do
     server.boot
     
     # test_boot_conflict
+    ok = false
     begin
       server.boot
-    rescue
+    rescue Saclient::Cloud::Errors::HttpConflictException
+      ok = true
     end
+    
+    fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
     
     # test_stop
     server.stop
     
     # test_destroy
     server.destroy
-    
     
   end
   
