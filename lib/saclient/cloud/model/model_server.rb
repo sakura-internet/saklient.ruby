@@ -67,8 +67,8 @@ module Saclient
         #
         # @param [String] id
         # @return [Saclient::Cloud::Resource::Server] リソースオブジェクト
-        def get(id)
-          return _get(id)
+        def get_by_id(id)
+          return _get_by_id(id)
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.

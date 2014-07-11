@@ -63,7 +63,7 @@ describe 'Server' do
   
   
   
-  it 'should be created, booted and stopped' do
+  it 'should be CRUDed and power-controlled' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
     description = 'This instance was created by saclient.ruby rspec'
     tag = 'saclient-test'

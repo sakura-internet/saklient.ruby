@@ -166,7 +166,7 @@ module Saclient
         # @private
         # @param [String] id
         # @return [Saclient::Cloud::Resource::Resource] リソースオブジェクト
-        def _get(id)
+        def _get_by_id(id)
           params = @_params
           _reset
           result = @_client.request('GET', _api_path + '/' + Saclient::Cloud::Util.url_encode(id), params)

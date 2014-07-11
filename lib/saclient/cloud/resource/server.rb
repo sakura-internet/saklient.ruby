@@ -110,7 +110,14 @@ module Saclient
         #
         # @return [bool]
         def is_up
-          return !(@instance[:status]).nil? && Saclient::Cloud::Enums::EServerInstanceStatus.compare(@instance[:status], Saclient::Cloud::Enums::EServerInstanceStatus[:up]) == 0
+          return get_instance.is_up
+        end
+
+        # サーバが停止しているときtrueを返します.
+        #
+        # @return [bool]
+        def is_down
+          return get_instance.is_down
         end
 
         # サーバを起動します.
@@ -118,7 +125,7 @@ module Saclient
         # @return [Server]
         def boot
           @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
-          return self
+          return reload
         end
 
         # サーバをシャットダウンします.
@@ -126,7 +133,7 @@ module Saclient
         # @return [Server]
         def shutdown
           @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
-          return self
+          return reload
         end
 
         # サーバを強制停止します.
@@ -134,7 +141,7 @@ module Saclient
         # @return [Server]
         def stop
           @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power', { Force: true })
-          return self
+          return reload
         end
 
         # サーバを強制再起動します.
@@ -142,7 +149,7 @@ module Saclient
         # @return [Server]
         def reboot
           @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/reset')
-          return self
+          return reload
         end
 
         # サーバのプランを変更します.

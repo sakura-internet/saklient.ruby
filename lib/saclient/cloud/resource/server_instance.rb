@@ -3,6 +3,7 @@
 require_relative '../client'
 require_relative '../util'
 require_relative 'resource'
+require_relative '../enums/eserver_instance_status'
 
 module Saclient
   module Cloud
@@ -30,6 +31,20 @@ module Saclient
         def initialize(client, r)
           super(client)
           api_deserialize(r)
+        end
+
+        # サーバが起動しているときtrueを返します.
+        #
+        # @return [bool]
+        def is_up
+          return !(get_status).nil? && Saclient::Cloud::Enums::EServerInstanceStatus.compare(get_status, Saclient::Cloud::Enums::EServerInstanceStatus[:up]) == 0
+        end
+
+        # サーバが停止しているときtrueを返します.
+        #
+        # @return [bool]
+        def is_down
+          return (get_status).nil? || Saclient::Cloud::Enums::EServerInstanceStatus.compare(get_status, Saclient::Cloud::Enums::EServerInstanceStatus[:down]) == 0
         end
 
         protected
