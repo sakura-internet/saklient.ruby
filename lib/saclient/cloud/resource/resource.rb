@@ -104,7 +104,7 @@ module Saclient
           r[_root_key.to_sym] = api_serialize
           method = @is_new ? 'POST' : 'PUT'
           path = _api_path
-          path += '/' + Saclient::Cloud::Util.url_encode(_id) if !@is_new
+          path += '/' + Saclient::Cloud::Util::url_encode(_id) if !@is_new
           result = @_client.request(method, path, r)
           api_deserialize(result[_root_key.to_sym])
           return self
@@ -115,7 +115,7 @@ module Saclient
         # このローカルオブジェクトのIDと対応するリソースの削除リクエストをAPIに送信します.
         def destroy
           return nil if @is_new
-          path = _api_path + '/' + Saclient::Cloud::Util.url_encode(_id)
+          path = _api_path + '/' + Saclient::Cloud::Util::url_encode(_id)
           @_client.request('DELETE', path)
         end
 
@@ -126,7 +126,7 @@ module Saclient
         # @private
         # @return [Resource] this
         def _reload
-          result = @_client.request('GET', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id))
+          result = @_client.request('GET', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id))
           api_deserialize(result[_root_key.to_sym])
           return self
         end

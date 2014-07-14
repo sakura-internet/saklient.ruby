@@ -107,7 +107,7 @@ module Saclient
         #
         # @return [Appliance]
         def boot
-          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
+          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/power')
           return self
         end
 
@@ -115,7 +115,7 @@ module Saclient
         #
         # @return [Appliance]
         def shutdown
-          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
+          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/power')
           return self
         end
 
@@ -123,7 +123,7 @@ module Saclient
         #
         # @return [Appliance]
         def stop
-          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power', { Force: true })
+          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/power', { Force: true })
           return self
         end
 
@@ -131,7 +131,7 @@ module Saclient
         #
         # @return [Appliance]
         def reboot
-          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/reset')
+          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/reset')
           return self
         end
 

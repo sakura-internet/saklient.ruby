@@ -124,7 +124,7 @@ module Saclient
         #
         # @return [Server]
         def boot
-          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
+          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/power')
           return reload
         end
 
@@ -132,7 +132,7 @@ module Saclient
         #
         # @return [Server]
         def shutdown
-          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power')
+          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/power')
           return reload
         end
 
@@ -140,7 +140,7 @@ module Saclient
         #
         # @return [Server]
         def stop
-          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/power', { Force: true })
+          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/power', { Force: true })
           return reload
         end
 
@@ -148,8 +148,47 @@ module Saclient
         #
         # @return [Server]
         def reboot
-          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/reset')
+          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/reset')
           return reload
+        end
+
+        protected
+
+        # サーバが指定のステータスに遷移するまで待機します.
+        #
+        # @ignore
+        # @param [String] status
+        # @param [Integer] timeout
+        # @return [bool]
+        def sleep_until(status, timeout = 60)
+          step = 3
+          while 0 < timeout do
+            reload
+            s = get_instance.status
+            s = Saclient::Cloud::Enums::EServerInstanceStatus::down if (s).nil?
+            return true if s == status
+            timeout -= step
+            sleep step if 0 < timeout
+          end
+          return false
+        end
+
+        public
+
+        # サーバが起動するまで待機します.
+        #
+        # @param [Integer] timeout
+        # @return [bool]
+        def sleep_until_up(timeout = 60)
+          return sleep_until(Saclient::Cloud::Enums::EServerInstanceStatus::up, timeout)
+        end
+
+        # サーバが停止するまで待機します.
+        #
+        # @param [Integer] timeout
+        # @return [bool]
+        def sleep_until_down(timeout = 60)
+          return sleep_until(Saclient::Cloud::Enums::EServerInstanceStatus::down, timeout)
         end
 
         # サーバのプランを変更します.
@@ -157,7 +196,7 @@ module Saclient
         # @param [ServerPlan] planTo
         # @return [Server]
         def change_plan(planTo)
-          path = _api_path + '/' + Saclient::Cloud::Util.url_encode(_id) + '/to/plan/' + Saclient::Cloud::Util.url_encode(planTo._id)
+          path = _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/to/plan/' + Saclient::Cloud::Util::url_encode(planTo._id)
           result = @_client.request('PUT', path)
           api_deserialize(result[_root_key.to_sym])
           return self
@@ -167,7 +206,7 @@ module Saclient
         #
         # @return [Array<Disk>]
         def find_disks
-          model = Saclient::Cloud::Util.create_class_instance('saclient.cloud.model.Model_Disk', [@_client])
+          model = Saclient::Cloud::Util::create_class_instance('saclient.cloud.model.Model_Disk', [@_client])
           return model.with_server_id(_id).find
         end
 

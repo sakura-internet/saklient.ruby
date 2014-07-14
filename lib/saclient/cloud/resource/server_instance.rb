@@ -37,14 +37,14 @@ module Saclient
         #
         # @return [bool]
         def is_up
-          return !(get_status).nil? && Saclient::Cloud::Enums::EServerInstanceStatus.compare(get_status, Saclient::Cloud::Enums::EServerInstanceStatus[:up]) == 0
+          return !(get_status).nil? && Saclient::Cloud::Enums::EServerInstanceStatus::compare(get_status, Saclient::Cloud::Enums::EServerInstanceStatus::up) == 0
         end
 
         # サーバが停止しているときtrueを返します.
         #
         # @return [bool]
         def is_down
-          return (get_status).nil? || Saclient::Cloud::Enums::EServerInstanceStatus.compare(get_status, Saclient::Cloud::Enums::EServerInstanceStatus[:down]) == 0
+          return (get_status).nil? || Saclient::Cloud::Enums::EServerInstanceStatus::compare(get_status, Saclient::Cloud::Enums::EServerInstanceStatus::down) == 0
         end
 
         protected
@@ -148,7 +148,7 @@ module Saclient
           ret = {}
           ret[:Status] = @m_status if withClean || @n_status
           ret[:BeforeStatus] = @m_before_status if withClean || @n_before_status
-          ret[:StatusChangedAt] = (@m_status_changed_at).nil? ? nil : Saclient::Cloud::Util.date2str(@m_status_changed_at) if withClean || @n_status_changed_at
+          ret[:StatusChangedAt] = (@m_status_changed_at).nil? ? nil : Saclient::Cloud::Util::date2str(@m_status_changed_at) if withClean || @n_status_changed_at
           return ret
         end
 

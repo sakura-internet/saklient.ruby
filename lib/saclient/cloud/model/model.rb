@@ -158,7 +158,7 @@ module Saclient
         # @private
         # @return [Saclient::Cloud::Resource::Resource]
         def _create
-          return Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, nil])
+          return Saclient::Cloud::Util::create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, nil])
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.
@@ -169,11 +169,11 @@ module Saclient
         def _get_by_id(id)
           params = @_params
           _reset
-          result = @_client.request('GET', _api_path + '/' + Saclient::Cloud::Util.url_encode(id), params)
+          result = @_client.request('GET', _api_path + '/' + Saclient::Cloud::Util::url_encode(id), params)
           @_total = 1
           @_count = 1
           record = result[_root_key.to_sym]
-          return Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, record])
+          return Saclient::Cloud::Util::create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, record])
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
@@ -189,7 +189,7 @@ module Saclient
           records = result[_root_key_m.to_sym]
           data = []
           for record in records
-            i = Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, record])
+            i = Saclient::Cloud::Util::create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, record])
             data << i
           end
           return data
@@ -207,7 +207,7 @@ module Saclient
           @_count = result[:Count]
           return nil if @_total == 0
           records = result[_root_key_m.to_sym]
-          return Saclient::Cloud::Util.create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, records[0]])
+          return Saclient::Cloud::Util::create_class_instance('saclient.cloud.resource.' + _root_key, [@_client, records[0]])
         end
 
         # @private

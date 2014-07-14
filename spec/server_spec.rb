@@ -102,6 +102,7 @@ describe 'Server' do
     
     # test_stop
     server.stop
+    fail 'サーバが正常に停止しません' unless server.sleep_until_down
     
     # test_destroy
     server.destroy
