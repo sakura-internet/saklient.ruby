@@ -182,26 +182,26 @@ module Saclient
         #
         # @yield [Saclient::Cloud::Resource::Disk, bool]
         # @yieldreturn [void]
-        # @param [Integer] timeout
+        # @param [Integer] timeoutSec
         # @return [void]
-        def after_copy(timeout, &callback)
-          ret = sleep_while_copying(timeout)
+        def after_copy(timeoutSec, &callback)
+          ret = sleep_while_copying(timeoutSec)
           callback.call(self, ret)
         end
 
         # コピー中のディスクが利用可能になるまで待機します.
         #
-        # @param [Integer] timeout
+        # @param [Integer] timeoutSec
         # @return [bool]
-        def sleep_while_copying(timeout = 3600)
+        def sleep_while_copying(timeoutSec = 3600)
           step = 3
-          while 0 < timeout do
+          while 0 < timeoutSec do
             reload
             a = get_availability
             return true if a == Saclient::Cloud::Enums::EAvailability::available
-            timeout = 0 if a != Saclient::Cloud::Enums::EAvailability::migrating
-            timeout -= step
-            sleep step if 0 < timeout
+            timeoutSec = 0 if a != Saclient::Cloud::Enums::EAvailability::migrating
+            timeoutSec -= step
+            sleep step if 0 < timeoutSec
           end
           return false
         end
