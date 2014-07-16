@@ -101,6 +101,7 @@ describe 'Server' do
     fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
     
     # test_stop
+    sleep 3
     server.stop
     fail 'サーバが正常に停止しません' unless server.sleep_until_down
     
