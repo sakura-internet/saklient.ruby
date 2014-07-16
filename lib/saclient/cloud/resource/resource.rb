@@ -88,17 +88,55 @@ module Saclient
         # @return [bool]
         attr_accessor :is_incomplete
 
+        # @private
+        # @param [any] r
+        # @return [void]
+        def _on_before_save(r)
+        end
+
+        # @private
+        # @param [any] r
+        # @return [void]
+        def _on_after_api_deserialize(r)
+        end
+
+        # @private
+        # @param [bool] withClean
+        # @param [any] r
+        # @return [void]
+        def _on_after_api_serialize(r, withClean)
+        end
+
+        # @param [any] r
+        # @return [void]
+        def api_deserialize_impl(r)
+        end
+
         public
 
         # @param [any] r
         # @return [void]
         def api_deserialize(r)
+          api_deserialize_impl(r)
+          _on_after_api_deserialize(r)
         end
+
+        protected
+
+        # @param [bool] withClean
+        # @return [any]
+        def api_serialize_impl(withClean = false)
+          return nil
+        end
+
+        public
 
         # @param [bool] withClean
         # @return [any]
         def api_serialize(withClean = false)
-          return nil
+          ret = api_serialize_impl(withClean)
+          _on_after_api_serialize(ret, withClean)
+          return ret
         end
 
         protected
@@ -125,6 +163,7 @@ module Saclient
             v = params[k.to_sym]
             r[k.to_sym] = v
           end
+          _on_before_save(r)
           method = @is_new ? 'POST' : 'PUT'
           path = _api_path
           path += '/' + Saclient::Cloud::Util::url_encode(_id) if !@is_new

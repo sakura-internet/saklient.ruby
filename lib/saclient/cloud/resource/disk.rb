@@ -141,40 +141,123 @@ module Saclient
           return get_size_mib >> 10
         end
 
+        # @param [Integer] sizeGib
+        # @return [Integer]
+        def set_size_gib(sizeGib)
+          set_size_mib(sizeGib * 1024)
+          return sizeGib
+        end
+
         public
 
         # サイズ[GiB]
         #
         # @return [Integer]
-        attr_reader :size_gib
+        attr_accessor :size_gib
 
         def size_gib
           get_size_gib
         end
 
+        def size_gib=(v)
+          set_size_gib(v)
+        end
+
+        protected
+
+        # @private
+        # @return [any]
+        attr_accessor :_source
+
+        public
+
+        # @return [any]
+        def get_source
+          return @_source
+        end
+
+        # @param [any] source
+        # @return [any]
+        def set_source(source)
+          @_source = source
+          return source
+        end
+
+        # ディスクのコピー元
+        #
+        # @return [any]
+        attr_accessor :source
+
+        def source
+          get_source
+        end
+
+        def source=(v)
+          set_source(v)
+        end
+
+        protected
+
+        # @private
+        # @param [any] r
+        # @return [void]
+        def _on_after_api_deserialize(r)
+          return nil if (r).nil?
+          if !r.nil? && r.key?(:SourceArchive)
+            s = r[:SourceArchive]
+            if !(s).nil?
+              id = s[:ID]
+              @_source = Saclient::Cloud::Resource::Archive.new(@_client, s) if !(id).nil?
+            end
+          end
+          if !r.nil? && r.key?(:SourceDisk)
+            s = r[:SourceDisk]
+            if !(s).nil?
+              id = s[:ID]
+              @_source = Saclient::Cloud::Resource::Disk.new(@_client, s) if !(id).nil?
+            end
+          end
+        end
+
+        # @private
+        # @param [bool] withClean
+        # @param [any] r
+        # @return [void]
+        def _on_after_api_serialize(r, withClean)
+          return nil if (r).nil?
+          if !(@_source).nil?
+            if @_source.is_a?(Saclient::Cloud::Resource::Archive)
+              archive = @_source
+              s = withClean ? archive.api_serialize(true) : { ID: archive._id }
+              r[:SourceArchive] = s
+            else
+              if @_source.is_a?(Saclient::Cloud::Resource::Disk)
+                disk = @_source
+                s = withClean ? disk.api_serialize(true) : { ID: disk._id }
+                r[:SourceDisk] = s
+              else
+                r[:SourceArchive] = { ID: 1 }
+              end
+            end
+          end
+        end
+
+        public
+
         # ディスクをサーバに取り付けます.
         #
-        # @param [String] serverId
+        # @param [Server] server
         # @return [Disk]
-        def attach_to(serverId)
-          @_client.request('PUT', '/disk/' + _id + '/to/server/' + serverId)
+        def connect_to(server)
+          @_client.request('PUT', '/disk/' + _id + '/to/server/' + server._id)
           return self
         end
 
         # ディスクをサーバから取り外します.
         #
         # @return [Disk]
-        def detach
+        def disconnect
           @_client.request('DELETE', '/disk/' + _id + '/to/server')
-          return self
-        end
-
-        # この後に save() するディスクのコピー元となるアーカイブを設定します.
-        #
-        # @param [Archive] archive
-        # @return [Disk]
-        def copy_from(archive)
-          set_param('SourceArchive', { ID: archive._id })
           return self
         end
 
@@ -389,15 +472,29 @@ module Saclient
           return @m_size_mib
         end
 
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @param [Integer] v
+        # @return [Integer]
+        def set_size_mib(v)
+          @m_size_mib = v
+          @n_size_mib = true
+          return @m_size_mib
+        end
+
         public
 
         # サイズ[MiB]
         #
         # @return [Integer]
-        attr_reader :size_mib
+        attr_accessor :size_mib
 
         def size_mib
           get_size_mib
+        end
+
+        def size_mib=(v)
+          set_size_mib(v)
         end
 
         protected
@@ -492,10 +589,12 @@ module Saclient
           get_availability
         end
 
+        protected
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
-        def api_deserialize(r)
+        def api_deserialize_impl(r)
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
@@ -584,7 +683,7 @@ module Saclient
         #
         # @param [bool] withClean
         # @return [any]
-        def api_serialize(withClean = false)
+        def api_serialize_impl(withClean = false)
           ret = {}
           ret[:ID] = @m_id if withClean || @n_id
           ret[:Name] = @m_name if withClean || @n_name

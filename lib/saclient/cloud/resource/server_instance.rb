@@ -110,10 +110,12 @@ module Saclient
           get_status_changed_at
         end
 
+        protected
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
-        def api_deserialize(r)
+        def api_deserialize_impl(r)
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
@@ -144,7 +146,7 @@ module Saclient
         #
         # @param [bool] withClean
         # @return [any]
-        def api_serialize(withClean = false)
+        def api_serialize_impl(withClean = false)
           ret = {}
           ret[:Status] = @m_status if withClean || @n_status
           ret[:BeforeStatus] = @m_before_status if withClean || @n_before_status

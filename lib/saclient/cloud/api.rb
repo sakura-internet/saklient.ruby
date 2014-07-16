@@ -1,6 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
 require_relative 'client'
+require_relative 'util'
 require_relative 'product'
 require_relative 'model/model_icon'
 require_relative 'model/model_server'
@@ -214,6 +215,12 @@ module Saclient
         ret._client.set_api_root('https://secure.sakura.ad.jp/cloud/')
         ret._client.set_api_root_suffix('zone/' + name)
         return ret
+      end
+
+      # @param [Integer] sec
+      # @return [void]
+      def sleep(sec)
+        sleep sec
       end
 
     end

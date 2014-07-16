@@ -132,10 +132,12 @@ module Saclient
           get_url
         end
 
+        protected
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
-        def api_deserialize(r)
+        def api_deserialize_impl(r)
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
@@ -166,7 +168,7 @@ module Saclient
         #
         # @param [bool] withClean
         # @return [any]
-        def api_serialize(withClean = false)
+        def api_serialize_impl(withClean = false)
           ret = {}
           ret[:ID] = @m_id if withClean || @n_id
           ret[:Name] = @m_name if withClean || @n_name
