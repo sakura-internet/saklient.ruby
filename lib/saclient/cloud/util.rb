@@ -48,6 +48,7 @@ module Saclient
       end
 
       # @param [Integer] sec
+      # @return [void]
       def self.sleep(sec)
         super self
       end

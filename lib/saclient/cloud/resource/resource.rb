@@ -33,6 +33,21 @@ module Saclient
         protected
 
         # @private
+        # @return [any]
+        attr_accessor :_params
+
+        public
+
+        # @param [any] value
+        # @param [String] key
+        # @return [void]
+        def set_param(key, value)
+          @_params[key.to_sym] = value
+        end
+
+        protected
+
+        # @private
         # @return [String]
         def _api_path
           return nil
@@ -62,6 +77,7 @@ module Saclient
         # @param [Saclient::Cloud::Client] client
         def initialize(client)
           @_client = client
+          @_params = {}
         end
 
         protected
@@ -75,6 +91,7 @@ module Saclient
         public
 
         # @param [any] r
+        # @return [void]
         def api_deserialize(r)
         end
 
@@ -100,12 +117,20 @@ module Saclient
         # @private
         # @return [Resource] this
         def _save
-          r = {}
-          r[_root_key.to_sym] = api_serialize
+          r = api_serialize
+          params = @_params
+          @_params = {}
+          keys = params.keys
+          for k in keys
+            v = params[k.to_sym]
+            r[k.to_sym] = v
+          end
           method = @is_new ? 'POST' : 'PUT'
           path = _api_path
           path += '/' + Saclient::Cloud::Util::url_encode(_id) if !@is_new
-          result = @_client.request(method, path, r)
+          q = {}
+          q[_root_key.to_sym] = r
+          result = @_client.request(method, path, q)
           api_deserialize(result[_root_key.to_sym])
           return self
         end
@@ -113,6 +138,8 @@ module Saclient
         public
 
         # このローカルオブジェクトのIDと対応するリソースの削除リクエストをAPIに送信します.
+        #
+        # @return [void]
         def destroy
           return nil if @is_new
           path = _api_path + '/' + Saclient::Cloud::Util::url_encode(_id)

@@ -2,6 +2,7 @@
 
 require_relative 'model'
 require_relative '../resource/archive'
+require_relative '../enums/escope'
 
 module Saclient
   module Cloud
@@ -85,6 +86,31 @@ module Saclient
         # @return [Model_Archive]
         def with_tag(tag)
           _filter_by('Tags.Name', tag, true)
+          return self
+        end
+
+        # 指定したサイズのアーカイブに絞り込みます.
+        #
+        # @param [Integer] sizeGib
+        # @return [Model_Archive]
+        def with_size_gib(sizeGib)
+          _filter_by('SizeMB', sizeGib * 1024)
+          return self
+        end
+
+        # パブリックアーカイブに絞り込みます.
+        #
+        # @return [Model_Archive]
+        def with_shared_scope
+          _filter_by('Scope', Saclient::Cloud::Enums::EScope::shared)
+          return self
+        end
+
+        # プライベートアーカイブに絞り込みます.
+        #
+        # @return [Model_Archive]
+        def with_user_scope
+          _filter_by('Scope', Saclient::Cloud::Enums::EScope::user)
           return self
         end
 

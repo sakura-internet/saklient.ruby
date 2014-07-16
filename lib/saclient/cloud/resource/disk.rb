@@ -5,6 +5,8 @@ require_relative 'resource'
 require_relative 'icon'
 require_relative 'disk_plan'
 require_relative 'server'
+require_relative 'archive'
+require_relative '../enums/eavailability'
 require_relative '../enums/edisk_connection'
 
 module Saclient
@@ -61,6 +63,11 @@ module Saclient
         # @return [Server]
         attr_accessor :m_server
 
+        # 有効状態
+        #
+        # @return [String]
+        attr_accessor :m_availability
+
         # @private
         # @return [String]
         def _api_path
@@ -111,6 +118,24 @@ module Saclient
 
         protected
 
+        # @return [bool]
+        def get_is_available
+          return get_availability == Saclient::Cloud::Enums::EAvailability::available
+        end
+
+        public
+
+        # ディスクが利用可能なときtrueを返します.
+        #
+        # @return [bool]
+        attr_reader :is_available
+
+        def is_available
+          get_is_available
+        end
+
+        protected
+
         # @return [Integer]
         def get_size_gib
           return get_size_mib >> 10
@@ -142,6 +167,43 @@ module Saclient
         def detach
           @_client.request('DELETE', '/disk/' + _id + '/to/server')
           return self
+        end
+
+        # この後に save() するディスクのコピー元となるアーカイブを設定します.
+        #
+        # @param [Archive] archive
+        # @return [Disk]
+        def copy_from(archive)
+          set_param('SourceArchive', { ID: archive._id })
+          return self
+        end
+
+        # コピー中のディスクが利用可能になるまで待機します.
+        #
+        # @yield [Saclient::Cloud::Resource::Disk, bool]
+        # @yieldreturn [void]
+        # @param [Integer] timeout
+        # @return [void]
+        def after_copy(timeout, &callback)
+          ret = sleep_while_copying(timeout)
+          callback.call(self, ret)
+        end
+
+        # コピー中のディスクが利用可能になるまで待機します.
+        #
+        # @param [Integer] timeout
+        # @return [bool]
+        def sleep_while_copying(timeout = 3600)
+          step = 3
+          while 0 < timeout do
+            reload
+            a = get_availability
+            return true if a == Saclient::Cloud::Enums::EAvailability::available
+            timeout = 0 if a != Saclient::Cloud::Enums::EAvailability::migrating
+            timeout -= step
+            sleep step if 0 < timeout
+          end
+          return false
         end
 
         protected
@@ -407,6 +469,29 @@ module Saclient
           get_server
         end
 
+        protected
+
+        # @return [bool]
+        attr_accessor :n_availability
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [String]
+        def get_availability
+          return @m_availability
+        end
+
+        public
+
+        # 有効状態
+        #
+        # @return [String]
+        attr_reader :availability
+
+        def availability
+          get_availability
+        end
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
@@ -486,6 +571,13 @@ module Saclient
             @is_incomplete = true
           end
           @n_server = false
+          if !r.nil? && r.key?(:Availability)
+            @m_availability = (r[:Availability]).nil? ? nil : r[:Availability].to_s
+          else
+            @m_availability = nil
+            @is_incomplete = true
+          end
+          @n_availability = false
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -510,6 +602,7 @@ module Saclient
           ret[:ServiceClass] = @m_service_class if withClean || @n_service_class
           ret[:Plan] = withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id) if withClean || @n_plan
           ret[:Server] = withClean ? ((@m_server).nil? ? nil : @m_server.api_serialize(withClean)) : ((@m_server).nil? ? { ID: '0' } : @m_server.api_serialize_id) if withClean || @n_server
+          ret[:Availability] = @m_availability if withClean || @n_availability
           return ret
         end
 

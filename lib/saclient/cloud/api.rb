@@ -211,8 +211,8 @@ module Saclient
       # @return [API] APIクライアント
       def in_zone(name)
         ret = Saclient::Cloud::API.new(@_client.clone_instance)
-        ret[:_client].set_api_root('https://secure.sakura.ad.jp/cloud/')
-        ret[:_client].set_api_root_suffix('zone/' + name)
+        ret._client.set_api_root('https://secure.sakura.ad.jp/cloud/')
+        ret._client.set_api_root_suffix('zone/' + name)
         return ret
       end
 

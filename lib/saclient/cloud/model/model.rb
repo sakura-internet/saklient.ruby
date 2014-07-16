@@ -128,7 +128,7 @@ module Saclient
         # @param [Integer] offset オフセット
         # @return [Model] this
         def _offset(offset)
-          @_params[:_begin] = offset
+          @_params._begin = offset
           return self
         end
 
@@ -138,7 +138,7 @@ module Saclient
         # @param [Integer] count 上限レコード数
         # @return [Model] this
         def _limit(count)
-          @_params[:_count] = count
+          @_params._count = count
           return self
         end
 
@@ -214,6 +214,7 @@ module Saclient
         # @param [any] value
         # @param [bool] multiple
         # @param [String] key
+        # @return [void]
         def _filter_by(key, value, multiple = false)
           @_params[:Filter] = {} if !(!@_params.nil? && @_params.key?(:Filter))
           filter = @_params[:Filter]

@@ -55,6 +55,13 @@ module Saclient
           return _reset
         end
 
+        # *
+        #
+        # @return [Saclient::Cloud::Resource::Disk]
+        def create
+          return _create
+        end
+
         # 指定したIDを持つ唯一のリソースを取得します.
         #
         # @param [String] id
@@ -85,6 +92,15 @@ module Saclient
         # @return [Model_Disk]
         def with_tag(tag)
           _filter_by('Tags.Name', tag, true)
+          return self
+        end
+
+        # 指定したサイズのディスクに絞り込みます.
+        #
+        # @param [Integer] sizeGib
+        # @return [Model_Disk]
+        def with_size_gib(sizeGib)
+          _filter_by('SizeMB', sizeGib * 1024)
           return self
         end
 

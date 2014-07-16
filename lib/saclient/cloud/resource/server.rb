@@ -58,6 +58,11 @@ module Saclient
         # @return [ServerInstance]
         attr_accessor :m_instance
 
+        # 有効状態
+        #
+        # @return [String]
+        attr_accessor :m_availability
+
         # @private
         # @return [String]
         def _api_path
@@ -152,44 +157,63 @@ module Saclient
           return reload
         end
 
+        # サーバが停止するまで待機します.
+        #
+        # @yield [Saclient::Cloud::Resource::Server, bool]
+        # @yieldreturn [void]
+        # @param [Integer] timeoutSec
+        # @return [void]
+        def after_down(timeoutSec, &callback)
+          after_status(Saclient::Cloud::Enums::EServerInstanceStatus::down, timeoutSec, &callback)
+        end
+
         protected
 
         # サーバが指定のステータスに遷移するまで待機します.
         #
         # @ignore
+        # @yield [Saclient::Cloud::Resource::Server, bool]
+        # @yieldreturn [void]
+        # @param [Integer] timeoutSec
         # @param [String] status
-        # @param [Integer] timeout
+        # @return [void]
+        def after_status(status, timeoutSec, &callback)
+          ret = sleep_until(status, timeoutSec)
+          callback.call(self, ret)
+        end
+
+        public
+
+        # サーバが停止するまで待機します.
+        #
+        # @param [Integer] timeoutSec
         # @return [bool]
-        def sleep_until(status, timeout = 60)
+        def sleep_until_down(timeoutSec = 180)
+          return sleep_until(Saclient::Cloud::Enums::EServerInstanceStatus::down, timeoutSec)
+        end
+
+        protected
+
+        # サーバが指定のステータスに遷移するまで待機します.
+        #
+        # @ignore
+        # @param [Integer] timeoutSec
+        # @param [String] status
+        # @return [bool]
+        def sleep_until(status, timeoutSec = 180)
           step = 3
-          while 0 < timeout do
+          while 0 < timeoutSec do
             reload
             s = get_instance.status
             s = Saclient::Cloud::Enums::EServerInstanceStatus::down if (s).nil?
             return true if s == status
-            timeout -= step
-            sleep step if 0 < timeout
+            timeoutSec -= step
+            sleep step if 0 < timeoutSec
           end
           return false
         end
 
         public
-
-        # サーバが起動するまで待機します.
-        #
-        # @param [Integer] timeout
-        # @return [bool]
-        def sleep_until_up(timeout = 60)
-          return sleep_until(Saclient::Cloud::Enums::EServerInstanceStatus::up, timeout)
-        end
-
-        # サーバが停止するまで待機します.
-        #
-        # @param [Integer] timeout
-        # @return [bool]
-        def sleep_until_down(timeout = 60)
-          return sleep_until(Saclient::Cloud::Enums::EServerInstanceStatus::down, timeout)
-        end
 
         # サーバのプランを変更します.
         #
@@ -464,6 +488,29 @@ module Saclient
           get_instance
         end
 
+        protected
+
+        # @return [bool]
+        attr_accessor :n_availability
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [String]
+        def get_availability
+          return @m_availability
+        end
+
+        public
+
+        # 有効状態
+        #
+        # @return [String]
+        attr_reader :availability
+
+        def availability
+          get_availability
+        end
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
@@ -545,6 +592,13 @@ module Saclient
             @is_incomplete = true
           end
           @n_instance = false
+          if !r.nil? && r.key?(:Availability)
+            @m_availability = (r[:Availability]).nil? ? nil : r[:Availability].to_s
+          else
+            @m_availability = nil
+            @is_incomplete = true
+          end
+          @n_availability = false
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -575,6 +629,7 @@ module Saclient
             end
           end
           ret[:Instance] = withClean ? ((@m_instance).nil? ? nil : @m_instance.api_serialize(withClean)) : ((@m_instance).nil? ? { ID: '0' } : @m_instance.api_serialize_id) if withClean || @n_instance
+          ret[:Availability] = @m_availability if withClean || @n_availability
           return ret
         end
 
