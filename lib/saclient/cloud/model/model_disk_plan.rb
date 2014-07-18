@@ -30,6 +30,12 @@ module Saclient
           return 'DiskPlans'
         end
 
+        # @private
+        # @return [String]
+        def _class_name
+          return 'DiskPlan'
+        end
+
         public
 
         # 次に取得するリストの開始オフセットを指定します.

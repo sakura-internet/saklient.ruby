@@ -173,36 +173,36 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if !r.nil? && r.key?(:ID)
-            @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if !r.nil? && r.key?(:Name)
-            @m_name = (r[:Name]).nil? ? nil : r[:Name].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if !r.nil? && r.key?(:CPU)
-            @m_cpu = (r[:CPU]).nil? ? nil : (r[:CPU].to_s).to_i(10)
+          if Saclient::Cloud::Util::exists_path(r, 'CPU')
+            @m_cpu = (Saclient::Cloud::Util::get_by_path(r, 'CPU')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'CPU').to_s).to_i(10)
           else
             @m_cpu = nil
             @is_incomplete = true
           end
           @n_cpu = false
-          if !r.nil? && r.key?(:MemoryMB)
-            @m_memory_mib = (r[:MemoryMB]).nil? ? nil : (r[:MemoryMB].to_s).to_i(10)
+          if Saclient::Cloud::Util::exists_path(r, 'MemoryMB')
+            @m_memory_mib = (Saclient::Cloud::Util::get_by_path(r, 'MemoryMB')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'MemoryMB').to_s).to_i(10)
           else
             @m_memory_mib = nil
             @is_incomplete = true
           end
           @n_memory_mib = false
-          if !r.nil? && r.key?(:ServiceClass)
-            @m_service_class = (r[:ServiceClass]).nil? ? nil : r[:ServiceClass].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ServiceClass')
+            @m_service_class = (Saclient::Cloud::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ServiceClass').to_s
           else
             @m_service_class = nil
             @is_incomplete = true

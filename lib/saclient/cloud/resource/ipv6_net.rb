@@ -133,29 +133,29 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if !r.nil? && r.key?(:ID)
-            @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if !r.nil? && r.key?(:IPv6Prefix)
-            @m_ipv6_prefix = (r[:IPv6Prefix]).nil? ? nil : r[:IPv6Prefix].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'IPv6Prefix')
+            @m_ipv6_prefix = (Saclient::Cloud::Util::get_by_path(r, 'IPv6Prefix')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPv6Prefix').to_s
           else
             @m_ipv6_prefix = nil
             @is_incomplete = true
           end
           @n_ipv6_prefix = false
-          if !r.nil? && r.key?(:IPv6PrefixLen)
-            @m_ipv6_prefix_len = (r[:IPv6PrefixLen]).nil? ? nil : (r[:IPv6PrefixLen].to_s).to_i(10)
+          if Saclient::Cloud::Util::exists_path(r, 'IPv6PrefixLen')
+            @m_ipv6_prefix_len = (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixLen')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixLen').to_s).to_i(10)
           else
             @m_ipv6_prefix_len = nil
             @is_incomplete = true
           end
           @n_ipv6_prefix_len = false
-          if !r.nil? && r.key?(:IPv6PrefixTail)
-            @m_ipv6_prefix_tail = (r[:IPv6PrefixTail]).nil? ? nil : r[:IPv6PrefixTail].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'IPv6PrefixTail')
+            @m_ipv6_prefix_tail = (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixTail')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixTail').to_s
           else
             @m_ipv6_prefix_tail = nil
             @is_incomplete = true

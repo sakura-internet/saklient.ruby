@@ -7,6 +7,54 @@ module Saclient
 
     class Util
 
+      # @param [any] obj
+      # @param [String] path
+      # @return [any]
+      def self.exists_path(obj, path)
+        aPath = path.split('.')
+        for seg in aPath
+          return false if (obj).nil?
+          return false if !obj.is_a?(Hash)
+          next if seg == ''
+          return false if !(!obj.nil? && obj.key?(seg.to_sym))
+          obj = obj[seg.to_sym]
+        end
+        return true
+      end
+
+      # @param [any] obj
+      # @param [String] path
+      # @return [any]
+      def self.get_by_path(obj, path)
+        aPath = path.split('.')
+        for seg in aPath
+          return nil if (obj).nil?
+          return nil if !obj.is_a?(Hash)
+          next if seg == ''
+          return nil if !(!obj.nil? && obj.key?(seg.to_sym))
+          obj = obj[seg.to_sym]
+        end
+        return obj
+      end
+
+      # @todo array support
+      # @todo overwriting
+      # @todo writing into children of non-object
+      # @param [any] obj
+      # @param [any] value
+      # @param [String] path
+      # @return [void]
+      def self.set_by_path(obj, path, value)
+        aPath = path.split('.')
+        key = aPath.pop
+        for seg in aPath
+          next if seg == ''
+          obj[seg.to_sym] = {} if !(!obj.nil? && obj.key?(seg.to_sym))
+          obj = obj[seg.to_sym]
+        end
+        obj[key.to_sym] = value
+      end
+
       # @param [String] classPath
       # @param [Array] args
       # @return [any]

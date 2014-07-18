@@ -30,6 +30,12 @@ module Saclient
           return 'IPv6Nets'
         end
 
+        # @private
+        # @return [String]
+        def _class_name
+          return 'IPv6Net'
+        end
+
         public
 
         # 次に取得するリストの開始オフセットを指定します.

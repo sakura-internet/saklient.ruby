@@ -141,22 +141,22 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if !r.nil? && r.key?(:ID)
-            @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if !r.nil? && r.key?(:Name)
-            @m_name = (r[:Name]).nil? ? nil : r[:Name].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if !r.nil? && r.key?(:URL)
-            @m_url = (r[:URL]).nil? ? nil : r[:URL].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'URL')
+            @m_url = (Saclient::Cloud::Util::get_by_path(r, 'URL')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'URL').to_s
           else
             @m_url = nil
             @is_incomplete = true

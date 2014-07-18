@@ -109,22 +109,22 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if !r.nil? && r.key?(:ID)
-            @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if !r.nil? && r.key?(:Name)
-            @m_name = (r[:Name]).nil? ? nil : r[:Name].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if !r.nil? && r.key?(:StorageClass)
-            @m_storage_class = (r[:StorageClass]).nil? ? nil : r[:StorageClass].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'StorageClass')
+            @m_storage_class = (Saclient::Cloud::Util::get_by_path(r, 'StorageClass')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'StorageClass').to_s
           else
             @m_storage_class = nil
             @is_incomplete = true

@@ -8,6 +8,7 @@ require_relative 'model/model_server'
 require_relative 'model/model_disk'
 require_relative 'model/model_appliance'
 require_relative 'model/model_archive'
+require_relative 'model/model_iface'
 require_relative 'model/model_ipv6_net'
 
 module Saclient
@@ -161,6 +162,26 @@ module Saclient
       protected
 
       # @private
+      # @return [Saclient::Cloud::Model::Model_Iface]
+      attr_accessor :_iface
+
+      # @return [Saclient::Cloud::Model::Model_Iface]
+      def get_iface
+        return @_iface
+      end
+
+      public
+
+      # @return [Saclient::Cloud::Model::Model_Iface]
+      attr_reader :iface
+
+      def iface
+        get_iface
+      end
+
+      protected
+
+      # @private
       # @return [Saclient::Cloud::Model::Model_IPv6Net]
       attr_accessor :_ipv6net
 
@@ -189,6 +210,7 @@ module Saclient
         @_disk = Saclient::Cloud::Model::Model_Disk.new(client)
         @_appliance = Saclient::Cloud::Model::Model_Appliance.new(client)
         @_archive = Saclient::Cloud::Model::Model_Archive.new(client)
+        @_iface = Saclient::Cloud::Model::Model_Iface.new(client)
         @_ipv6net = Saclient::Cloud::Model::Model_IPv6Net.new(client)
       end
 

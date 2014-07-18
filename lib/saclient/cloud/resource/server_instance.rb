@@ -119,22 +119,22 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if !r.nil? && r.key?(:Status)
-            @m_status = (r[:Status]).nil? ? nil : r[:Status].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'Status')
+            @m_status = (Saclient::Cloud::Util::get_by_path(r, 'Status')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Status').to_s
           else
             @m_status = nil
             @is_incomplete = true
           end
           @n_status = false
-          if !r.nil? && r.key?(:BeforeStatus)
-            @m_before_status = (r[:BeforeStatus]).nil? ? nil : r[:BeforeStatus].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'BeforeStatus')
+            @m_before_status = (Saclient::Cloud::Util::get_by_path(r, 'BeforeStatus')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'BeforeStatus').to_s
           else
             @m_before_status = nil
             @is_incomplete = true
           end
           @n_before_status = false
-          if !r.nil? && r.key?(:StatusChangedAt)
-            @m_status_changed_at = (r[:StatusChangedAt]).nil? ? nil : r[:StatusChangedAt].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'StatusChangedAt')
+            @m_status_changed_at = (Saclient::Cloud::Util::get_by_path(r, 'StatusChangedAt')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'StatusChangedAt').to_s
           else
             @m_status_changed_at = nil
             @is_incomplete = true

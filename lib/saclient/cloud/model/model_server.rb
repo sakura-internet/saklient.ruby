@@ -31,6 +31,12 @@ module Saclient
           return 'Servers'
         end
 
+        # @private
+        # @return [String]
+        def _class_name
+          return 'Server'
+        end
+
         public
 
         # 次に取得するリストの開始オフセットを指定します.

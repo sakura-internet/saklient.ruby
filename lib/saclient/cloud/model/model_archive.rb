@@ -31,6 +31,12 @@ module Saclient
           return 'Archives'
         end
 
+        # @private
+        # @return [String]
+        def _class_name
+          return 'Archive'
+        end
+
         public
 
         # 次に取得するリストの開始オフセットを指定します.

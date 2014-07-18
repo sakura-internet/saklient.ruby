@@ -398,40 +398,40 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if !r.nil? && r.key?(:ID)
-            @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if !r.nil? && r.key?(:Class)
-            @m_clazz = (r[:Class]).nil? ? nil : r[:Class].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'Class')
+            @m_clazz = (Saclient::Cloud::Util::get_by_path(r, 'Class')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Class').to_s
           else
             @m_clazz = nil
             @is_incomplete = true
           end
           @n_clazz = false
-          if !r.nil? && r.key?(:Name)
-            @m_name = (r[:Name]).nil? ? nil : r[:Name].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if !r.nil? && r.key?(:Description)
-            @m_description = (r[:Description]).nil? ? nil : r[:Description].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'Description')
+            @m_description = (Saclient::Cloud::Util::get_by_path(r, 'Description')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Description').to_s
           else
             @m_description = nil
             @is_incomplete = true
           end
           @n_description = false
-          if !r.nil? && r.key?(:Tags)
-            if (r[:Tags]).nil?
+          if Saclient::Cloud::Util::exists_path(r, 'Tags')
+            if (Saclient::Cloud::Util::get_by_path(r, 'Tags')).nil?
               @m_tags = []
             else
               @m_tags = []
-              for t in r[:Tags]
+              for t in Saclient::Cloud::Util::get_by_path(r, 'Tags')
                 v = nil
                 v = (t).nil? ? nil : t.to_s
                 @m_tags << v
@@ -442,19 +442,19 @@ module Saclient
             @is_incomplete = true
           end
           @n_tags = false
-          if !r.nil? && r.key?(:Icon)
-            @m_icon = (r[:Icon]).nil? ? nil : Saclient::Cloud::Resource::Icon.new(@_client, r[:Icon])
+          if Saclient::Cloud::Util::exists_path(r, 'Icon')
+            @m_icon = (Saclient::Cloud::Util::get_by_path(r, 'Icon')).nil? ? nil : Saclient::Cloud::Resource::Icon.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'Icon'))
           else
             @m_icon = nil
             @is_incomplete = true
           end
           @n_icon = false
-          if !r.nil? && r.key?(:Interfaces)
-            if (r[:Interfaces]).nil?
+          if Saclient::Cloud::Util::exists_path(r, 'Interfaces')
+            if (Saclient::Cloud::Util::get_by_path(r, 'Interfaces')).nil?
               @m_ifaces = []
             else
               @m_ifaces = []
-              for t in r[:Interfaces]
+              for t in Saclient::Cloud::Util::get_by_path(r, 'Interfaces')
                 v = nil
                 v = (t).nil? ? nil : Saclient::Cloud::Resource::Iface.new(@_client, t)
                 @m_ifaces << v
@@ -465,8 +465,8 @@ module Saclient
             @is_incomplete = true
           end
           @n_ifaces = false
-          if !r.nil? && r.key?(:ServiceClass)
-            @m_service_class = (r[:ServiceClass]).nil? ? nil : r[:ServiceClass].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ServiceClass')
+            @m_service_class = (Saclient::Cloud::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ServiceClass').to_s
           else
             @m_service_class = nil
             @is_incomplete = true

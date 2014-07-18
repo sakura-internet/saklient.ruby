@@ -30,6 +30,12 @@ module Saclient
           return 'InternetPlans'
         end
 
+        # @private
+        # @return [String]
+        def _class_name
+          return 'InternetPlan'
+        end
+
         public
 
         # 次に取得するリストの開始オフセットを指定します.

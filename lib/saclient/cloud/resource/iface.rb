@@ -24,6 +24,11 @@ module Saclient
         # @return [String]
         attr_accessor :m_user_ip_address
 
+        # サーバ
+        #
+        # @return [String]
+        attr_accessor :m_server_id
+
         # @private
         # @return [String]
         def _api_path
@@ -172,6 +177,43 @@ module Saclient
 
         protected
 
+        # @return [bool]
+        attr_accessor :n_server_id
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [String]
+        def get_server_id
+          return @m_server_id
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @param [String] v
+        # @return [String]
+        def set_server_id(v)
+          @m_server_id = v
+          @n_server_id = true
+          return @m_server_id
+        end
+
+        public
+
+        # サーバ
+        #
+        # @return [String]
+        attr_accessor :server_id
+
+        def server_id
+          get_server_id
+        end
+
+        def server_id=(v)
+          set_server_id(v)
+        end
+
+        protected
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
@@ -179,34 +221,41 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if !r.nil? && r.key?(:ID)
-            @m_id = (r[:ID]).nil? ? nil : r[:ID].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if !r.nil? && r.key?(:MACAddress)
-            @m_mac_address = (r[:MACAddress]).nil? ? nil : r[:MACAddress].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'MACAddress')
+            @m_mac_address = (Saclient::Cloud::Util::get_by_path(r, 'MACAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'MACAddress').to_s
           else
             @m_mac_address = nil
             @is_incomplete = true
           end
           @n_mac_address = false
-          if !r.nil? && r.key?(:IPAddress)
-            @m_ip_address = (r[:IPAddress]).nil? ? nil : r[:IPAddress].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'IPAddress')
+            @m_ip_address = (Saclient::Cloud::Util::get_by_path(r, 'IPAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPAddress').to_s
           else
             @m_ip_address = nil
             @is_incomplete = true
           end
           @n_ip_address = false
-          if !r.nil? && r.key?(:UserIPAddress)
-            @m_user_ip_address = (r[:UserIPAddress]).nil? ? nil : r[:UserIPAddress].to_s
+          if Saclient::Cloud::Util::exists_path(r, 'UserIPAddress')
+            @m_user_ip_address = (Saclient::Cloud::Util::get_by_path(r, 'UserIPAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'UserIPAddress').to_s
           else
             @m_user_ip_address = nil
             @is_incomplete = true
           end
           @n_user_ip_address = false
+          if Saclient::Cloud::Util::exists_path(r, 'Server.ID')
+            @m_server_id = (Saclient::Cloud::Util::get_by_path(r, 'Server.ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Server.ID').to_s
+          else
+            @m_server_id = nil
+            @is_incomplete = true
+          end
+          @n_server_id = false
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -219,6 +268,7 @@ module Saclient
           ret[:MACAddress] = @m_mac_address if withClean || @n_mac_address
           ret[:IPAddress] = @m_ip_address if withClean || @n_ip_address
           ret[:UserIPAddress] = @m_user_ip_address if withClean || @n_user_ip_address
+          ret[:Server.ID] = @m_server_id if withClean || @n_server_id
           return ret
         end
 

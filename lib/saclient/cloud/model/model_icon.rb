@@ -30,6 +30,12 @@ module Saclient
           return 'Icons'
         end
 
+        # @private
+        # @return [String]
+        def _class_name
+          return 'Icon'
+        end
+
         public
 
         # 次に取得するリストの開始オフセットを指定します.
