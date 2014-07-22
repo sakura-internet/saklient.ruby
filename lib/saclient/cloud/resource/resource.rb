@@ -156,6 +156,26 @@ module Saclient
           return r
         end
 
+        # @param [String] name
+        # @return [String]
+        def normalize_field_name(name)
+          name.gsub!(/[A-Z]/) {|s| '_'+s.downcase}
+          return name
+        end
+
+        public
+
+        # @param [String] name
+        # @param [any] value
+        # @return [void]
+        def set_property(name, value)
+          name = normalize_field_name(name)
+          instance_variable_set('@m_'+name, value)
+          instance_variable_set('@n_'+name, true)
+        end
+
+        protected
+
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
         # @private

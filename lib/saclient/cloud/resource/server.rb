@@ -240,7 +240,7 @@ module Saclient
         def add_iface
           model = Saclient::Cloud::Util::create_class_instance('saclient.cloud.model.Model_Iface', [@_client])
           res = model.create
-          res.server_id = _id
+          res.set_property('serverId', _id)
           return res.save
         end
 
