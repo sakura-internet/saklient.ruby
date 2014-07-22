@@ -33,7 +33,7 @@ describe 'Server' do
     
     # authorize
     @api = Saclient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
-    @api = @api.inZone(@config[:SACLOUD_ZONE]) if @config[:SACLOUD_ZONE]
+    @api = @api.in_zone(@config[:SACLOUD_ZONE]) if @config[:SACLOUD_ZONE]
     expect(@api).to be_an_instance_of Saclient::Cloud::API
     
   end
@@ -44,14 +44,14 @@ describe 'Server' do
     
     servers = @api.server.find
     expect(servers).to be_an_instance_of Array
-    expect(servers.length).to be >= 1
+    expect(servers.length).to be > 0
     
     servers.each {|server|
       expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
       expect(server.plan).to be_an_instance_of Saclient::Cloud::Resource::ServerPlan
-      expect(server.plan.cpu).to be >= 1
-      expect(server.plan.memory_mib).to be >= 1
-      expect(server.plan.memory_gib).to be >= 1
+      expect(server.plan.cpu).to be > 0
+      expect(server.plan.memory_mib).to be > 0
+      expect(server.plan.memory_gib).to be > 0
       expect(server.plan.memory_mib / server.plan.memory_gib).to eq 1024
       expect(server.tags).to be_an_instance_of Array
       server.tags.each {|tag|
@@ -69,6 +69,9 @@ describe 'Server' do
     tag = 'saclient-test'
     cpu = 1
     mem = 2
+    host_name = 'saclient-test'
+    ssh_public_key = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3sSg8Vfxrs3eFTx3G//wMRlgqmFGxh5Ia8DZSSf2YrkZGqKbL1t2AsiUtIMwxGiEVVBc0K89lORzra7qoHQj5v5Xlcdqodgcs9nwuSeS38XWO6tXNF4a8LvKnfGS55+uzmBmVUwAztr3TIJR5TTWxZXpcxSsSEHx7nIcr31zcvosjgdxqvSokAsIgJyPQyxCxsPK8SFIsUV+aATqBCWNyp+R1jECPkd74ipEBoccnA0pYZnRhIsKNWR9phBRXIVd5jx/gK5jHqouhFWvCucUs0gwilEGwpng3b/YxrinNskpfOpMhOD9zjNU58OCoMS8MA17yqoZv59l3u16CrnrD saclient-test@local'
+    ssh_private_key_file = File.dirname(__dir__) + '/test-sshkey.txt'
     
     # search archives
     puts 'searching archives...'
@@ -98,7 +101,7 @@ describe 'Server' do
     server.save
     
     # check the server properties
-    expect(server.id.to_i).to be >= 1
+    expect(server.id.to_i).to be > 0
     expect(server.name).to eq name
     expect(server.description).to eq description
     expect(server.tags).to be_an_instance_of Array
@@ -106,6 +109,12 @@ describe 'Server' do
     expect(server.tags[0]).to eq tag
     expect(server.plan.cpu).to eq cpu
     expect(server.plan.memory_gib).to eq mem
+    
+    # connect to shared segment
+    iface = server.add_iface
+    expect(iface).to be_an_instance_of Saclient::Cloud::Resource::Iface
+    expect(iface.id.to_i).to be > 0
+    iface.connect_to_shared_segment
     
     # wait disk copy
     puts 'waiting disk copy...'
@@ -121,10 +130,17 @@ describe 'Server' do
     puts 'connecting the disk to the server...'
     disk.connect_to(server)
     
+    # config the disk
+    diskconf = disk.create_config
+    diskconf.host_name = 'saclient-test'
+    diskconf.password = SecureRandom.uuid[0, 8]
+    diskconf.ssh_key = ssh_public_key
+    diskconf.write
+    
     # boot
     puts 'booting the server...'
     server.boot
-    sleep 1
+    sleep 3
     server.reload
     expect(server.instance.status).to eq Saclient::Cloud::Enums::EServerInstanceStatus::up
     
@@ -138,8 +154,30 @@ describe 'Server' do
     end
     fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
     
+    # ssh
+    ip_address = server.ifaces[0].ip_address
+    expect(ip_address).not_to be_empty
+    cmd = '| ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i' + ssh_private_key_file +
+          ' root@' + ip_address + ' hostname 2>/dev/null'
+    ssh_success = false
+    puts 'trying to SSH to the server...'
+    for i in 0..9 do
+      sleep 5
+      sh = open cmd
+      host_name_got = ''
+      while !sh.eof
+        host_name_got += sh.gets
+      end
+      sh.close
+      host_name_got.strip!
+      next unless host_name == host_name_got
+      ssh_success = true
+      break
+    end
+    fail '作成したサーバへ正常にSSHできません' unless ssh_success
+    
     # stop
-    sleep 3
+    sleep 1
     puts 'stopping the server...'
     server.stop
     fail 'サーバが正常に停止しません' unless server.sleep_until_down

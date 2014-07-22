@@ -138,9 +138,9 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:ID] = @m_id if withClean || @n_id
-          ret[:Name] = @m_name if withClean || @n_name
-          ret[:StorageClass] = @m_storage_class if withClean || @n_storage_class
+          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Cloud::Util::set_by_path(ret, 'StorageClass', @m_storage_class) if withClean || @n_storage_class
           return ret
         end
 

@@ -234,6 +234,16 @@ module Saclient
           return model.with_server_id(_id).find
         end
 
+        # インタフェースを1つ増設し, それを取得します.
+        #
+        # @return [Iface]
+        def add_iface
+          model = Saclient::Cloud::Util::create_class_instance('saclient.cloud.model.Model_Iface', [@_client])
+          res = model.create
+          res.server_id = _id
+          return res.save
+        end
+
         protected
 
         # @return [bool]
@@ -547,9 +557,9 @@ module Saclient
             else
               @m_tags = []
               for t in Saclient::Cloud::Util::get_by_path(r, 'Tags')
-                v = nil
-                v = (t).nil? ? nil : t.to_s
-                @m_tags << v
+                v1 = nil
+                v1 = (t).nil? ? nil : t.to_s
+                @m_tags << v1
               end
             end
           else
@@ -577,9 +587,9 @@ module Saclient
             else
               @m_ifaces = []
               for t in Saclient::Cloud::Util::get_by_path(r, 'Interfaces')
-                v = nil
-                v = (t).nil? ? nil : Saclient::Cloud::Resource::Iface.new(@_client, t)
-                @m_ifaces << v
+                v2 = nil
+                v2 = (t).nil? ? nil : Saclient::Cloud::Resource::Iface.new(@_client, t)
+                @m_ifaces << v2
               end
             end
           else
@@ -609,29 +619,29 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:ID] = @m_id if withClean || @n_id
-          ret[:Name] = @m_name if withClean || @n_name
-          ret[:Description] = @m_description if withClean || @n_description
+          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Cloud::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           if withClean || @n_tags
-            ret[:Tags] = []
-            for r in @m_tags
+            Saclient::Cloud::Util::set_by_path(ret, 'Tags', [])
+            for r1 in @m_tags
               v = nil
-              v = r
+              v = r1
               ret[:Tags] << v
             end
           end
-          ret[:Icon] = withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id) if withClean || @n_icon
-          ret[:ServerPlan] = withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id) if withClean || @n_plan
+          Saclient::Cloud::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
+          Saclient::Cloud::Util::set_by_path(ret, 'ServerPlan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
           if withClean || @n_ifaces
-            ret[:Interfaces] = []
-            for r in @m_ifaces
+            Saclient::Cloud::Util::set_by_path(ret, 'Interfaces', [])
+            for r2 in @m_ifaces
               v = nil
-              v = withClean ? ((r).nil? ? nil : r.api_serialize(withClean)) : ((r).nil? ? { ID: '0' } : r.api_serialize_id)
+              v = withClean ? ((r2).nil? ? nil : r2.api_serialize(withClean)) : ((r2).nil? ? { ID: '0' } : r2.api_serialize_id)
               ret[:Interfaces] << v
             end
           end
-          ret[:Instance] = withClean ? ((@m_instance).nil? ? nil : @m_instance.api_serialize(withClean)) : ((@m_instance).nil? ? { ID: '0' } : @m_instance.api_serialize_id) if withClean || @n_instance
-          ret[:Availability] = @m_availability if withClean || @n_availability
+          Saclient::Cloud::Util::set_by_path(ret, 'Instance', withClean ? ((@m_instance).nil? ? nil : @m_instance.api_serialize(withClean)) : ((@m_instance).nil? ? { ID: '0' } : @m_instance.api_serialize_id)) if withClean || @n_instance
+          Saclient::Cloud::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
           return ret
         end
 

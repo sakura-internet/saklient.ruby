@@ -17,7 +17,6 @@ describe 'Util' do
     expect(Util::get_by_path(test, 'existing')).to be_a Object
     expect(Util::get_by_path(test, 'existing.nil')).to be_nil
     #
-    p test
     expect(Util::get_by_path(test, 'top')).to eq 123
     expect(Util::get_by_path(test, 'first.second')).to eq 456
     expect(Util::get_by_path(test, '.weird..path')).to eq 789

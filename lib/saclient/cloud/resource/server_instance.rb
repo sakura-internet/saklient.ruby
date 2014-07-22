@@ -148,9 +148,9 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:Status] = @m_status if withClean || @n_status
-          ret[:BeforeStatus] = @m_before_status if withClean || @n_before_status
-          ret[:StatusChangedAt] = (@m_status_changed_at).nil? ? nil : Saclient::Cloud::Util::date2str(@m_status_changed_at) if withClean || @n_status_changed_at
+          Saclient::Cloud::Util::set_by_path(ret, 'Status', @m_status) if withClean || @n_status
+          Saclient::Cloud::Util::set_by_path(ret, 'BeforeStatus', @m_before_status) if withClean || @n_before_status
+          Saclient::Cloud::Util::set_by_path(ret, 'StatusChangedAt', (@m_status_changed_at).nil? ? nil : Saclient::Cloud::Util::date2str(@m_status_changed_at)) if withClean || @n_status_changed_at
           return ret
         end
 

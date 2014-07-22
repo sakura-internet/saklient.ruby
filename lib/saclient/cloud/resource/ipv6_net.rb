@@ -169,10 +169,10 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:ID] = @m_id if withClean || @n_id
-          ret[:IPv6Prefix] = @m_ipv6_prefix if withClean || @n_ipv6_prefix
-          ret[:IPv6PrefixLen] = @m_ipv6_prefix_len if withClean || @n_ipv6_prefix_len
-          ret[:IPv6PrefixTail] = @m_ipv6_prefix_tail if withClean || @n_ipv6_prefix_tail
+          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Cloud::Util::set_by_path(ret, 'IPv6Prefix', @m_ipv6_prefix) if withClean || @n_ipv6_prefix
+          Saclient::Cloud::Util::set_by_path(ret, 'IPv6PrefixLen', @m_ipv6_prefix_len) if withClean || @n_ipv6_prefix_len
+          Saclient::Cloud::Util::set_by_path(ret, 'IPv6PrefixTail', @m_ipv6_prefix_tail) if withClean || @n_ipv6_prefix_tail
           return ret
         end
 

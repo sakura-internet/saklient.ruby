@@ -170,9 +170,9 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:ID] = @m_id if withClean || @n_id
-          ret[:Name] = @m_name if withClean || @n_name
-          ret[:URL] = @m_url if withClean || @n_url
+          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Cloud::Util::set_by_path(ret, 'URL', @m_url) if withClean || @n_url
           return ret
         end
 

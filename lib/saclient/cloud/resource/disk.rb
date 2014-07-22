@@ -6,6 +6,7 @@ require_relative 'icon'
 require_relative 'disk_plan'
 require_relative 'server'
 require_relative 'archive'
+require_relative 'disk_config'
 require_relative '../enums/eavailability'
 require_relative '../enums/edisk_connection'
 
@@ -259,6 +260,13 @@ module Saclient
         def disconnect
           @_client.request('DELETE', '/disk/' + _id + '/to/server')
           return self
+        end
+
+        # *
+        #
+        # @return [DiskConfig]
+        def create_config
+          return Saclient::Cloud::Resource::DiskConfig.new(@_client, _id)
         end
 
         # コピー中のディスクが利用可能になるまで待機します.
@@ -625,9 +633,9 @@ module Saclient
             else
               @m_tags = []
               for t in Saclient::Cloud::Util::get_by_path(r, 'Tags')
-                v = nil
-                v = (t).nil? ? nil : t.to_s
-                @m_tags << v
+                v1 = nil
+                v1 = (t).nil? ? nil : t.to_s
+                @m_tags << v1
               end
             end
           else
@@ -685,23 +693,23 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:ID] = @m_id if withClean || @n_id
-          ret[:Name] = @m_name if withClean || @n_name
-          ret[:Description] = @m_description if withClean || @n_description
+          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Cloud::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           if withClean || @n_tags
-            ret[:Tags] = []
-            for r in @m_tags
+            Saclient::Cloud::Util::set_by_path(ret, 'Tags', [])
+            for r1 in @m_tags
               v = nil
-              v = r
+              v = r1
               ret[:Tags] << v
             end
           end
-          ret[:Icon] = withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id) if withClean || @n_icon
-          ret[:SizeMB] = @m_size_mib if withClean || @n_size_mib
-          ret[:ServiceClass] = @m_service_class if withClean || @n_service_class
-          ret[:Plan] = withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id) if withClean || @n_plan
-          ret[:Server] = withClean ? ((@m_server).nil? ? nil : @m_server.api_serialize(withClean)) : ((@m_server).nil? ? { ID: '0' } : @m_server.api_serialize_id) if withClean || @n_server
-          ret[:Availability] = @m_availability if withClean || @n_availability
+          Saclient::Cloud::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
+          Saclient::Cloud::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
+          Saclient::Cloud::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
+          Saclient::Cloud::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
+          Saclient::Cloud::Util::set_by_path(ret, 'Server', withClean ? ((@m_server).nil? ? nil : @m_server.api_serialize(withClean)) : ((@m_server).nil? ? { ID: '0' } : @m_server.api_serialize_id)) if withClean || @n_server
+          Saclient::Cloud::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
           return ret
         end
 

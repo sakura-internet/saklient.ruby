@@ -169,10 +169,10 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:ID] = @m_id if withClean || @n_id
-          ret[:Name] = @m_name if withClean || @n_name
-          ret[:BandWidthMbps] = @m_band_width_mbps if withClean || @n_band_width_mbps
-          ret[:ServiceClass] = @m_service_class if withClean || @n_service_class
+          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Cloud::Util::set_by_path(ret, 'BandWidthMbps', @m_band_width_mbps) if withClean || @n_band_width_mbps
+          Saclient::Cloud::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           return ret
         end
 

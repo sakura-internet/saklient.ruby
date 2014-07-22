@@ -77,6 +77,14 @@ module Saclient
           api_deserialize(r)
         end
 
+        # 共有セグメントに接続します.
+        #
+        # @return [Iface]
+        def connect_to_shared_segment
+          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/to/switch/shared')
+          return reload
+        end
+
         protected
 
         # @return [bool]
@@ -264,11 +272,11 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          ret[:ID] = @m_id if withClean || @n_id
-          ret[:MACAddress] = @m_mac_address if withClean || @n_mac_address
-          ret[:IPAddress] = @m_ip_address if withClean || @n_ip_address
-          ret[:UserIPAddress] = @m_user_ip_address if withClean || @n_user_ip_address
-          ret[:Server.ID] = @m_server_id if withClean || @n_server_id
+          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Cloud::Util::set_by_path(ret, 'MACAddress', @m_mac_address) if withClean || @n_mac_address
+          Saclient::Cloud::Util::set_by_path(ret, 'IPAddress', @m_ip_address) if withClean || @n_ip_address
+          Saclient::Cloud::Util::set_by_path(ret, 'UserIPAddress', @m_user_ip_address) if withClean || @n_user_ip_address
+          Saclient::Cloud::Util::set_by_path(ret, 'Server.ID', @m_server_id) if withClean || @n_server_id
           return ret
         end
 
