@@ -111,6 +111,7 @@ describe 'Server' do
     expect(server.plan.memory_gib).to eq mem
     
     # connect to shared segment
+    puts 'connecting the server to shared segment...'
     iface = server.add_iface
     expect(iface).to be_an_instance_of Saclient::Cloud::Resource::Iface
     expect(iface.id.to_i).to be > 0
@@ -131,6 +132,7 @@ describe 'Server' do
     disk.connect_to(server)
     
     # config the disk
+    puts 'writing configuration to the disk...'
     diskconf = disk.create_config
     diskconf.host_name = 'saclient-test'
     diskconf.password = SecureRandom.uuid[0, 8]
