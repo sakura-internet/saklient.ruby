@@ -2,7 +2,7 @@
 
 require_relative 'model/model_server_plan'
 require_relative 'model/model_disk_plan'
-require_relative 'model/model_internet_plan'
+require_relative 'model/model_router_plan'
 require_relative 'client'
 
 module Saclient
@@ -53,28 +53,28 @@ module Saclient
       protected
 
       # @private
-      # @return [Saclient::Cloud::Model::Model_InternetPlan]
-      attr_accessor :_internet
+      # @return [Saclient::Cloud::Model::Model_RouterPlan]
+      attr_accessor :_router
 
-      # @return [Saclient::Cloud::Model::Model_InternetPlan]
-      def get_internet
-        return @_internet
+      # @return [Saclient::Cloud::Model::Model_RouterPlan]
+      def get_router
+        return @_router
       end
 
       public
 
-      # @return [Saclient::Cloud::Model::Model_InternetPlan]
-      attr_reader :internet
+      # @return [Saclient::Cloud::Model::Model_RouterPlan]
+      attr_reader :router
 
-      def internet
-        get_internet
+      def router
+        get_router
       end
 
       # @param [Client] client
       def initialize(client)
         @_server = Saclient::Cloud::Model::Model_ServerPlan.new(client)
         @_disk = Saclient::Cloud::Model::Model_DiskPlan.new(client)
-        @_internet = Saclient::Cloud::Model::Model_InternetPlan.new(client)
+        @_router = Saclient::Cloud::Model::Model_RouterPlan.new(client)
       end
 
     end

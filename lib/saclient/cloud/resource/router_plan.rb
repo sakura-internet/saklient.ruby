@@ -8,7 +8,7 @@ module Saclient
     module Resource
 
       # ルータのプラン情報へのアクセス機能を備えたクラス.
-      class InternetPlan < Saclient::Cloud::Resource::Resource
+      class RouterPlan < Saclient::Cloud::Resource::Resource
 
         protected
 

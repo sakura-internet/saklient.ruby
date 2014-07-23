@@ -9,6 +9,8 @@ require_relative 'model/model_disk'
 require_relative 'model/model_appliance'
 require_relative 'model/model_archive'
 require_relative 'model/model_iface'
+require_relative 'model/model_swytch'
+require_relative 'model/model_router'
 require_relative 'model/model_ipv6_net'
 
 module Saclient
@@ -182,21 +184,61 @@ module Saclient
       protected
 
       # @private
-      # @return [Saclient::Cloud::Model::Model_IPv6Net]
-      attr_accessor :_ipv6net
+      # @return [Saclient::Cloud::Model::Model_Swytch]
+      attr_accessor :_swytch
 
-      # @return [Saclient::Cloud::Model::Model_IPv6Net]
-      def get_ipv6net
-        return @_ipv6net
+      # @return [Saclient::Cloud::Model::Model_Swytch]
+      def get_swytch
+        return @_swytch
       end
 
       public
 
-      # @return [Saclient::Cloud::Model::Model_IPv6Net]
-      attr_reader :ipv6net
+      # @return [Saclient::Cloud::Model::Model_Swytch]
+      attr_reader :swytch
 
-      def ipv6net
-        get_ipv6net
+      def swytch
+        get_swytch
+      end
+
+      protected
+
+      # @private
+      # @return [Saclient::Cloud::Model::Model_Router]
+      attr_accessor :_router
+
+      # @return [Saclient::Cloud::Model::Model_Router]
+      def get_router
+        return @_router
+      end
+
+      public
+
+      # @return [Saclient::Cloud::Model::Model_Router]
+      attr_reader :router
+
+      def router
+        get_router
+      end
+
+      protected
+
+      # @private
+      # @return [Saclient::Cloud::Model::Model_Ipv6Net]
+      attr_accessor :_ipv6_net
+
+      # @return [Saclient::Cloud::Model::Model_Ipv6Net]
+      def get_ipv6_net
+        return @_ipv6_net
+      end
+
+      public
+
+      # @return [Saclient::Cloud::Model::Model_Ipv6Net]
+      attr_reader :ipv6_net
+
+      def ipv6_net
+        get_ipv6_net
       end
 
       protected
@@ -211,7 +253,9 @@ module Saclient
         @_appliance = Saclient::Cloud::Model::Model_Appliance.new(client)
         @_archive = Saclient::Cloud::Model::Model_Archive.new(client)
         @_iface = Saclient::Cloud::Model::Model_Iface.new(client)
-        @_ipv6net = Saclient::Cloud::Model::Model_IPv6Net.new(client)
+        @_swytch = Saclient::Cloud::Model::Model_Swytch.new(client)
+        @_router = Saclient::Cloud::Model::Model_Router.new(client)
+        @_ipv6_net = Saclient::Cloud::Model::Model_Ipv6Net.new(client)
       end
 
       public

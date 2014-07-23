@@ -178,31 +178,31 @@ module Saclient
 
         # @private
         # @return [String]
-        attr_accessor :_gateway
+        attr_accessor :_default_route
 
         # @return [String]
-        def get_gateway
-          return @_gateway
+        def get_default_route
+          return @_default_route
         end
 
         # @param [String] v
         # @return [String]
-        def set_gateway(v)
-          @_gateway = v
+        def set_default_route(v)
+          @_default_route = v
           return v
         end
 
         public
 
         # @return [String]
-        attr_accessor :gateway
+        attr_accessor :default_route
 
-        def gateway
-          get_gateway
+        def default_route
+          get_default_route
         end
 
-        def gateway=(v)
-          set_gateway(v)
+        def default_route=(v)
+          set_default_route(v)
         end
 
         protected
@@ -246,7 +246,7 @@ module Saclient
           @_password = nil
           @_ssh_key = nil
           @_ip_address = nil
-          @_gateway = nil
+          @_default_route = nil
           @_network_mask_len = nil
         end
 
@@ -259,7 +259,7 @@ module Saclient
           Saclient::Cloud::Util::set_by_path(q, 'Password', @_password) if !(@_password).nil?
           Saclient::Cloud::Util::set_by_path(q, 'SSHKey.PublicKey', @_ssh_key) if !(@_ssh_key).nil?
           Saclient::Cloud::Util::set_by_path(q, 'UserIPAddress', @_ip_address) if !(@_ip_address).nil?
-          Saclient::Cloud::Util::set_by_path(q, 'UserSubnet.DefaultRoute', @_gateway) if !(@_gateway).nil?
+          Saclient::Cloud::Util::set_by_path(q, 'UserSubnet.DefaultRoute', @_default_route) if !(@_default_route).nil?
           Saclient::Cloud::Util::set_by_path(q, 'UserSubnet.NetworkMaskLen', @_network_mask_len) if !(@_network_mask_len).nil?
           path = '/disk/' + @_disk_id + '/config'
           result = @_client.request('PUT', path, q)

@@ -54,6 +54,16 @@ module Saclient
           return _limit(count)
         end
 
+        # APIのフィルタリング設定を直接指定します.
+        #
+        # @param [any] value
+        # @param [bool] multiple
+        # @param [String] key
+        # @return [Model_Icon]
+        def filter_by(key, value, multiple = false)
+          return _filter_by(key, value, multiple)
+        end
+
         # 次のリクエストのために設定されているステートをすべて破棄します.
         #
         # @return [Model_Icon] this

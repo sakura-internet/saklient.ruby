@@ -7,8 +7,8 @@ module Saclient
   module Cloud
     module Resource
 
-      # IPv6ネットワークのリソース情報へのアクセス機能や操作機能を備えたクラス.
-      class Ipv6Net < Saclient::Cloud::Resource::Resource
+      # IPv4ネットワークのリソース情報へのアクセス機能や操作機能を備えたクラス.
+      class Ipv4Net < Saclient::Cloud::Resource::Resource
 
         protected
 
@@ -16,30 +16,33 @@ module Saclient
         attr_accessor :m_id
 
         # @return [String]
-        attr_accessor :m_prefix
+        attr_accessor :m_address
 
         # @return [Integer]
-        attr_accessor :m_prefix_len
+        attr_accessor :m_mask_len
 
         # @return [String]
-        attr_accessor :m_prefix_tail
+        attr_accessor :m_default_route
+
+        # @return [String]
+        attr_accessor :m_next_hop
 
         # @private
         # @return [String]
         def _api_path
-          return '/ipv6net'
+          return '/subnet'
         end
 
         # @private
         # @return [String]
         def _root_key
-          return 'IPv6Net'
+          return 'Subnet'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          return 'IPv6Nets'
+          return 'Subnets'
         end
 
         public
@@ -89,64 +92,85 @@ module Saclient
         protected
 
         # @return [bool]
-        attr_accessor :n_prefix
+        attr_accessor :n_address
 
         # (This method is generated in Translator_default#buildImpl)
         #
         # @return [String]
-        def get_prefix
-          return @m_prefix
+        def get_address
+          return @m_address
         end
 
         public
 
         # @return [String]
-        attr_reader :prefix
+        attr_reader :address
 
-        def prefix
-          get_prefix
+        def address
+          get_address
         end
 
         protected
 
         # @return [bool]
-        attr_accessor :n_prefix_len
+        attr_accessor :n_mask_len
 
         # (This method is generated in Translator_default#buildImpl)
         #
         # @return [Integer]
-        def get_prefix_len
-          return @m_prefix_len
+        def get_mask_len
+          return @m_mask_len
         end
 
         public
 
         # @return [Integer]
-        attr_reader :prefix_len
+        attr_reader :mask_len
 
-        def prefix_len
-          get_prefix_len
+        def mask_len
+          get_mask_len
         end
 
         protected
 
         # @return [bool]
-        attr_accessor :n_prefix_tail
+        attr_accessor :n_default_route
 
         # (This method is generated in Translator_default#buildImpl)
         #
         # @return [String]
-        def get_prefix_tail
-          return @m_prefix_tail
+        def get_default_route
+          return @m_default_route
         end
 
         public
 
         # @return [String]
-        attr_reader :prefix_tail
+        attr_reader :default_route
 
-        def prefix_tail
-          get_prefix_tail
+        def default_route
+          get_default_route
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_next_hop
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [String]
+        def get_next_hop
+          return @m_next_hop
+        end
+
+        public
+
+        # @return [String]
+        attr_reader :next_hop
+
+        def next_hop
+          get_next_hop
         end
 
         protected
@@ -165,27 +189,34 @@ module Saclient
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPv6Prefix')
-            @m_prefix = (Saclient::Cloud::Util::get_by_path(r, 'IPv6Prefix')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPv6Prefix').to_s
+          if Saclient::Cloud::Util::exists_path(r, 'NetworkAddress')
+            @m_address = (Saclient::Cloud::Util::get_by_path(r, 'NetworkAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'NetworkAddress').to_s
           else
-            @m_prefix = nil
+            @m_address = nil
             @is_incomplete = true
           end
-          @n_prefix = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPv6PrefixLen')
-            @m_prefix_len = (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixLen')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixLen').to_s).to_i(10)
+          @n_address = false
+          if Saclient::Cloud::Util::exists_path(r, 'NetworkMaskLen')
+            @m_mask_len = (Saclient::Cloud::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_i(10)
           else
-            @m_prefix_len = nil
+            @m_mask_len = nil
             @is_incomplete = true
           end
-          @n_prefix_len = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPv6PrefixTail')
-            @m_prefix_tail = (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixTail')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixTail').to_s
+          @n_mask_len = false
+          if Saclient::Cloud::Util::exists_path(r, 'DefaultRoute')
+            @m_default_route = (Saclient::Cloud::Util::get_by_path(r, 'DefaultRoute')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'DefaultRoute').to_s
           else
-            @m_prefix_tail = nil
+            @m_default_route = nil
             @is_incomplete = true
           end
-          @n_prefix_tail = false
+          @n_default_route = false
+          if Saclient::Cloud::Util::exists_path(r, 'NextHop')
+            @m_next_hop = (Saclient::Cloud::Util::get_by_path(r, 'NextHop')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'NextHop').to_s
+          else
+            @m_next_hop = nil
+            @is_incomplete = true
+          end
+          @n_next_hop = false
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -195,9 +226,10 @@ module Saclient
         def api_serialize_impl(withClean = false)
           ret = {}
           Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'IPv6Prefix', @m_prefix) if withClean || @n_prefix
-          Saclient::Cloud::Util::set_by_path(ret, 'IPv6PrefixLen', @m_prefix_len) if withClean || @n_prefix_len
-          Saclient::Cloud::Util::set_by_path(ret, 'IPv6PrefixTail', @m_prefix_tail) if withClean || @n_prefix_tail
+          Saclient::Cloud::Util::set_by_path(ret, 'NetworkAddress', @m_address) if withClean || @n_address
+          Saclient::Cloud::Util::set_by_path(ret, 'NetworkMaskLen', @m_mask_len) if withClean || @n_mask_len
+          Saclient::Cloud::Util::set_by_path(ret, 'DefaultRoute', @m_default_route) if withClean || @n_default_route
+          Saclient::Cloud::Util::set_by_path(ret, 'NextHop', @m_next_hop) if withClean || @n_next_hop
           return ret
         end
 

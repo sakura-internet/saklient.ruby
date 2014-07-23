@@ -225,6 +225,17 @@ module Saclient
 
         public
 
+        # このリソースが存在するかを調べます.
+        #
+        # @return [bool]
+        def exists
+          params = {}
+          Saclient::Cloud::Util::set_by_path(params, 'Filter.ID', [_id])
+          Saclient::Cloud::Util::set_by_path(params, 'Include', ['ID'])
+          result = @_client.request('GET', _api_path, params)
+          return result[:Count] == 1
+        end
+
         # @return [any]
         def dump
           return api_serialize(true)

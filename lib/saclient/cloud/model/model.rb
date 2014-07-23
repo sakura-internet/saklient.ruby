@@ -148,6 +148,26 @@ module Saclient
           return self
         end
 
+        # APIのフィルタリング設定を直接指定します.
+        #
+        # @private
+        # @param [any] value
+        # @param [bool] multiple
+        # @param [String] key
+        # @return [Model]
+        def _filter_by(key, value, multiple = false)
+          @_params[:Filter] = {} if !(!@_params.nil? && @_params.key?(:Filter))
+          filter = @_params[:Filter]
+          if multiple
+            filter[key.to_sym] = [] if !(!filter.nil? && filter.key?(key.to_sym))
+            values = filter[key.to_sym]
+            values << value
+          else
+            filter[key.to_sym] = value
+          end
+          return self
+        end
+
         # 次のリクエストのために設定されているステートをすべて破棄します.
         #
         # @private
@@ -214,23 +234,6 @@ module Saclient
           return nil if @_total == 0
           records = result[_root_key_m.to_sym]
           return Saclient::Cloud::Util::create_class_instance('saclient.cloud.resource.' + _class_name, [@_client, records[0]])
-        end
-
-        # @private
-        # @param [any] value
-        # @param [bool] multiple
-        # @param [String] key
-        # @return [void]
-        def _filter_by(key, value, multiple = false)
-          @_params[:Filter] = {} if !(!@_params.nil? && @_params.key?(:Filter))
-          filter = @_params[:Filter]
-          if multiple
-            filter[key.to_sym] = [] if !(!filter.nil? && filter.key?(key.to_sym))
-            values = filter[key.to_sym]
-            values << value
-          else
-            filter[key.to_sym] = value
-          end
         end
 
       end
