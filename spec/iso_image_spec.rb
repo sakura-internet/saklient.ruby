@@ -46,7 +46,7 @@ describe 'IsoImage' do
     tag = 'saclient-test'
     
     # search iso images
-    puts 'searching iso images..'
+    puts 'searching iso images...'
     isos = @api.iso_image.
       with_name_like('CentOS 6.5 64bit').
       with_shared_scope.
@@ -56,7 +56,7 @@ describe 'IsoImage' do
     iso = isos[0]
     
     # create a server
-    puts 'creating a server..'
+    puts 'creating a server...'
     server = @api.server.create
     expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
     server.name = name
@@ -66,29 +66,29 @@ describe 'IsoImage' do
     server.save
     
     # insert iso image while the server is down
-    puts 'inserting an ISO image to the server..'
+    puts 'inserting an ISO image to the server...'
     server.insert_iso_image(iso)
     expect(server.instance.iso_image).to be_an_instance_of Saclient::Cloud::Resource::IsoImage
     expect(server.instance.iso_image.id).to eq iso.id
     
     # eject iso image while the server is down
-    puts 'ejecting the ISO image from the server..'
+    puts 'ejecting the ISO image from the server...'
     server.eject_iso_image
     expect(server.instance.iso_image).to be_nil
     
     # boot
-    puts 'booting the server..'
+    puts 'booting the server...'
     server.boot
     sleep 3
     
     # insert iso image while the server is up
-    puts 'inserting an ISO image to the server..'
+    puts 'inserting an ISO image to the server...'
     server.insert_iso_image(iso)
     expect(server.instance.iso_image).to be_an_instance_of Saclient::Cloud::Resource::IsoImage
     expect(server.instance.iso_image.id).to eq iso.id
     
     # eject iso image while the server is up
-    puts 'ejecting the ISO image from the server..'
+    puts 'ejecting the ISO image from the server...'
     server.eject_iso_image
     expect(server.instance.iso_image).to be_nil
     
@@ -99,7 +99,7 @@ describe 'IsoImage' do
     fail 'サーバが正常に停止しません' unless server.sleep_until_down
     
     # delete the server
-    puts 'deleting the server..'
+    puts 'deleting the server...'
     server.destroy
     
   end
