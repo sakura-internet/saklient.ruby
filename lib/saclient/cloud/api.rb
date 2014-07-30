@@ -8,6 +8,7 @@ require_relative 'model/model_server'
 require_relative 'model/model_disk'
 require_relative 'model/model_appliance'
 require_relative 'model/model_archive'
+require_relative 'model/model_iso_image'
 require_relative 'model/model_iface'
 require_relative 'model/model_swytch'
 require_relative 'model/model_router'
@@ -164,6 +165,26 @@ module Saclient
       protected
 
       # @private
+      # @return [Saclient::Cloud::Model::Model_IsoImage]
+      attr_accessor :_iso_image
+
+      # @return [Saclient::Cloud::Model::Model_IsoImage]
+      def get_iso_image
+        return @_iso_image
+      end
+
+      public
+
+      # @return [Saclient::Cloud::Model::Model_IsoImage]
+      attr_reader :iso_image
+
+      def iso_image
+        get_iso_image
+      end
+
+      protected
+
+      # @private
       # @return [Saclient::Cloud::Model::Model_Iface]
       attr_accessor :_iface
 
@@ -252,6 +273,7 @@ module Saclient
         @_disk = Saclient::Cloud::Model::Model_Disk.new(client)
         @_appliance = Saclient::Cloud::Model::Model_Appliance.new(client)
         @_archive = Saclient::Cloud::Model::Model_Archive.new(client)
+        @_iso_image = Saclient::Cloud::Model::Model_IsoImage.new(client)
         @_iface = Saclient::Cloud::Model::Model_Iface.new(client)
         @_swytch = Saclient::Cloud::Model::Model_Swytch.new(client)
         @_router = Saclient::Cloud::Model::Model_Router.new(client)

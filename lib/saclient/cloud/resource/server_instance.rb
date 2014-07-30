@@ -14,14 +14,25 @@ module Saclient
 
         protected
 
+        # 起動状態
+        #
         # @return [String]
         attr_accessor :m_status
 
+        # 前回の起動状態
+        #
         # @return [String]
         attr_accessor :m_before_status
 
+        # 現在の起動状態に変化した日時
+        #
         # @return [NativeDate]
         attr_accessor :m_status_changed_at
+
+        # 挿入されているISOイメージ
+        #
+        # @return [IsoImage]
+        attr_accessor :m_iso_image
 
         public
 
@@ -61,6 +72,8 @@ module Saclient
 
         public
 
+        # 起動状態
+        #
         # @return [String]
         attr_reader :status
 
@@ -82,6 +95,8 @@ module Saclient
 
         public
 
+        # 前回の起動状態
+        #
         # @return [String]
         attr_reader :before_status
 
@@ -103,11 +118,36 @@ module Saclient
 
         public
 
+        # 現在の起動状態に変化した日時
+        #
         # @return [NativeDate]
         attr_reader :status_changed_at
 
         def status_changed_at
           get_status_changed_at
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_iso_image
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [IsoImage]
+        def get_iso_image
+          return @m_iso_image
+        end
+
+        public
+
+        # 挿入されているISOイメージ
+        #
+        # @return [IsoImage]
+        attr_reader :iso_image
+
+        def iso_image
+          get_iso_image
         end
 
         protected
@@ -140,6 +180,13 @@ module Saclient
             @is_incomplete = true
           end
           @n_status_changed_at = false
+          if Saclient::Cloud::Util::exists_path(r, 'CDROM')
+            @m_iso_image = (Saclient::Cloud::Util::get_by_path(r, 'CDROM')).nil? ? nil : IsoImage.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'CDROM'))
+          else
+            @m_iso_image = nil
+            @is_incomplete = true
+          end
+          @n_iso_image = false
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -151,6 +198,7 @@ module Saclient
           Saclient::Cloud::Util::set_by_path(ret, 'Status', @m_status) if withClean || @n_status
           Saclient::Cloud::Util::set_by_path(ret, 'BeforeStatus', @m_before_status) if withClean || @n_before_status
           Saclient::Cloud::Util::set_by_path(ret, 'StatusChangedAt', (@m_status_changed_at).nil? ? nil : Saclient::Cloud::Util::date2str(@m_status_changed_at)) if withClean || @n_status_changed_at
+          Saclient::Cloud::Util::set_by_path(ret, 'CDROM', withClean ? ((@m_iso_image).nil? ? nil : @m_iso_image.api_serialize(withClean)) : ((@m_iso_image).nil? ? { ID: '0' } : @m_iso_image.api_serialize_id)) if withClean || @n_iso_image
           return ret
         end
 

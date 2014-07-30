@@ -234,7 +234,7 @@ module Saclient
           return model.with_server_id(_id).find
         end
 
-        # インタフェースを1つ増設し, それを取得します.
+        # サーバにインタフェースを1つ増設し, それを取得します.
         #
         # @return [Iface]
         def add_iface
@@ -242,6 +242,28 @@ module Saclient
           res = model.create
           res.set_property('serverId', _id)
           return res.save
+        end
+
+        # サーバにISOイメージを挿入します.
+        #
+        # @param [IsoImage] iso
+        # @return [Server]
+        def insert_iso_image(iso)
+          path = _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/cdrom'
+          q = { CDROM: { ID: iso._id } }
+          result = @_client.request('PUT', path, q)
+          reload
+          return self
+        end
+
+        # サーバに挿入されているISOイメージを排出します.
+        #
+        # @return [Server]
+        def eject_iso_image
+          path = _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/cdrom'
+          result = @_client.request('DELETE', path)
+          reload
+          return self
         end
 
         protected

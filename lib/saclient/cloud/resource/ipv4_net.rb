@@ -2,6 +2,7 @@
 
 require_relative '../client'
 require_relative 'resource'
+require_relative 'swytch'
 
 module Saclient
   module Cloud

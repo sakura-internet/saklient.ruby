@@ -116,7 +116,8 @@ module Saclient
         # @return [Swytch]
         def get_swytch
           model = Saclient::Cloud::Util::create_class_instance('saclient.cloud.model.Model_Swytch', [@_client])
-          return model.get_by_id(@swytch_id)
+          id = get_swytch_id
+          return model.get_by_id(id)
         end
 
         # このルータ＋スイッチでIPv6アドレスを有効にします.
