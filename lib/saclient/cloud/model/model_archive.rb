@@ -105,6 +105,15 @@ module Saclient
           return self
         end
 
+        # 指定したタグを持つアーカイブに絞り込みます.
+        #
+        # @param [Array<String>] tags
+        # @return [Model_Archive]
+        def with_tags(tags)
+          _filter_by('Tags.Name', tags, true)
+          return self
+        end
+
         # 指定したサイズのアーカイブに絞り込みます.
         #
         # @param [Integer] sizeGib

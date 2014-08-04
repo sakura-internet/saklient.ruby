@@ -111,6 +111,15 @@ module Saclient
           return self
         end
 
+        # 指定したタグを持つディスクに絞り込みます.
+        #
+        # @param [Array<String>] tags
+        # @return [Model_Disk]
+        def with_tags(tags)
+          _filter_by('Tags.Name', tags, true)
+          return self
+        end
+
         # 指定したサイズのディスクに絞り込みます.
         #
         # @param [Integer] sizeGib

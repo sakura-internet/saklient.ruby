@@ -3,6 +3,7 @@
 require_relative '../client'
 require_relative '../util'
 require_relative 'resource'
+require_relative 'iso_image'
 require_relative '../enums/eserver_instance_status'
 
 module Saclient
@@ -181,7 +182,7 @@ module Saclient
           end
           @n_status_changed_at = false
           if Saclient::Cloud::Util::exists_path(r, 'CDROM')
-            @m_iso_image = (Saclient::Cloud::Util::get_by_path(r, 'CDROM')).nil? ? nil : IsoImage.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'CDROM'))
+            @m_iso_image = (Saclient::Cloud::Util::get_by_path(r, 'CDROM')).nil? ? nil : Saclient::Cloud::Resource::IsoImage.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'CDROM'))
           else
             @m_iso_image = nil
             @is_incomplete = true

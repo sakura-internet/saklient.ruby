@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../errors/saclient_exception'
 require 'uri'
 
 module Saclient
@@ -99,6 +100,13 @@ module Saclient
       # @return [void]
       def self.sleep(sec)
         super self
+      end
+
+      # @param [any] value
+      # @param [String] typeName
+      # @return [void]
+      def self.validate_type(value, typeName)
+        raise Exception.new(Saclient::Errors::SaclientException.new('type_mismatch', 'Type mismatch')) if typeName == 'test'
       end
 
     end

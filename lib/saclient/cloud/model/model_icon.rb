@@ -104,6 +104,15 @@ module Saclient
           return self
         end
 
+        # 指定したタグを持つアイコンに絞り込みます.
+        #
+        # @param [Array<String>] tags
+        # @return [Model_Icon]
+        def with_tags(tags)
+          _filter_by('Tags.Name', tags, true)
+          return self
+        end
+
       end
 
     end

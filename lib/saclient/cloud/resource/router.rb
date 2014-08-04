@@ -96,6 +96,17 @@ module Saclient
 
         # 作成中のルータが利用可能になるまで待機します.
         #
+        # @yield [Saclient::Cloud::Resource::Router, bool]
+        # @yieldreturn [void]
+        # @param [Integer] timeoutSec
+        # @return [void]
+        def after_create(timeoutSec, &callback)
+          ret = sleep_while_creating(timeoutSec)
+          callback.call(self, ret)
+        end
+
+        # 作成中のルータが利用可能になるまで待機します.
+        #
         # @param [Integer] timeoutSec
         # @return [bool]
         def sleep_while_creating(timeoutSec = 120)

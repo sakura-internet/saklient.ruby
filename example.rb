@@ -24,7 +24,7 @@ server.destroy
 
 
 # # 停止中のサーバに接続されているディスクを一覧
-# servers = api.server.with_instance_status("down").find
+# servers = api.server.with_status("down").find
 # for server in servers
 #   next if server.tags.empty?
 #   puts ""

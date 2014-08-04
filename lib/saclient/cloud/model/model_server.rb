@@ -3,6 +3,7 @@
 require_relative 'model'
 require_relative '../resource/server'
 require_relative '../resource/server_plan'
+require_relative '../resource/iso_image'
 require_relative '../enums/eserver_instance_status'
 
 module Saclient
@@ -115,6 +116,15 @@ module Saclient
 
         # 指定したタグを持つサーバに絞り込みます.
         #
+        # @param [Array<String>] tags
+        # @return [Model_Server]
+        def with_tags(tags)
+          _filter_by('Tags.Name', tags, true)
+          return self
+        end
+
+        # 指定したタグを持つサーバに絞り込みます.
+        #
         # @param [Saclient::Cloud::Resource::ServerPlan] plan
         # @return [Model_Server]
         def with_plan(plan)
@@ -126,7 +136,7 @@ module Saclient
         #
         # @param [String] status
         # @return [Model_Server]
-        def with_instance_status(status)
+        def with_status(status)
           _filter_by('Instance.Status', status, true)
           return self
         end
@@ -134,15 +144,24 @@ module Saclient
         # インスタンスが起動中のサーバに絞り込みます.
         #
         # @return [Model_Server]
-        def with_instance_up
-          return with_instance_status(Saclient::Cloud::Enums::EServerInstanceStatus::up)
+        def with_status_up
+          return with_status(Saclient::Cloud::Enums::EServerInstanceStatus::up)
         end
 
         # インスタンスが停止中のサーバに絞り込みます.
         #
         # @return [Model_Server]
-        def with_instance_down
-          return with_instance_status(Saclient::Cloud::Enums::EServerInstanceStatus::down)
+        def with_status_down
+          return with_status(Saclient::Cloud::Enums::EServerInstanceStatus::down)
+        end
+
+        # 指定したISOイメージが挿入されているサーバに絞り込みます.
+        #
+        # @param [Saclient::Cloud::Resource::IsoImage] iso
+        # @return [Model_Server]
+        def with_iso_image(iso)
+          _filter_by('Instance.CDROM.ID', iso._id, true)
+          return self
         end
 
       end

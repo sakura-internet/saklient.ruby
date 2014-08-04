@@ -7,6 +7,7 @@ require_relative 'disk'
 require_relative 'iface'
 require_relative 'server_plan'
 require_relative 'server_instance'
+require_relative 'iso_image'
 require_relative '../enums/eserver_instance_status'
 
 module Saclient
