@@ -1,13 +1,13 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative 'http_conflict_exception'
+require_relative '../../errors/http_conflict_exception'
 
 module Saclient
   module Cloud
     module Errors
 
       # 要求された操作を行えません. FTP共有によりアップロードされたファイルを操作できません. ファイル名等をご確認ください.
-      class FtpCannotCloseException < Saclient::Cloud::Errors::HttpConflictException
+      class FtpCannotCloseException < Saclient::Errors::HttpConflictException
 
         # (static var) @@default_message = '要求された操作を行えません。FTP共有によりアップロードされたファイルを操作できません。ファイル名等をご確認ください。'
 

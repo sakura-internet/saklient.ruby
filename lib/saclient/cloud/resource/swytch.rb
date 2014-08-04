@@ -375,54 +375,54 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'Name')
-            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
+          if Saclient::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if Saclient::Cloud::Util::exists_path(r, 'Description')
-            @m_description = (Saclient::Cloud::Util::get_by_path(r, 'Description')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Description').to_s
+          if Saclient::Util::exists_path(r, 'Description')
+            @m_description = (Saclient::Util::get_by_path(r, 'Description')).nil? ? nil : Saclient::Util::get_by_path(r, 'Description').to_s
           else
             @m_description = nil
             @is_incomplete = true
           end
           @n_description = false
-          if Saclient::Cloud::Util::exists_path(r, 'UserSubnet.DefaultRoute')
-            @m_user_default_route = (Saclient::Cloud::Util::get_by_path(r, 'UserSubnet.DefaultRoute')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'UserSubnet.DefaultRoute').to_s
+          if Saclient::Util::exists_path(r, 'UserSubnet.DefaultRoute')
+            @m_user_default_route = (Saclient::Util::get_by_path(r, 'UserSubnet.DefaultRoute')).nil? ? nil : Saclient::Util::get_by_path(r, 'UserSubnet.DefaultRoute').to_s
           else
             @m_user_default_route = nil
             @is_incomplete = true
           end
           @n_user_default_route = false
-          if Saclient::Cloud::Util::exists_path(r, 'UserSubnet.NetworkMaskLen')
-            @m_user_mask_len = (Saclient::Cloud::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'UserSubnet.NetworkMaskLen')
+            @m_user_mask_len = (Saclient::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen')).nil? ? nil : (Saclient::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen').to_s).to_i(10)
           else
             @m_user_mask_len = nil
             @is_incomplete = true
           end
           @n_user_mask_len = false
-          if Saclient::Cloud::Util::exists_path(r, 'Internet')
-            @m_router = (Saclient::Cloud::Util::get_by_path(r, 'Internet')).nil? ? nil : Saclient::Cloud::Resource::Router.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'Internet'))
+          if Saclient::Util::exists_path(r, 'Internet')
+            @m_router = (Saclient::Util::get_by_path(r, 'Internet')).nil? ? nil : Saclient::Cloud::Resource::Router.new(@_client, Saclient::Util::get_by_path(r, 'Internet'))
           else
             @m_router = nil
             @is_incomplete = true
           end
           @n_router = false
-          if Saclient::Cloud::Util::exists_path(r, 'Subnets')
-            if (Saclient::Cloud::Util::get_by_path(r, 'Subnets')).nil?
+          if Saclient::Util::exists_path(r, 'Subnets')
+            if (Saclient::Util::get_by_path(r, 'Subnets')).nil?
               @m_ipv4_nets = []
             else
               @m_ipv4_nets = []
-              for t in Saclient::Cloud::Util::get_by_path(r, 'Subnets')
+              for t in Saclient::Util::get_by_path(r, 'Subnets')
                 v1 = nil
                 v1 = (t).nil? ? nil : Saclient::Cloud::Resource::Ipv4Net.new(@_client, t)
                 @m_ipv4_nets << v1
@@ -433,12 +433,12 @@ module Saclient
             @is_incomplete = true
           end
           @n_ipv4_nets = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPv6Nets')
-            if (Saclient::Cloud::Util::get_by_path(r, 'IPv6Nets')).nil?
+          if Saclient::Util::exists_path(r, 'IPv6Nets')
+            if (Saclient::Util::get_by_path(r, 'IPv6Nets')).nil?
               @m_ipv6_nets = []
             else
               @m_ipv6_nets = []
-              for t in Saclient::Cloud::Util::get_by_path(r, 'IPv6Nets')
+              for t in Saclient::Util::get_by_path(r, 'IPv6Nets')
                 v2 = nil
                 v2 = (t).nil? ? nil : Saclient::Cloud::Resource::Ipv6Net.new(@_client, t)
                 @m_ipv6_nets << v2
@@ -457,14 +457,14 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
-          Saclient::Cloud::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
-          Saclient::Cloud::Util::set_by_path(ret, 'UserSubnet.DefaultRoute', @m_user_default_route) if withClean || @n_user_default_route
-          Saclient::Cloud::Util::set_by_path(ret, 'UserSubnet.NetworkMaskLen', @m_user_mask_len) if withClean || @n_user_mask_len
-          Saclient::Cloud::Util::set_by_path(ret, 'Internet', withClean ? ((@m_router).nil? ? nil : @m_router.api_serialize(withClean)) : ((@m_router).nil? ? { ID: '0' } : @m_router.api_serialize_id)) if withClean || @n_router
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
+          Saclient::Util::set_by_path(ret, 'UserSubnet.DefaultRoute', @m_user_default_route) if withClean || @n_user_default_route
+          Saclient::Util::set_by_path(ret, 'UserSubnet.NetworkMaskLen', @m_user_mask_len) if withClean || @n_user_mask_len
+          Saclient::Util::set_by_path(ret, 'Internet', withClean ? ((@m_router).nil? ? nil : @m_router.api_serialize(withClean)) : ((@m_router).nil? ? { ID: '0' } : @m_router.api_serialize_id)) if withClean || @n_router
           if withClean || @n_ipv4_nets
-            Saclient::Cloud::Util::set_by_path(ret, 'Subnets', [])
+            Saclient::Util::set_by_path(ret, 'Subnets', [])
             for r1 in @m_ipv4_nets
               v = nil
               v = withClean ? ((r1).nil? ? nil : r1.api_serialize(withClean)) : ((r1).nil? ? { ID: '0' } : r1.api_serialize_id)
@@ -472,7 +472,7 @@ module Saclient
             end
           end
           if withClean || @n_ipv6_nets
-            Saclient::Cloud::Util::set_by_path(ret, 'IPv6Nets', [])
+            Saclient::Util::set_by_path(ret, 'IPv6Nets', [])
             for r2 in @m_ipv6_nets
               v = nil
               v = withClean ? ((r2).nil? ? nil : r2.api_serialize(withClean)) : ((r2).nil? ? { ID: '0' } : r2.api_serialize_id)

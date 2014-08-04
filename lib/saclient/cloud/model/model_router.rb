@@ -90,7 +90,7 @@ module Saclient
         #
         # @return [Array<Saclient::Cloud::Resource::Router>] リソースオブジェクトの配列
         def find
-          return Saclient::Cloud::Util::cast_array(_find, nil)
+          return _find
         end
 
         # 指定した文字列を名前に含むルータに絞り込みます.

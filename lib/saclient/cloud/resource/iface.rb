@@ -81,7 +81,7 @@ module Saclient
         #
         # @return [Iface]
         def connect_to_shared_segment
-          @_client.request('PUT', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/to/switch/shared')
+          @_client.request('PUT', _api_path + '/' + Saclient::Util::url_encode(_id) + '/to/switch/shared')
           return reload
         end
 
@@ -229,36 +229,36 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'MACAddress')
-            @m_mac_address = (Saclient::Cloud::Util::get_by_path(r, 'MACAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'MACAddress').to_s
+          if Saclient::Util::exists_path(r, 'MACAddress')
+            @m_mac_address = (Saclient::Util::get_by_path(r, 'MACAddress')).nil? ? nil : Saclient::Util::get_by_path(r, 'MACAddress').to_s
           else
             @m_mac_address = nil
             @is_incomplete = true
           end
           @n_mac_address = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPAddress')
-            @m_ip_address = (Saclient::Cloud::Util::get_by_path(r, 'IPAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPAddress').to_s
+          if Saclient::Util::exists_path(r, 'IPAddress')
+            @m_ip_address = (Saclient::Util::get_by_path(r, 'IPAddress')).nil? ? nil : Saclient::Util::get_by_path(r, 'IPAddress').to_s
           else
             @m_ip_address = nil
             @is_incomplete = true
           end
           @n_ip_address = false
-          if Saclient::Cloud::Util::exists_path(r, 'UserIPAddress')
-            @m_user_ip_address = (Saclient::Cloud::Util::get_by_path(r, 'UserIPAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'UserIPAddress').to_s
+          if Saclient::Util::exists_path(r, 'UserIPAddress')
+            @m_user_ip_address = (Saclient::Util::get_by_path(r, 'UserIPAddress')).nil? ? nil : Saclient::Util::get_by_path(r, 'UserIPAddress').to_s
           else
             @m_user_ip_address = nil
             @is_incomplete = true
           end
           @n_user_ip_address = false
-          if Saclient::Cloud::Util::exists_path(r, 'Server.ID')
-            @m_server_id = (Saclient::Cloud::Util::get_by_path(r, 'Server.ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Server.ID').to_s
+          if Saclient::Util::exists_path(r, 'Server.ID')
+            @m_server_id = (Saclient::Util::get_by_path(r, 'Server.ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'Server.ID').to_s
           else
             @m_server_id = nil
             @is_incomplete = true
@@ -272,11 +272,11 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'MACAddress', @m_mac_address) if withClean || @n_mac_address
-          Saclient::Cloud::Util::set_by_path(ret, 'IPAddress', @m_ip_address) if withClean || @n_ip_address
-          Saclient::Cloud::Util::set_by_path(ret, 'UserIPAddress', @m_user_ip_address) if withClean || @n_user_ip_address
-          Saclient::Cloud::Util::set_by_path(ret, 'Server.ID', @m_server_id) if withClean || @n_server_id
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'MACAddress', @m_mac_address) if withClean || @n_mac_address
+          Saclient::Util::set_by_path(ret, 'IPAddress', @m_ip_address) if withClean || @n_ip_address
+          Saclient::Util::set_by_path(ret, 'UserIPAddress', @m_user_ip_address) if withClean || @n_user_ip_address
+          Saclient::Util::set_by_path(ret, 'Server.ID', @m_server_id) if withClean || @n_server_id
           return ret
         end
 

@@ -183,36 +183,36 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'NetworkAddress')
-            @m_address = (Saclient::Cloud::Util::get_by_path(r, 'NetworkAddress')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'NetworkAddress').to_s
+          if Saclient::Util::exists_path(r, 'NetworkAddress')
+            @m_address = (Saclient::Util::get_by_path(r, 'NetworkAddress')).nil? ? nil : Saclient::Util::get_by_path(r, 'NetworkAddress').to_s
           else
             @m_address = nil
             @is_incomplete = true
           end
           @n_address = false
-          if Saclient::Cloud::Util::exists_path(r, 'NetworkMaskLen')
-            @m_mask_len = (Saclient::Cloud::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'NetworkMaskLen')
+            @m_mask_len = (Saclient::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saclient::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_i(10)
           else
             @m_mask_len = nil
             @is_incomplete = true
           end
           @n_mask_len = false
-          if Saclient::Cloud::Util::exists_path(r, 'DefaultRoute')
-            @m_default_route = (Saclient::Cloud::Util::get_by_path(r, 'DefaultRoute')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'DefaultRoute').to_s
+          if Saclient::Util::exists_path(r, 'DefaultRoute')
+            @m_default_route = (Saclient::Util::get_by_path(r, 'DefaultRoute')).nil? ? nil : Saclient::Util::get_by_path(r, 'DefaultRoute').to_s
           else
             @m_default_route = nil
             @is_incomplete = true
           end
           @n_default_route = false
-          if Saclient::Cloud::Util::exists_path(r, 'NextHop')
-            @m_next_hop = (Saclient::Cloud::Util::get_by_path(r, 'NextHop')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'NextHop').to_s
+          if Saclient::Util::exists_path(r, 'NextHop')
+            @m_next_hop = (Saclient::Util::get_by_path(r, 'NextHop')).nil? ? nil : Saclient::Util::get_by_path(r, 'NextHop').to_s
           else
             @m_next_hop = nil
             @is_incomplete = true
@@ -226,11 +226,11 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'NetworkAddress', @m_address) if withClean || @n_address
-          Saclient::Cloud::Util::set_by_path(ret, 'NetworkMaskLen', @m_mask_len) if withClean || @n_mask_len
-          Saclient::Cloud::Util::set_by_path(ret, 'DefaultRoute', @m_default_route) if withClean || @n_default_route
-          Saclient::Cloud::Util::set_by_path(ret, 'NextHop', @m_next_hop) if withClean || @n_next_hop
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'NetworkAddress', @m_address) if withClean || @n_address
+          Saclient::Util::set_by_path(ret, 'NetworkMaskLen', @m_mask_len) if withClean || @n_mask_len
+          Saclient::Util::set_by_path(ret, 'DefaultRoute', @m_default_route) if withClean || @n_default_route
+          Saclient::Util::set_by_path(ret, 'NextHop', @m_next_hop) if withClean || @n_next_hop
           return ret
         end
 

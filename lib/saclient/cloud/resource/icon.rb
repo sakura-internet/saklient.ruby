@@ -141,22 +141,22 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'Name')
-            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
+          if Saclient::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if Saclient::Cloud::Util::exists_path(r, 'URL')
-            @m_url = (Saclient::Cloud::Util::get_by_path(r, 'URL')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'URL').to_s
+          if Saclient::Util::exists_path(r, 'URL')
+            @m_url = (Saclient::Util::get_by_path(r, 'URL')).nil? ? nil : Saclient::Util::get_by_path(r, 'URL').to_s
           else
             @m_url = nil
             @is_incomplete = true
@@ -170,9 +170,9 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
-          Saclient::Cloud::Util::set_by_path(ret, 'URL', @m_url) if withClean || @n_url
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Util::set_by_path(ret, 'URL', @m_url) if withClean || @n_url
           return ret
         end
 

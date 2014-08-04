@@ -83,7 +83,7 @@ module Saclient
         #
         # @return [Array<Saclient::Cloud::Resource::ServerPlan>] リソースオブジェクトの配列
         def find
-          return Saclient::Cloud::Util::cast_array(_find, nil)
+          return _find
         end
 
         # 指定したスペックのプランを取得します.

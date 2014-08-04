@@ -1,9 +1,9 @@
 $: << File.dirname(__dir__) + '/lib'
 require 'saclient/cloud/errors/exception_factory'
 
-ExceptionFactory = Saclient::Cloud::Errors::ExceptionFactory
-HttpException = Saclient::Cloud::Errors::HttpException
-HttpNotFoundException = Saclient::Cloud::Errors::HttpNotFoundException
+ExceptionFactory = Saclient::Errors::ExceptionFactory
+HttpException = Saclient::Errors::HttpException
+HttpNotFoundException = Saclient::Errors::HttpNotFoundException
 ServerPowerMustBeUpException = Saclient::Cloud::Errors::ServerPowerMustBeUpException
 
 describe 'Exception' do

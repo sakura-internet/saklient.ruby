@@ -117,7 +117,7 @@ module Saclient
               return true
             end
             timeoutSec -= step
-            Saclient::Cloud::Util::sleep(step) if 0 < timeoutSec
+            sleep step if 0 < timeoutSec
           end
           return false
         end
@@ -126,7 +126,7 @@ module Saclient
         #
         # @return [Swytch]
         def get_swytch
-          model = Saclient::Cloud::Util::create_class_instance('saclient.cloud.model.Model_Swytch', [@_client])
+          model = Saclient::Util::create_class_instance('saclient.cloud.model.Model_Swytch', [@_client])
           id = get_swytch_id
           return model.get_by_id(id)
         end
@@ -135,7 +135,7 @@ module Saclient
         #
         # @return [Ipv6Net]
         def add_ipv6_net
-          result = @_client.request('POST', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/ipv6net')
+          result = @_client.request('POST', _api_path + '/' + Saclient::Util::url_encode(_id) + '/ipv6net')
           reload
           return Saclient::Cloud::Resource::Ipv6Net.new(@_client, result[:IPv6Net])
         end
@@ -145,7 +145,7 @@ module Saclient
         # @param [Ipv6Net] ipv6Net
         # @return [Router]
         def remove_ipv6_net(ipv6Net)
-          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/ipv6net/' + ipv6Net._id)
+          @_client.request('DELETE', _api_path + '/' + Saclient::Util::url_encode(_id) + '/ipv6net/' + ipv6Net._id)
           reload
           return self
         end
@@ -157,9 +157,9 @@ module Saclient
         # @return [Ipv4Net]
         def add_static_route(maskLen, nextHop)
           q = {}
-          Saclient::Cloud::Util::set_by_path(q, 'NetworkMaskLen', maskLen)
-          Saclient::Cloud::Util::set_by_path(q, 'NextHop', nextHop)
-          result = @_client.request('POST', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/subnet', q)
+          Saclient::Util::set_by_path(q, 'NetworkMaskLen', maskLen)
+          Saclient::Util::set_by_path(q, 'NextHop', nextHop)
+          result = @_client.request('POST', _api_path + '/' + Saclient::Util::url_encode(_id) + '/subnet', q)
           reload
           return Saclient::Cloud::Resource::Ipv4Net.new(@_client, result[:Subnet])
         end
@@ -169,7 +169,7 @@ module Saclient
         # @param [Ipv4Net] ipv4Net
         # @return [Router]
         def remove_static_route(ipv4Net)
-          @_client.request('DELETE', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/subnet/' + ipv4Net._id)
+          @_client.request('DELETE', _api_path + '/' + Saclient::Util::url_encode(_id) + '/subnet/' + ipv4Net._id)
           reload
           return self
         end
@@ -179,9 +179,9 @@ module Saclient
         # @param [Integer] bandWidthMbps
         # @return [Router]
         def change_plan(bandWidthMbps)
-          path = _api_path + '/' + Saclient::Cloud::Util::url_encode(_id) + '/bandwidth'
+          path = _api_path + '/' + Saclient::Util::url_encode(_id) + '/bandwidth'
           q = {}
-          Saclient::Cloud::Util::set_by_path(q, 'Internet.BandWidthMbps', bandWidthMbps)
+          Saclient::Util::set_by_path(q, 'Internet.BandWidthMbps', bandWidthMbps)
           result = @_client.request('PUT', path, q)
           api_deserialize(result[_root_key.to_sym])
           return self
@@ -390,43 +390,43 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'Name')
-            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
+          if Saclient::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if Saclient::Cloud::Util::exists_path(r, 'Description')
-            @m_description = (Saclient::Cloud::Util::get_by_path(r, 'Description')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Description').to_s
+          if Saclient::Util::exists_path(r, 'Description')
+            @m_description = (Saclient::Util::get_by_path(r, 'Description')).nil? ? nil : Saclient::Util::get_by_path(r, 'Description').to_s
           else
             @m_description = nil
             @is_incomplete = true
           end
           @n_description = false
-          if Saclient::Cloud::Util::exists_path(r, 'NetworkMaskLen')
-            @m_network_mask_len = (Saclient::Cloud::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'NetworkMaskLen')
+            @m_network_mask_len = (Saclient::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saclient::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_i(10)
           else
             @m_network_mask_len = nil
             @is_incomplete = true
           end
           @n_network_mask_len = false
-          if Saclient::Cloud::Util::exists_path(r, 'BandWidthMbps')
-            @m_band_width_mbps = (Saclient::Cloud::Util::get_by_path(r, 'BandWidthMbps')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'BandWidthMbps').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'BandWidthMbps')
+            @m_band_width_mbps = (Saclient::Util::get_by_path(r, 'BandWidthMbps')).nil? ? nil : (Saclient::Util::get_by_path(r, 'BandWidthMbps').to_s).to_i(10)
           else
             @m_band_width_mbps = nil
             @is_incomplete = true
           end
           @n_band_width_mbps = false
-          if Saclient::Cloud::Util::exists_path(r, 'Switch.ID')
-            @m_swytch_id = (Saclient::Cloud::Util::get_by_path(r, 'Switch.ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Switch.ID').to_s
+          if Saclient::Util::exists_path(r, 'Switch.ID')
+            @m_swytch_id = (Saclient::Util::get_by_path(r, 'Switch.ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'Switch.ID').to_s
           else
             @m_swytch_id = nil
             @is_incomplete = true
@@ -440,12 +440,12 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
-          Saclient::Cloud::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
-          Saclient::Cloud::Util::set_by_path(ret, 'NetworkMaskLen', @m_network_mask_len) if withClean || @n_network_mask_len
-          Saclient::Cloud::Util::set_by_path(ret, 'BandWidthMbps', @m_band_width_mbps) if withClean || @n_band_width_mbps
-          Saclient::Cloud::Util::set_by_path(ret, 'Switch.ID', @m_swytch_id) if withClean || @n_swytch_id
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
+          Saclient::Util::set_by_path(ret, 'NetworkMaskLen', @m_network_mask_len) if withClean || @n_network_mask_len
+          Saclient::Util::set_by_path(ret, 'BandWidthMbps', @m_band_width_mbps) if withClean || @n_band_width_mbps
+          Saclient::Util::set_by_path(ret, 'Switch.ID', @m_swytch_id) if withClean || @n_swytch_id
           return ret
         end
 

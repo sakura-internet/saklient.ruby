@@ -413,40 +413,40 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'Scope')
-            @m_scope = (Saclient::Cloud::Util::get_by_path(r, 'Scope')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Scope').to_s
+          if Saclient::Util::exists_path(r, 'Scope')
+            @m_scope = (Saclient::Util::get_by_path(r, 'Scope')).nil? ? nil : Saclient::Util::get_by_path(r, 'Scope').to_s
           else
             @m_scope = nil
             @is_incomplete = true
           end
           @n_scope = false
-          if Saclient::Cloud::Util::exists_path(r, 'Name')
-            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
+          if Saclient::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if Saclient::Cloud::Util::exists_path(r, 'Description')
-            @m_description = (Saclient::Cloud::Util::get_by_path(r, 'Description')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Description').to_s
+          if Saclient::Util::exists_path(r, 'Description')
+            @m_description = (Saclient::Util::get_by_path(r, 'Description')).nil? ? nil : Saclient::Util::get_by_path(r, 'Description').to_s
           else
             @m_description = nil
             @is_incomplete = true
           end
           @n_description = false
-          if Saclient::Cloud::Util::exists_path(r, 'Tags')
-            if (Saclient::Cloud::Util::get_by_path(r, 'Tags')).nil?
+          if Saclient::Util::exists_path(r, 'Tags')
+            if (Saclient::Util::get_by_path(r, 'Tags')).nil?
               @m_tags = []
             else
               @m_tags = []
-              for t in Saclient::Cloud::Util::get_by_path(r, 'Tags')
+              for t in Saclient::Util::get_by_path(r, 'Tags')
                 v1 = nil
                 v1 = (t).nil? ? nil : t.to_s
                 @m_tags << v1
@@ -457,29 +457,29 @@ module Saclient
             @is_incomplete = true
           end
           @n_tags = false
-          if Saclient::Cloud::Util::exists_path(r, 'Icon')
-            @m_icon = (Saclient::Cloud::Util::get_by_path(r, 'Icon')).nil? ? nil : Saclient::Cloud::Resource::Icon.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'Icon'))
+          if Saclient::Util::exists_path(r, 'Icon')
+            @m_icon = (Saclient::Util::get_by_path(r, 'Icon')).nil? ? nil : Saclient::Cloud::Resource::Icon.new(@_client, Saclient::Util::get_by_path(r, 'Icon'))
           else
             @m_icon = nil
             @is_incomplete = true
           end
           @n_icon = false
-          if Saclient::Cloud::Util::exists_path(r, 'SizeMB')
-            @m_size_mib = (Saclient::Cloud::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'SizeMB').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'SizeMB')
+            @m_size_mib = (Saclient::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saclient::Util::get_by_path(r, 'SizeMB').to_s).to_i(10)
           else
             @m_size_mib = nil
             @is_incomplete = true
           end
           @n_size_mib = false
-          if Saclient::Cloud::Util::exists_path(r, 'ServiceClass')
-            @m_service_class = (Saclient::Cloud::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ServiceClass').to_s
+          if Saclient::Util::exists_path(r, 'ServiceClass')
+            @m_service_class = (Saclient::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saclient::Util::get_by_path(r, 'ServiceClass').to_s
           else
             @m_service_class = nil
             @is_incomplete = true
           end
           @n_service_class = false
-          if Saclient::Cloud::Util::exists_path(r, 'Plan')
-            @m_plan = (Saclient::Cloud::Util::get_by_path(r, 'Plan')).nil? ? nil : Saclient::Cloud::Resource::DiskPlan.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'Plan'))
+          if Saclient::Util::exists_path(r, 'Plan')
+            @m_plan = (Saclient::Util::get_by_path(r, 'Plan')).nil? ? nil : Saclient::Cloud::Resource::DiskPlan.new(@_client, Saclient::Util::get_by_path(r, 'Plan'))
           else
             @m_plan = nil
             @is_incomplete = true
@@ -493,22 +493,22 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'Scope', @m_scope) if withClean || @n_scope
-          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
-          Saclient::Cloud::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'Scope', @m_scope) if withClean || @n_scope
+          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           if withClean || @n_tags
-            Saclient::Cloud::Util::set_by_path(ret, 'Tags', [])
+            Saclient::Util::set_by_path(ret, 'Tags', [])
             for r1 in @m_tags
               v = nil
               v = r1
               ret[:Tags] << v
             end
           end
-          Saclient::Cloud::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
-          Saclient::Cloud::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
-          Saclient::Cloud::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
-          Saclient::Cloud::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
+          Saclient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
+          Saclient::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
+          Saclient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
+          Saclient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
           return ret
         end
 

@@ -1,13 +1,13 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative 'http_bad_request_exception'
+require_relative '../../errors/http_bad_request_exception'
 
 module Saclient
   module Cloud
     module Errors
 
       # 不適切な要求です. この種類のリソースは要求された操作に対応しません.
-      class UnsupportedResClassException < Saclient::Cloud::Errors::HttpBadRequestException
+      class UnsupportedResClassException < Saclient::Errors::HttpBadRequestException
 
         # (static var) @@default_message = '不適切な要求です。この種類のリソースは要求された操作に対応しません。'
 

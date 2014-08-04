@@ -159,29 +159,29 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPv6Prefix')
-            @m_prefix = (Saclient::Cloud::Util::get_by_path(r, 'IPv6Prefix')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPv6Prefix').to_s
+          if Saclient::Util::exists_path(r, 'IPv6Prefix')
+            @m_prefix = (Saclient::Util::get_by_path(r, 'IPv6Prefix')).nil? ? nil : Saclient::Util::get_by_path(r, 'IPv6Prefix').to_s
           else
             @m_prefix = nil
             @is_incomplete = true
           end
           @n_prefix = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPv6PrefixLen')
-            @m_prefix_len = (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixLen')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixLen').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'IPv6PrefixLen')
+            @m_prefix_len = (Saclient::Util::get_by_path(r, 'IPv6PrefixLen')).nil? ? nil : (Saclient::Util::get_by_path(r, 'IPv6PrefixLen').to_s).to_i(10)
           else
             @m_prefix_len = nil
             @is_incomplete = true
           end
           @n_prefix_len = false
-          if Saclient::Cloud::Util::exists_path(r, 'IPv6PrefixTail')
-            @m_prefix_tail = (Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixTail')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'IPv6PrefixTail').to_s
+          if Saclient::Util::exists_path(r, 'IPv6PrefixTail')
+            @m_prefix_tail = (Saclient::Util::get_by_path(r, 'IPv6PrefixTail')).nil? ? nil : Saclient::Util::get_by_path(r, 'IPv6PrefixTail').to_s
           else
             @m_prefix_tail = nil
             @is_incomplete = true
@@ -195,10 +195,10 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'IPv6Prefix', @m_prefix) if withClean || @n_prefix
-          Saclient::Cloud::Util::set_by_path(ret, 'IPv6PrefixLen', @m_prefix_len) if withClean || @n_prefix_len
-          Saclient::Cloud::Util::set_by_path(ret, 'IPv6PrefixTail', @m_prefix_tail) if withClean || @n_prefix_tail
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'IPv6Prefix', @m_prefix) if withClean || @n_prefix
+          Saclient::Util::set_by_path(ret, 'IPv6PrefixLen', @m_prefix_len) if withClean || @n_prefix_len
+          Saclient::Util::set_by_path(ret, 'IPv6PrefixTail', @m_prefix_tail) if withClean || @n_prefix_tail
           return ret
         end
 

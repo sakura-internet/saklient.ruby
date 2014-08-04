@@ -173,36 +173,36 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'ID')
-            @m_id = (Saclient::Cloud::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ID').to_s
+          if Saclient::Util::exists_path(r, 'ID')
+            @m_id = (Saclient::Util::get_by_path(r, 'ID')).nil? ? nil : Saclient::Util::get_by_path(r, 'ID').to_s
           else
             @m_id = nil
             @is_incomplete = true
           end
           @n_id = false
-          if Saclient::Cloud::Util::exists_path(r, 'Name')
-            @m_name = (Saclient::Cloud::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Name').to_s
+          if Saclient::Util::exists_path(r, 'Name')
+            @m_name = (Saclient::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Util::get_by_path(r, 'Name').to_s
           else
             @m_name = nil
             @is_incomplete = true
           end
           @n_name = false
-          if Saclient::Cloud::Util::exists_path(r, 'CPU')
-            @m_cpu = (Saclient::Cloud::Util::get_by_path(r, 'CPU')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'CPU').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'CPU')
+            @m_cpu = (Saclient::Util::get_by_path(r, 'CPU')).nil? ? nil : (Saclient::Util::get_by_path(r, 'CPU').to_s).to_i(10)
           else
             @m_cpu = nil
             @is_incomplete = true
           end
           @n_cpu = false
-          if Saclient::Cloud::Util::exists_path(r, 'MemoryMB')
-            @m_memory_mib = (Saclient::Cloud::Util::get_by_path(r, 'MemoryMB')).nil? ? nil : (Saclient::Cloud::Util::get_by_path(r, 'MemoryMB').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'MemoryMB')
+            @m_memory_mib = (Saclient::Util::get_by_path(r, 'MemoryMB')).nil? ? nil : (Saclient::Util::get_by_path(r, 'MemoryMB').to_s).to_i(10)
           else
             @m_memory_mib = nil
             @is_incomplete = true
           end
           @n_memory_mib = false
-          if Saclient::Cloud::Util::exists_path(r, 'ServiceClass')
-            @m_service_class = (Saclient::Cloud::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'ServiceClass').to_s
+          if Saclient::Util::exists_path(r, 'ServiceClass')
+            @m_service_class = (Saclient::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saclient::Util::get_by_path(r, 'ServiceClass').to_s
           else
             @m_service_class = nil
             @is_incomplete = true
@@ -216,11 +216,11 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Cloud::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
-          Saclient::Cloud::Util::set_by_path(ret, 'CPU', @m_cpu) if withClean || @n_cpu
-          Saclient::Cloud::Util::set_by_path(ret, 'MemoryMB', @m_memory_mib) if withClean || @n_memory_mib
-          Saclient::Cloud::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
+          Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          Saclient::Util::set_by_path(ret, 'CPU', @m_cpu) if withClean || @n_cpu
+          Saclient::Util::set_by_path(ret, 'MemoryMB', @m_memory_mib) if withClean || @n_memory_mib
+          Saclient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           return ret
         end
 
