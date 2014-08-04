@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../util'
 require_relative '../client'
-require_relative '../util'
 require_relative 'resource'
 require_relative 'iso_image'
 require_relative '../enums/eserver_instance_status'
@@ -160,29 +160,29 @@ module Saclient
           @is_new = (r).nil?
           r = {} if @is_new
           @is_incomplete = false
-          if Saclient::Cloud::Util::exists_path(r, 'Status')
-            @m_status = (Saclient::Cloud::Util::get_by_path(r, 'Status')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'Status').to_s
+          if Saclient::Util::exists_path(r, 'Status')
+            @m_status = (Saclient::Util::get_by_path(r, 'Status')).nil? ? nil : Saclient::Util::get_by_path(r, 'Status').to_s
           else
             @m_status = nil
             @is_incomplete = true
           end
           @n_status = false
-          if Saclient::Cloud::Util::exists_path(r, 'BeforeStatus')
-            @m_before_status = (Saclient::Cloud::Util::get_by_path(r, 'BeforeStatus')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'BeforeStatus').to_s
+          if Saclient::Util::exists_path(r, 'BeforeStatus')
+            @m_before_status = (Saclient::Util::get_by_path(r, 'BeforeStatus')).nil? ? nil : Saclient::Util::get_by_path(r, 'BeforeStatus').to_s
           else
             @m_before_status = nil
             @is_incomplete = true
           end
           @n_before_status = false
-          if Saclient::Cloud::Util::exists_path(r, 'StatusChangedAt')
-            @m_status_changed_at = (Saclient::Cloud::Util::get_by_path(r, 'StatusChangedAt')).nil? ? nil : Saclient::Cloud::Util::get_by_path(r, 'StatusChangedAt').to_s
+          if Saclient::Util::exists_path(r, 'StatusChangedAt')
+            @m_status_changed_at = (Saclient::Util::get_by_path(r, 'StatusChangedAt')).nil? ? nil : Saclient::Util::get_by_path(r, 'StatusChangedAt').to_s
           else
             @m_status_changed_at = nil
             @is_incomplete = true
           end
           @n_status_changed_at = false
-          if Saclient::Cloud::Util::exists_path(r, 'CDROM')
-            @m_iso_image = (Saclient::Cloud::Util::get_by_path(r, 'CDROM')).nil? ? nil : Saclient::Cloud::Resource::IsoImage.new(@_client, Saclient::Cloud::Util::get_by_path(r, 'CDROM'))
+          if Saclient::Util::exists_path(r, 'CDROM')
+            @m_iso_image = (Saclient::Util::get_by_path(r, 'CDROM')).nil? ? nil : Saclient::Cloud::Resource::IsoImage.new(@_client, Saclient::Util::get_by_path(r, 'CDROM'))
           else
             @m_iso_image = nil
             @is_incomplete = true
@@ -196,10 +196,10 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           ret = {}
-          Saclient::Cloud::Util::set_by_path(ret, 'Status', @m_status) if withClean || @n_status
-          Saclient::Cloud::Util::set_by_path(ret, 'BeforeStatus', @m_before_status) if withClean || @n_before_status
-          Saclient::Cloud::Util::set_by_path(ret, 'StatusChangedAt', (@m_status_changed_at).nil? ? nil : Saclient::Cloud::Util::date2str(@m_status_changed_at)) if withClean || @n_status_changed_at
-          Saclient::Cloud::Util::set_by_path(ret, 'CDROM', withClean ? ((@m_iso_image).nil? ? nil : @m_iso_image.api_serialize(withClean)) : ((@m_iso_image).nil? ? { ID: '0' } : @m_iso_image.api_serialize_id)) if withClean || @n_iso_image
+          Saclient::Util::set_by_path(ret, 'Status', @m_status) if withClean || @n_status
+          Saclient::Util::set_by_path(ret, 'BeforeStatus', @m_before_status) if withClean || @n_before_status
+          Saclient::Util::set_by_path(ret, 'StatusChangedAt', (@m_status_changed_at).nil? ? nil : Saclient::Util::date2str(@m_status_changed_at)) if withClean || @n_status_changed_at
+          Saclient::Util::set_by_path(ret, 'CDROM', withClean ? ((@m_iso_image).nil? ? nil : @m_iso_image.api_serialize(withClean)) : ((@m_iso_image).nil? ? { ID: '0' } : @m_iso_image.api_serialize_id)) if withClean || @n_iso_image
           return ret
         end
 

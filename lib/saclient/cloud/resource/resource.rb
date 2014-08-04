@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../util'
 require_relative '../client'
-require_relative '../util'
 
 module Saclient
   module Cloud
@@ -192,7 +192,7 @@ module Saclient
           _on_before_save(r)
           method = @is_new ? 'POST' : 'PUT'
           path = _api_path
-          path += '/' + Saclient::Cloud::Util::url_encode(_id) if !@is_new
+          path += '/' + Saclient::Util::url_encode(_id) if !@is_new
           q = {}
           q[_root_key.to_sym] = r
           result = @_client.request(method, path, q)
@@ -207,7 +207,7 @@ module Saclient
         # @return [void]
         def destroy
           return nil if @is_new
-          path = _api_path + '/' + Saclient::Cloud::Util::url_encode(_id)
+          path = _api_path + '/' + Saclient::Util::url_encode(_id)
           @_client.request('DELETE', path)
         end
 
@@ -218,7 +218,7 @@ module Saclient
         # @private
         # @return [Resource] this
         def _reload
-          result = @_client.request('GET', _api_path + '/' + Saclient::Cloud::Util::url_encode(_id))
+          result = @_client.request('GET', _api_path + '/' + Saclient::Util::url_encode(_id))
           api_deserialize(result[_root_key.to_sym])
           return self
         end
@@ -230,8 +230,8 @@ module Saclient
         # @return [bool]
         def exists
           params = {}
-          Saclient::Cloud::Util::set_by_path(params, 'Filter.ID', [_id])
-          Saclient::Cloud::Util::set_by_path(params, 'Include', ['ID'])
+          Saclient::Util::set_by_path(params, 'Filter.ID', [_id])
+          Saclient::Util::set_by_path(params, 'Include', ['ID'])
           result = @_client.request('GET', _api_path, params)
           return result[:Count] == 1
         end

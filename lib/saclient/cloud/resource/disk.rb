@@ -292,7 +292,7 @@ module Saclient
             return true if a == Saclient::Cloud::Enums::EAvailability::available
             timeoutSec = 0 if a != Saclient::Cloud::Enums::EAvailability::migrating
             timeoutSec -= step
-            sleep step if 0 < timeoutSec
+            Saclient::Cloud::Util::sleep(step) if 0 < timeoutSec
           end
           return false
         end

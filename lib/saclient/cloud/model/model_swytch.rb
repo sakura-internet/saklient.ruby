@@ -90,7 +90,7 @@ module Saclient
         #
         # @return [Array<Saclient::Cloud::Resource::Swytch>] リソースオブジェクトの配列
         def find
-          return _find
+          return Saclient::Cloud::Util::cast_array(_find, nil)
         end
 
         # 指定した文字列を名前に含むスイッチに絞り込みます.

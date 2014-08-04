@@ -93,7 +93,7 @@ module Saclient
         #
         # @return [Array<Saclient::Cloud::Resource::Server>] リソースオブジェクトの配列
         def find
-          return _find
+          return Saclient::Cloud::Util::cast_array(_find, nil)
         end
 
         # 指定した文字列を名前に含むサーバに絞り込みます.

@@ -209,7 +209,7 @@ module Saclient
             s = Saclient::Cloud::Enums::EServerInstanceStatus::down if (s).nil?
             return true if s == status
             timeoutSec -= step
-            sleep step if 0 < timeoutSec
+            Saclient::Cloud::Util::sleep(step) if 0 < timeoutSec
           end
           return false
         end

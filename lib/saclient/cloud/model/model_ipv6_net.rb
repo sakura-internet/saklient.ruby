@@ -83,7 +83,7 @@ module Saclient
         #
         # @return [Array<Saclient::Cloud::Resource::Ipv6Net>] リソースオブジェクトの配列
         def find
-          return _find
+          return Saclient::Cloud::Util::cast_array(_find, nil)
         end
 
       end

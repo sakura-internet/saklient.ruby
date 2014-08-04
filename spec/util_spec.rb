@@ -1,7 +1,7 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/cloud/util'
+require 'saclient/util'
 
-Util = Saclient::Cloud::Util
+Util = Saclient::Util
 
 describe 'Util' do
   

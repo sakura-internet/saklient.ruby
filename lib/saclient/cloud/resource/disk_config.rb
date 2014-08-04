@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../util'
 require_relative '../client'
-require_relative '../util'
 
 module Saclient
   module Cloud
@@ -255,12 +255,12 @@ module Saclient
         # @return [DiskConfig]
         def write
           q = {}
-          Saclient::Cloud::Util::set_by_path(q, 'HostName', @_host_name) if !(@_host_name).nil?
-          Saclient::Cloud::Util::set_by_path(q, 'Password', @_password) if !(@_password).nil?
-          Saclient::Cloud::Util::set_by_path(q, 'SSHKey.PublicKey', @_ssh_key) if !(@_ssh_key).nil?
-          Saclient::Cloud::Util::set_by_path(q, 'UserIPAddress', @_ip_address) if !(@_ip_address).nil?
-          Saclient::Cloud::Util::set_by_path(q, 'UserSubnet.DefaultRoute', @_default_route) if !(@_default_route).nil?
-          Saclient::Cloud::Util::set_by_path(q, 'UserSubnet.NetworkMaskLen', @_network_mask_len) if !(@_network_mask_len).nil?
+          Saclient::Util::set_by_path(q, 'HostName', @_host_name) if !(@_host_name).nil?
+          Saclient::Util::set_by_path(q, 'Password', @_password) if !(@_password).nil?
+          Saclient::Util::set_by_path(q, 'SSHKey.PublicKey', @_ssh_key) if !(@_ssh_key).nil?
+          Saclient::Util::set_by_path(q, 'UserIPAddress', @_ip_address) if !(@_ip_address).nil?
+          Saclient::Util::set_by_path(q, 'UserSubnet.DefaultRoute', @_default_route) if !(@_default_route).nil?
+          Saclient::Util::set_by_path(q, 'UserSubnet.NetworkMaskLen', @_network_mask_len) if !(@_network_mask_len).nil?
           path = '/disk/' + @_disk_id + '/config'
           result = @_client.request('PUT', path, q)
           return self

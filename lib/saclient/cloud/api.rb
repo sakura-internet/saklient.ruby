@@ -1,7 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../util'
 require_relative 'client'
-require_relative 'util'
 require_relative 'product'
 require_relative 'model/model_icon'
 require_relative 'model/model_server'
