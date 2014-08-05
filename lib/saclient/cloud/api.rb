@@ -266,6 +266,7 @@ module Saclient
 
       # @param [Client] client
       def initialize(client)
+        Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
         @_client = client
         @_product = Saclient::Cloud::Product.new(client)
         @_icon = Saclient::Cloud::Model::Model_Icon.new(client)
@@ -290,6 +291,8 @@ module Saclient
       # @param [String] secret ACCESS TOKEN SECRET
       # @return [API] APIクライアント
       def self.authorize(token, secret)
+        Saclient::Util::validate_type(token, 'String')
+        Saclient::Util::validate_type(secret, 'String')
         c = Saclient::Cloud::Client.new(token, secret)
         return Saclient::Cloud::API.new(c)
       end
@@ -299,15 +302,17 @@ module Saclient
       # @param [String] name ゾーン名
       # @return [API] APIクライアント
       def in_zone(name)
+        Saclient::Util::validate_type(name, 'String')
         ret = Saclient::Cloud::API.new(@_client.clone_instance)
         ret._client.set_api_root('https://secure.sakura.ad.jp/cloud/')
         ret._client.set_api_root_suffix('zone/' + name)
         return ret
       end
 
-      # @param [Integer] sec
+      # @param [Fixnum] sec
       # @return [void]
       def sleep(sec)
+        Saclient::Util::validate_type(sec, 'Fixnum')
         sleep sec
       end
 

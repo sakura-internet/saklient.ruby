@@ -42,6 +42,7 @@ module Saclient
         # @param [String] key
         # @return [void]
         def set_param(key, value)
+          Saclient::Util::validate_type(key, 'String')
           @_params[key.to_sym] = value
         end
 
@@ -82,6 +83,7 @@ module Saclient
         # @private
         # @param [Saclient::Cloud::Client] client
         def initialize(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           @_client = client
           @_params = {}
         end
@@ -111,6 +113,7 @@ module Saclient
         # @param [any] r
         # @return [void]
         def _on_after_api_serialize(r, withClean)
+          Saclient::Util::validate_type(withClean, 'bool')
         end
 
         # @param [any] r
@@ -132,6 +135,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           return nil
         end
 
@@ -140,6 +144,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = api_serialize_impl(withClean)
           _on_after_api_serialize(ret, withClean)
           return ret
@@ -159,6 +164,7 @@ module Saclient
         # @param [String] name
         # @return [String]
         def normalize_field_name(name)
+          Saclient::Util::validate_type(name, 'String')
           name.gsub!(/[A-Z]/) {|s| '_'+s.downcase}
           return name
         end
@@ -169,6 +175,7 @@ module Saclient
         # @param [any] value
         # @return [void]
         def set_property(name, value)
+          Saclient::Util::validate_type(name, 'String')
           name = normalize_field_name(name)
           instance_variable_set('@m_'+name, value)
           instance_variable_set('@n_'+name, true)

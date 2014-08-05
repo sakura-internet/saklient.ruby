@@ -74,6 +74,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -165,6 +166,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_user_ip_address(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_user_ip_address = v
           @n_user_ip_address = true
           return @m_user_ip_address
@@ -200,6 +202,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_server_id(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_server_id = v
           @n_server_id = true
           return @m_server_id
@@ -271,6 +274,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'MACAddress', @m_mac_address) if withClean || @n_mac_address

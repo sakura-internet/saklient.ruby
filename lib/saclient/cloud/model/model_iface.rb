@@ -40,17 +40,19 @@ module Saclient
 
         # 次に取得するリストの開始オフセットを指定します.
         #
-        # @param [Integer] offset オフセット
+        # @param [Fixnum] offset オフセット
         # @return [Model_Iface] this
         def offset(offset)
+          Saclient::Util::validate_type(offset, 'Fixnum')
           return _offset(offset)
         end
 
         # 次に取得するリストの上限レコード数を指定します.
         #
-        # @param [Integer] count 上限レコード数
+        # @param [Fixnum] count 上限レコード数
         # @return [Model_Iface] this
         def limit(count)
+          Saclient::Util::validate_type(count, 'Fixnum')
           return _limit(count)
         end
 
@@ -61,6 +63,8 @@ module Saclient
         # @param [String] key
         # @return [Model_Iface]
         def filter_by(key, value, multiple = false)
+          Saclient::Util::validate_type(key, 'String')
+          Saclient::Util::validate_type(multiple, 'bool')
           return _filter_by(key, value, multiple)
         end
 
@@ -83,6 +87,7 @@ module Saclient
         # @param [String] id
         # @return [Saclient::Cloud::Resource::Iface] リソースオブジェクト
         def get_by_id(id)
+          Saclient::Util::validate_type(id, 'String')
           return _get_by_id(id)
         end
 

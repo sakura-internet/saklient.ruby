@@ -98,7 +98,21 @@ module Saclient
     # @param [String] typeName
     # @return [void]
     def self.validate_type(value, typeName)
-      raise Exception.new(Saclient::Errors::SaclientException.new('type_mismatch', 'Type mismatch')) if typeName == 'test'
+      return if typeName=="any" || typeName=="void" || value.nil?
+      isOk = false
+      clazz = value.class.to_s
+      if typeName=="bool"
+        isOk = clazz=="TrueClass" || clazz=="FalseClass"
+      elsif typeName=="Float"
+        isOk = clazz=="Fixnum" || clazz=="Float"
+      elsif typeName=="String"
+        isOk = clazz=="Fixnum" || clazz=="Float" || clazz=="String"
+      # elsif typeName=="Fixnum" || typeName=="Proc"
+      #   isOk = clazz==typeName
+      else
+        isOk = value.is_a?(Object.const_get(typeName))
+      end
+      raise Saclient::Errors::SaclientException.new('argument_type_mismatch', 'Argument type mismatch (expected '+typeName+' but got '+clazz+')') unless isOk
     end
 
   end

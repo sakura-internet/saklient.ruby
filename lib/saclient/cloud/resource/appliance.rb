@@ -100,6 +100,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -175,6 +176,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_clazz(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_clazz = v
           @n_clazz = true
           return @m_clazz
@@ -212,6 +214,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_name(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_name = v
           @n_name = true
           return @m_name
@@ -249,6 +252,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_description(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_description = v
           @n_description = true
           return @m_description
@@ -286,6 +290,7 @@ module Saclient
         # @param [Array<String>] v
         # @return [Array<String>]
         def set_tags(v)
+          Saclient::Util::validate_type(v, 'Array')
           @m_tags = v
           @n_tags = true
           return @m_tags
@@ -323,6 +328,7 @@ module Saclient
         # @param [Icon] v
         # @return [Icon]
         def set_icon(v)
+          Saclient::Util::validate_type(v, 'Saclient::Cloud::Resource::Icon')
           @m_icon = v
           @n_icon = true
           return @m_icon
@@ -479,6 +485,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Class', @m_clazz) if withClean || @n_clazz

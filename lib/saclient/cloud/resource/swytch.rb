@@ -38,7 +38,7 @@ module Saclient
 
         # ユーザ設定ネットワークのマスク長
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_user_mask_len
 
         # 接続されているルータ
@@ -101,6 +101,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -125,10 +126,12 @@ module Saclient
 
         # このルータ＋スイッチにスタティックルートを追加します.
         #
-        # @param [Integer] maskLen
+        # @param [Fixnum] maskLen
         # @param [String] nextHop
         # @return [Ipv4Net]
         def add_static_route(maskLen, nextHop)
+          Saclient::Util::validate_type(maskLen, 'Fixnum')
+          Saclient::Util::validate_type(nextHop, 'String')
           ret = get_router.add_static_route(maskLen, nextHop)
           reload
           return ret
@@ -139,6 +142,7 @@ module Saclient
         # @param [Ipv4Net] ipv4Net
         # @return [Swytch]
         def remove_static_route(ipv4Net)
+          Saclient::Util::validate_type(ipv4Net, 'Saclient::Cloud::Resource::Ipv4Net')
           get_router.remove_static_route(ipv4Net)
           reload
           return self
@@ -146,9 +150,10 @@ module Saclient
 
         # このルータ＋スイッチの帯域プランを変更します.
         #
-        # @param [Integer] bandWidthMbps
+        # @param [Fixnum] bandWidthMbps
         # @return [Swytch]
         def change_plan(bandWidthMbps)
+          Saclient::Util::validate_type(bandWidthMbps, 'Fixnum')
           get_router.change_plan(bandWidthMbps)
           reload
           return self
@@ -194,6 +199,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_name(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_name = v
           @n_name = true
           return @m_name
@@ -231,6 +237,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_description(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_description = v
           @n_description = true
           return @m_description
@@ -281,7 +288,7 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_user_mask_len
           return @m_user_mask_len
         end
@@ -290,7 +297,7 @@ module Saclient
 
         # ユーザ設定ネットワークのマスク長
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :user_mask_len
 
         def user_mask_len
@@ -456,6 +463,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name

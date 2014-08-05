@@ -18,7 +18,7 @@ module Saclient
         # @return [String]
         attr_accessor :m_name
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_band_width_mbps
 
         # @return [String]
@@ -37,6 +37,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -89,14 +90,14 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_band_width_mbps
           return @m_band_width_mbps
         end
 
         public
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :band_width_mbps
 
         def band_width_mbps
@@ -168,6 +169,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name

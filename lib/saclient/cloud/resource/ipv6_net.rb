@@ -19,7 +19,7 @@ module Saclient
         # @return [String]
         attr_accessor :m_prefix
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_prefix_len
 
         # @return [String]
@@ -63,6 +63,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -115,14 +116,14 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_prefix_len
           return @m_prefix_len
         end
 
         public
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :prefix_len
 
         def prefix_len
@@ -194,6 +195,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'IPv6Prefix', @m_prefix) if withClean || @n_prefix

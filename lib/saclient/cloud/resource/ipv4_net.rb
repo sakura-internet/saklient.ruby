@@ -19,7 +19,7 @@ module Saclient
         # @return [String]
         attr_accessor :m_address
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_mask_len
 
         # @return [String]
@@ -66,6 +66,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -118,14 +119,14 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_mask_len
           return @m_mask_len
         end
 
         public
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :mask_len
 
         def mask_len
@@ -225,6 +226,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'NetworkAddress', @m_address) if withClean || @n_address

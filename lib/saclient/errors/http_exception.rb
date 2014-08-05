@@ -6,7 +6,7 @@ module Saclient
 
     class HttpException < StandardError
 
-      # @return [Integer]
+      # @return [Fixnum]
       attr_accessor :status
 
       # @return [String]
@@ -16,7 +16,7 @@ module Saclient
       attr_accessor :message
 
       # @param [String] message
-      # @param [Integer] status
+      # @param [Fixnum] status
       # @param [String] code
       def initialize(status, code = nil, message = '')
         super(message)

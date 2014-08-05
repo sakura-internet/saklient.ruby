@@ -64,6 +64,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_host_name(v)
+          Saclient::Util::validate_type(v, 'String')
           @_host_name = v
           return v
         end
@@ -95,6 +96,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_password(v)
+          Saclient::Util::validate_type(v, 'String')
           @_password = v
           return v
         end
@@ -126,6 +128,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_ssh_key(v)
+          Saclient::Util::validate_type(v, 'String')
           @_ssh_key = v
           return v
         end
@@ -157,6 +160,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_ip_address(v)
+          Saclient::Util::validate_type(v, 'String')
           @_ip_address = v
           return v
         end
@@ -188,6 +192,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_default_route(v)
+          Saclient::Util::validate_type(v, 'String')
           @_default_route = v
           return v
         end
@@ -208,24 +213,25 @@ module Saclient
         protected
 
         # @private
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :_network_mask_len
 
-        # @return [Integer]
+        # @return [Fixnum]
         def get_network_mask_len
           return @_network_mask_len
         end
 
-        # @param [Integer] v
-        # @return [Integer]
+        # @param [Fixnum] v
+        # @return [Fixnum]
         def set_network_mask_len(v)
+          Saclient::Util::validate_type(v, 'Fixnum')
           @_network_mask_len = v
           return v
         end
 
         public
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :network_mask_len
 
         def network_mask_len
@@ -240,6 +246,8 @@ module Saclient
         # @param [String] diskId
         # @param [Saclient::Cloud::Client] client
         def initialize(client, diskId)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
+          Saclient::Util::validate_type(diskId, 'String')
           @_client = client
           @_disk_id = diskId
           @_host_name = nil

@@ -43,17 +43,19 @@ module Saclient
 
         # 次に取得するリストの開始オフセットを指定します.
         #
-        # @param [Integer] offset オフセット
+        # @param [Fixnum] offset オフセット
         # @return [Model_Server] this
         def offset(offset)
+          Saclient::Util::validate_type(offset, 'Fixnum')
           return _offset(offset)
         end
 
         # 次に取得するリストの上限レコード数を指定します.
         #
-        # @param [Integer] count 上限レコード数
+        # @param [Fixnum] count 上限レコード数
         # @return [Model_Server] this
         def limit(count)
+          Saclient::Util::validate_type(count, 'Fixnum')
           return _limit(count)
         end
 
@@ -64,6 +66,8 @@ module Saclient
         # @param [String] key
         # @return [Model_Server]
         def filter_by(key, value, multiple = false)
+          Saclient::Util::validate_type(key, 'String')
+          Saclient::Util::validate_type(multiple, 'bool')
           return _filter_by(key, value, multiple)
         end
 
@@ -86,6 +90,7 @@ module Saclient
         # @param [String] id
         # @return [Saclient::Cloud::Resource::Server] リソースオブジェクト
         def get_by_id(id)
+          Saclient::Util::validate_type(id, 'String')
           return _get_by_id(id)
         end
 
@@ -101,6 +106,7 @@ module Saclient
         # @param [String] name
         # @return [Model_Server]
         def with_name_like(name)
+          Saclient::Util::validate_type(name, 'String')
           _filter_by('Name', name)
           return self
         end
@@ -110,6 +116,7 @@ module Saclient
         # @param [String] tag
         # @return [Model_Server]
         def with_tag(tag)
+          Saclient::Util::validate_type(tag, 'String')
           _filter_by('Tags.Name', tag, true)
           return self
         end
@@ -119,6 +126,7 @@ module Saclient
         # @param [Array<String>] tags
         # @return [Model_Server]
         def with_tags(tags)
+          Saclient::Util::validate_type(tags, 'Array')
           _filter_by('Tags.Name', tags, true)
           return self
         end
@@ -128,6 +136,7 @@ module Saclient
         # @param [Saclient::Cloud::Resource::ServerPlan] plan
         # @return [Model_Server]
         def with_plan(plan)
+          Saclient::Util::validate_type(plan, 'Saclient::Cloud::Resource::ServerPlan')
           _filter_by('ServerPlan.ID', plan._id, true)
           return self
         end
@@ -137,6 +146,7 @@ module Saclient
         # @param [String] status
         # @return [Model_Server]
         def with_status(status)
+          Saclient::Util::validate_type(status, 'String')
           _filter_by('Instance.Status', status, true)
           return self
         end
@@ -160,6 +170,7 @@ module Saclient
         # @param [Saclient::Cloud::Resource::IsoImage] iso
         # @return [Model_Server]
         def with_iso_image(iso)
+          Saclient::Util::validate_type(iso, 'Saclient::Cloud::Resource::IsoImage')
           _filter_by('Instance.CDROM.ID', iso._id, true)
           return self
         end

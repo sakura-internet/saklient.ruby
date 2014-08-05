@@ -40,17 +40,19 @@ module Saclient
 
         # 次に取得するリストの開始オフセットを指定します.
         #
-        # @param [Integer] offset オフセット
+        # @param [Fixnum] offset オフセット
         # @return [Model_ServerPlan] this
         def offset(offset)
+          Saclient::Util::validate_type(offset, 'Fixnum')
           return _offset(offset)
         end
 
         # 次に取得するリストの上限レコード数を指定します.
         #
-        # @param [Integer] count 上限レコード数
+        # @param [Fixnum] count 上限レコード数
         # @return [Model_ServerPlan] this
         def limit(count)
+          Saclient::Util::validate_type(count, 'Fixnum')
           return _limit(count)
         end
 
@@ -61,6 +63,8 @@ module Saclient
         # @param [String] key
         # @return [Model_ServerPlan]
         def filter_by(key, value, multiple = false)
+          Saclient::Util::validate_type(key, 'String')
+          Saclient::Util::validate_type(multiple, 'bool')
           return _filter_by(key, value, multiple)
         end
 
@@ -76,6 +80,7 @@ module Saclient
         # @param [String] id
         # @return [Saclient::Cloud::Resource::ServerPlan] リソースオブジェクト
         def get_by_id(id)
+          Saclient::Util::validate_type(id, 'String')
           return _get_by_id(id)
         end
 
@@ -88,10 +93,12 @@ module Saclient
 
         # 指定したスペックのプランを取得します.
         #
-        # @param [Integer] cores
-        # @param [Integer] memoryGib
+        # @param [Fixnum] cores
+        # @param [Fixnum] memoryGib
         # @return [Saclient::Cloud::Resource::ServerPlan]
         def get_by_spec(cores, memoryGib)
+          Saclient::Util::validate_type(cores, 'Fixnum')
+          Saclient::Util::validate_type(memoryGib, 'Fixnum')
           _filter_by('CPU', cores, true)
           _filter_by('MemoryMB', memoryGib * 1024, true)
           return _find_one

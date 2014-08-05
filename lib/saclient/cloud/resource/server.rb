@@ -109,6 +109,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -162,9 +163,11 @@ module Saclient
         #
         # @yield [Saclient::Cloud::Resource::Server, bool]
         # @yieldreturn [void]
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @return [void]
         def after_down(timeoutSec, &callback)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
+          Saclient::Util::validate_type(callback, 'Proc')
           after_status(Saclient::Cloud::Enums::EServerInstanceStatus::down, timeoutSec, &callback)
         end
 
@@ -175,10 +178,13 @@ module Saclient
         # @ignore
         # @yield [Saclient::Cloud::Resource::Server, bool]
         # @yieldreturn [void]
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @param [String] status
         # @return [void]
         def after_status(status, timeoutSec, &callback)
+          Saclient::Util::validate_type(status, 'String')
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
+          Saclient::Util::validate_type(callback, 'Proc')
           ret = sleep_until(status, timeoutSec)
           callback.call(self, ret)
         end
@@ -187,9 +193,10 @@ module Saclient
 
         # サーバが停止するまで待機します.
         #
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @return [bool]
         def sleep_until_down(timeoutSec = 180)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
           return sleep_until(Saclient::Cloud::Enums::EServerInstanceStatus::down, timeoutSec)
         end
 
@@ -198,10 +205,12 @@ module Saclient
         # サーバが指定のステータスに遷移するまで待機します.
         #
         # @ignore
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @param [String] status
         # @return [bool]
         def sleep_until(status, timeoutSec = 180)
+          Saclient::Util::validate_type(status, 'String')
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 3
           while 0 < timeoutSec do
             reload
@@ -221,6 +230,7 @@ module Saclient
         # @param [ServerPlan] planTo
         # @return [Server]
         def change_plan(planTo)
+          Saclient::Util::validate_type(planTo, 'Saclient::Cloud::Resource::ServerPlan')
           path = _api_path + '/' + Saclient::Util::url_encode(_id) + '/to/plan/' + Saclient::Util::url_encode(planTo._id)
           result = @_client.request('PUT', path)
           api_deserialize(result[_root_key.to_sym])
@@ -250,6 +260,7 @@ module Saclient
         # @param [IsoImage] iso
         # @return [Server]
         def insert_iso_image(iso)
+          Saclient::Util::validate_type(iso, 'Saclient::Cloud::Resource::IsoImage')
           path = _api_path + '/' + Saclient::Util::url_encode(_id) + '/cdrom'
           q = { CDROM: { ID: iso._id } }
           result = @_client.request('PUT', path, q)
@@ -307,6 +318,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_name(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_name = v
           @n_name = true
           return @m_name
@@ -344,6 +356,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_description(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_description = v
           @n_description = true
           return @m_description
@@ -381,6 +394,7 @@ module Saclient
         # @param [Array<String>] v
         # @return [Array<String>]
         def set_tags(v)
+          Saclient::Util::validate_type(v, 'Array')
           @m_tags = v
           @n_tags = true
           return @m_tags
@@ -418,6 +432,7 @@ module Saclient
         # @param [Icon] v
         # @return [Icon]
         def set_icon(v)
+          Saclient::Util::validate_type(v, 'Saclient::Cloud::Resource::Icon')
           @m_icon = v
           @n_icon = true
           return @m_icon
@@ -455,6 +470,7 @@ module Saclient
         # @param [ServerPlan] v
         # @return [ServerPlan]
         def set_plan(v)
+          Saclient::Util::validate_type(v, 'Saclient::Cloud::Resource::ServerPlan')
           @m_plan = v
           @n_plan = true
           return @m_plan
@@ -641,6 +657,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name

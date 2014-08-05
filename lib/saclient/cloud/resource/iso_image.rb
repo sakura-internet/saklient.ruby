@@ -46,7 +46,7 @@ module Saclient
 
         # サイズ[MiB]
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_size_mib
 
         # サービスクラス
@@ -99,12 +99,13 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
         protected
 
-        # @return [Integer]
+        # @return [Fixnum]
         def get_size_gib
           return get_size_mib >> 10
         end
@@ -113,7 +114,7 @@ module Saclient
 
         # サイズ[GiB]
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :size_gib
 
         def size_gib
@@ -160,6 +161,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_scope(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_scope = v
           @n_scope = true
           return @m_scope
@@ -197,6 +199,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_name(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_name = v
           @n_name = true
           return @m_name
@@ -234,6 +237,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_description(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_description = v
           @n_description = true
           return @m_description
@@ -271,6 +275,7 @@ module Saclient
         # @param [Array<String>] v
         # @return [Array<String>]
         def set_tags(v)
+          Saclient::Util::validate_type(v, 'Array')
           @m_tags = v
           @n_tags = true
           return @m_tags
@@ -308,6 +313,7 @@ module Saclient
         # @param [Icon] v
         # @return [Icon]
         def set_icon(v)
+          Saclient::Util::validate_type(v, 'Saclient::Cloud::Resource::Icon')
           @m_icon = v
           @n_icon = true
           return @m_icon
@@ -335,7 +341,7 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_size_mib
           return @m_size_mib
         end
@@ -344,7 +350,7 @@ module Saclient
 
         # サイズ[MiB]
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :size_mib
 
         def size_mib
@@ -455,6 +461,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Scope', @m_scope) if withClean || @n_scope

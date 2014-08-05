@@ -46,7 +46,7 @@ module Saclient
 
         # サイズ[MiB]
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_size_mib
 
         # サービスクラス
@@ -114,6 +114,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -137,14 +138,15 @@ module Saclient
 
         protected
 
-        # @return [Integer]
+        # @return [Fixnum]
         def get_size_gib
           return get_size_mib >> 10
         end
 
-        # @param [Integer] sizeGib
-        # @return [Integer]
+        # @param [Fixnum] sizeGib
+        # @return [Fixnum]
         def set_size_gib(sizeGib)
+          Saclient::Util::validate_type(sizeGib, 'Fixnum')
           set_size_mib(sizeGib * 1024)
           return sizeGib
         end
@@ -153,7 +155,7 @@ module Saclient
 
         # サイズ[GiB]
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :size_gib
 
         def size_gib
@@ -225,6 +227,7 @@ module Saclient
         # @param [any] r
         # @return [void]
         def _on_after_api_serialize(r, withClean)
+          Saclient::Util::validate_type(withClean, 'bool')
           return nil if (r).nil?
           if !(@_source).nil?
             if @_source.is_a?(Saclient::Cloud::Resource::Archive)
@@ -250,6 +253,7 @@ module Saclient
         # @param [Server] server
         # @return [Disk]
         def connect_to(server)
+          Saclient::Util::validate_type(server, 'Saclient::Cloud::Resource::Server')
           @_client.request('PUT', '/disk/' + _id + '/to/server/' + server._id)
           return self
         end
@@ -273,18 +277,21 @@ module Saclient
         #
         # @yield [Saclient::Cloud::Resource::Disk, bool]
         # @yieldreturn [void]
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @return [void]
         def after_copy(timeoutSec, &callback)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
+          Saclient::Util::validate_type(callback, 'Proc')
           ret = sleep_while_copying(timeoutSec)
           callback.call(self, ret)
         end
 
         # コピー中のディスクが利用可能になるまで待機します.
         #
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @return [bool]
         def sleep_while_copying(timeoutSec = 3600)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 3
           while 0 < timeoutSec do
             reload
@@ -337,6 +344,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_name(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_name = v
           @n_name = true
           return @m_name
@@ -374,6 +382,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_description(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_description = v
           @n_description = true
           return @m_description
@@ -411,6 +420,7 @@ module Saclient
         # @param [Array<String>] v
         # @return [Array<String>]
         def set_tags(v)
+          Saclient::Util::validate_type(v, 'Array')
           @m_tags = v
           @n_tags = true
           return @m_tags
@@ -448,6 +458,7 @@ module Saclient
         # @param [Icon] v
         # @return [Icon]
         def set_icon(v)
+          Saclient::Util::validate_type(v, 'Saclient::Cloud::Resource::Icon')
           @m_icon = v
           @n_icon = true
           return @m_icon
@@ -475,16 +486,17 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_size_mib
           return @m_size_mib
         end
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @param [Integer] v
-        # @return [Integer]
+        # @param [Fixnum] v
+        # @return [Fixnum]
         def set_size_mib(v)
+          Saclient::Util::validate_type(v, 'Fixnum')
           @m_size_mib = v
           @n_size_mib = true
           return @m_size_mib
@@ -494,7 +506,7 @@ module Saclient
 
         # サイズ[MiB]
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :size_mib
 
         def size_mib
@@ -692,6 +704,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name

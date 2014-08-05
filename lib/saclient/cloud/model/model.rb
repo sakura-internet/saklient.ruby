@@ -53,17 +53,17 @@ module Saclient
         protected
 
         # @private
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :_total
 
-        # @return [Integer]
+        # @return [Fixnum]
         def get_total
           return @_total
         end
 
         public
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :total
 
         def total
@@ -73,17 +73,17 @@ module Saclient
         protected
 
         # @private
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :_count
 
-        # @return [Integer]
+        # @return [Fixnum]
         def get_count
           return @_count
         end
 
         public
 
-        # @return [Integer]
+        # @return [Fixnum]
         attr_reader :count
 
         def count
@@ -120,6 +120,7 @@ module Saclient
 
         # @param [Saclient::Cloud::Client] client
         def initialize(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           @_client = client
           @_params = {}
           @_total = nil
@@ -131,9 +132,10 @@ module Saclient
         # 次に取得するリストの開始オフセットを指定します.
         #
         # @private
-        # @param [Integer] offset オフセット
+        # @param [Fixnum] offset オフセット
         # @return [Model] this
         def _offset(offset)
+          Saclient::Util::validate_type(offset, 'Fixnum')
           @_params[:Begin] = offset
           return self
         end
@@ -141,9 +143,10 @@ module Saclient
         # 次に取得するリストの上限レコード数を指定します.
         #
         # @private
-        # @param [Integer] count 上限レコード数
+        # @param [Fixnum] count 上限レコード数
         # @return [Model] this
         def _limit(count)
+          Saclient::Util::validate_type(count, 'Fixnum')
           @_params[:Count] = count
           return self
         end
@@ -156,6 +159,8 @@ module Saclient
         # @param [String] key
         # @return [Model]
         def _filter_by(key, value, multiple = false)
+          Saclient::Util::validate_type(key, 'String')
+          Saclient::Util::validate_type(multiple, 'bool')
           @_params[:Filter] = {} if !(!@_params.nil? && @_params.key?(:Filter))
           filter = @_params[:Filter]
           if multiple
@@ -193,6 +198,7 @@ module Saclient
         # @param [String] id
         # @return [Saclient::Cloud::Resource::Resource] リソースオブジェクト
         def _get_by_id(id)
+          Saclient::Util::validate_type(id, 'String')
           params = @_params
           _reset
           result = @_client.request('GET', _api_path + '/' + Saclient::Util::url_encode(id), params)

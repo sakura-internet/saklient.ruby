@@ -72,6 +72,7 @@ module Saclient
 
       # @param [Client] client
       def initialize(client)
+        Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
         @_server = Saclient::Cloud::Model::Model_ServerPlan.new(client)
         @_disk = Saclient::Cloud::Model::Model_DiskPlan.new(client)
         @_router = Saclient::Cloud::Model::Model_RouterPlan.new(client)

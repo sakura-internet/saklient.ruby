@@ -33,12 +33,12 @@ module Saclient
 
         # ネットワークのマスク長
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_network_mask_len
 
         # 帯域幅
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :m_band_width_mbps
 
         # スイッチ
@@ -91,6 +91,7 @@ module Saclient
         # @param [any] r
         def initialize(client, r)
           super(client)
+          Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
         end
 
@@ -98,18 +99,21 @@ module Saclient
         #
         # @yield [Saclient::Cloud::Resource::Router, bool]
         # @yieldreturn [void]
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @return [void]
         def after_create(timeoutSec, &callback)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
+          Saclient::Util::validate_type(callback, 'Proc')
           ret = sleep_while_creating(timeoutSec)
           callback.call(self, ret)
         end
 
         # 作成中のルータが利用可能になるまで待機します.
         #
-        # @param [Integer] timeoutSec
+        # @param [Fixnum] timeoutSec
         # @return [bool]
         def sleep_while_creating(timeoutSec = 120)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 3
           while 0 < timeoutSec do
             if exists
@@ -145,6 +149,7 @@ module Saclient
         # @param [Ipv6Net] ipv6Net
         # @return [Router]
         def remove_ipv6_net(ipv6Net)
+          Saclient::Util::validate_type(ipv6Net, 'Saclient::Cloud::Resource::Ipv6Net')
           @_client.request('DELETE', _api_path + '/' + Saclient::Util::url_encode(_id) + '/ipv6net/' + ipv6Net._id)
           reload
           return self
@@ -152,10 +157,12 @@ module Saclient
 
         # このルータ＋スイッチにスタティックルートを追加します.
         #
-        # @param [Integer] maskLen
+        # @param [Fixnum] maskLen
         # @param [String] nextHop
         # @return [Ipv4Net]
         def add_static_route(maskLen, nextHop)
+          Saclient::Util::validate_type(maskLen, 'Fixnum')
+          Saclient::Util::validate_type(nextHop, 'String')
           q = {}
           Saclient::Util::set_by_path(q, 'NetworkMaskLen', maskLen)
           Saclient::Util::set_by_path(q, 'NextHop', nextHop)
@@ -169,6 +176,7 @@ module Saclient
         # @param [Ipv4Net] ipv4Net
         # @return [Router]
         def remove_static_route(ipv4Net)
+          Saclient::Util::validate_type(ipv4Net, 'Saclient::Cloud::Resource::Ipv4Net')
           @_client.request('DELETE', _api_path + '/' + Saclient::Util::url_encode(_id) + '/subnet/' + ipv4Net._id)
           reload
           return self
@@ -176,9 +184,10 @@ module Saclient
 
         # このルータ＋スイッチの帯域プランを変更します.
         #
-        # @param [Integer] bandWidthMbps
+        # @param [Fixnum] bandWidthMbps
         # @return [Router]
         def change_plan(bandWidthMbps)
+          Saclient::Util::validate_type(bandWidthMbps, 'Fixnum')
           path = _api_path + '/' + Saclient::Util::url_encode(_id) + '/bandwidth'
           q = {}
           Saclient::Util::set_by_path(q, 'Internet.BandWidthMbps', bandWidthMbps)
@@ -227,6 +236,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_name(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_name = v
           @n_name = true
           return @m_name
@@ -264,6 +274,7 @@ module Saclient
         # @param [String] v
         # @return [String]
         def set_description(v)
+          Saclient::Util::validate_type(v, 'String')
           @m_description = v
           @n_description = true
           return @m_description
@@ -291,16 +302,17 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_network_mask_len
           return @m_network_mask_len
         end
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @param [Integer] v
-        # @return [Integer]
+        # @param [Fixnum] v
+        # @return [Fixnum]
         def set_network_mask_len(v)
+          Saclient::Util::validate_type(v, 'Fixnum')
           @m_network_mask_len = v
           @n_network_mask_len = true
           return @m_network_mask_len
@@ -310,7 +322,7 @@ module Saclient
 
         # ネットワークのマスク長
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :network_mask_len
 
         def network_mask_len
@@ -328,16 +340,17 @@ module Saclient
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Integer]
+        # @return [Fixnum]
         def get_band_width_mbps
           return @m_band_width_mbps
         end
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @param [Integer] v
-        # @return [Integer]
+        # @param [Fixnum] v
+        # @return [Fixnum]
         def set_band_width_mbps(v)
+          Saclient::Util::validate_type(v, 'Fixnum')
           @m_band_width_mbps = v
           @n_band_width_mbps = true
           return @m_band_width_mbps
@@ -347,7 +360,7 @@ module Saclient
 
         # 帯域幅
         #
-        # @return [Integer]
+        # @return [Fixnum]
         attr_accessor :band_width_mbps
 
         def band_width_mbps
@@ -439,6 +452,7 @@ module Saclient
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
+          Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name

@@ -155,7 +155,7 @@ module Saclient
     class ExceptionFactory
 
       # @param [String] message
-      # @param [Integer] status
+      # @param [Fixnum] status
       # @param [String] code
       # @return [HttpException]
       def self.create(status, code = nil, message = '')
