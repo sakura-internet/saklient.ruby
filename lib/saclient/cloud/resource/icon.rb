@@ -12,12 +12,23 @@ module Saclient
 
         protected
 
+        # ID
+        #
         # @return [String]
         attr_accessor :m_id
 
+        # スコープ
+        #
+        # @return [String]
+        attr_accessor :m_scope
+
+        # 名前
+        #
         # @return [String]
         attr_accessor :m_name
 
+        # URL
+        #
         # @return [String]
         attr_accessor :m_url
 
@@ -84,11 +95,36 @@ module Saclient
 
         public
 
+        # ID
+        #
         # @return [String]
         attr_reader :id
 
         def id
           get_id
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_scope
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [String]
+        def get_scope
+          return @m_scope
+        end
+
+        public
+
+        # スコープ
+        #
+        # @return [String]
+        attr_reader :scope
+
+        def scope
+          get_scope
         end
 
         protected
@@ -105,6 +141,8 @@ module Saclient
 
         public
 
+        # 名前
+        #
         # @return [String]
         attr_reader :name
 
@@ -126,6 +164,8 @@ module Saclient
 
         public
 
+        # URL
+        #
         # @return [String]
         attr_reader :url
 
@@ -149,6 +189,13 @@ module Saclient
             @is_incomplete = true
           end
           @n_id = false
+          if Saclient::Util::exists_path(r, 'Scope')
+            @m_scope = (Saclient::Util::get_by_path(r, 'Scope')).nil? ? nil : Saclient::Util::get_by_path(r, 'Scope').to_s
+          else
+            @m_scope = nil
+            @is_incomplete = true
+          end
+          @n_scope = false
           if Saclient::Util::exists_path(r, 'Name')
             @m_name = (Saclient::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Util::get_by_path(r, 'Name').to_s
           else
@@ -173,6 +220,7 @@ module Saclient
           Saclient::Util::validate_type(withClean, 'bool')
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
+          Saclient::Util::set_by_path(ret, 'Scope', @m_scope) if withClean || @n_scope
           Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
           Saclient::Util::set_by_path(ret, 'URL', @m_url) if withClean || @n_url
           return ret

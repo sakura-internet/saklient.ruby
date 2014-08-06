@@ -107,8 +107,6 @@ module Saclient
         isOk = clazz=="Fixnum" || clazz=="Float"
       elsif typeName=="String"
         isOk = clazz=="Fixnum" || clazz=="Float" || clazz=="String"
-      # elsif typeName=="Fixnum" || typeName=="Proc"
-      #   isOk = clazz==typeName
       else
         isOk = value.is_a?(Object.const_get(typeName))
       end

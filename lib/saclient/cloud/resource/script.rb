@@ -3,16 +3,13 @@
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
-require_relative 'disk_plan'
-require_relative 'server'
-require_relative '../enums/escope'
 
 module Saclient
   module Cloud
     module Resource
 
-      # アーカイブのリソース情報へのアクセス機能や操作機能を備えたクラス.
-      class Archive < Saclient::Cloud::Resource::Resource
+      # スクリプトのリソース情報へのアクセス機能や操作機能を備えたクラス.
+      class Script < Saclient::Cloud::Resource::Resource
 
         protected
 
@@ -25,6 +22,11 @@ module Saclient
         #
         # @return [String]
         attr_accessor :m_scope
+
+        # クラス
+        #
+        # @return [String]
+        attr_accessor :m_clazz
 
         # 名前
         #
@@ -46,37 +48,32 @@ module Saclient
         # @return [Icon]
         attr_accessor :m_icon
 
-        # サイズ[MiB]
-        #
-        # @return [Fixnum]
-        attr_accessor :m_size_mib
-
-        # サービスクラス
+        # 内容
         #
         # @return [String]
-        attr_accessor :m_service_class
+        attr_accessor :m_content
 
-        # プラン
+        # 注釈
         #
-        # @return [DiskPlan]
-        attr_accessor :m_plan
+        # @return [any]
+        attr_accessor :m_annotation
 
         # @private
         # @return [String]
         def _api_path
-          return '/archive'
+          return '/note'
         end
 
         # @private
         # @return [String]
         def _root_key
-          return 'Archive'
+          return 'Note'
         end
 
         # @private
         # @return [String]
         def _root_key_m
-          return 'Archives'
+          return 'Notes'
         end
 
         public
@@ -89,14 +86,14 @@ module Saclient
 
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 上書き保存します.
         #
-        # @return [Archive] this
+        # @return [Script] this
         def save
           return _save
         end
 
         # 最新のリソース情報を再取得します.
         #
-        # @return [Archive] this
+        # @return [Script] this
         def reload
           return _reload
         end
@@ -108,24 +105,6 @@ module Saclient
           super(client)
           Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
           api_deserialize(r)
-        end
-
-        protected
-
-        # @return [Fixnum]
-        def get_size_gib
-          return get_size_mib >> 10
-        end
-
-        public
-
-        # サイズ[GiB]
-        #
-        # @return [Fixnum]
-        attr_reader :size_gib
-
-        def size_gib
-          get_size_gib
         end
 
         protected
@@ -177,6 +156,44 @@ module Saclient
         protected
 
         # @return [bool]
+        attr_accessor :n_clazz
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [String]
+        def get_clazz
+          return @m_clazz
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @param [String] v
+        # @return [String]
+        def set_clazz(v)
+          Saclient::Util::validate_type(v, 'String')
+          @m_clazz = v
+          @n_clazz = true
+          return @m_clazz
+        end
+
+        public
+
+        # クラス
+        #
+        # @return [String]
+        attr_accessor :clazz
+
+        def clazz
+          get_clazz
+        end
+
+        def clazz=(v)
+          set_clazz(v)
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_name
 
         # (This method is generated in Translator_default#buildImpl)
@@ -186,30 +203,15 @@ module Saclient
           return @m_name
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
-        # @param [String] v
-        # @return [String]
-        def set_name(v)
-          Saclient::Util::validate_type(v, 'String')
-          @m_name = v
-          @n_name = true
-          return @m_name
-        end
-
         public
 
         # 名前
         #
         # @return [String]
-        attr_accessor :name
+        attr_reader :name
 
         def name
           get_name
-        end
-
-        def name=(v)
-          set_name(v)
         end
 
         protected
@@ -329,70 +331,76 @@ module Saclient
         protected
 
         # @return [bool]
-        attr_accessor :n_size_mib
+        attr_accessor :n_content
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [Fixnum]
-        def get_size_mib
-          return @m_size_mib
+        # @return [String]
+        def get_content
+          return @m_content
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @param [String] v
+        # @return [String]
+        def set_content(v)
+          Saclient::Util::validate_type(v, 'String')
+          @m_content = v
+          @n_content = true
+          return @m_content
         end
 
         public
 
-        # サイズ[MiB]
+        # 内容
         #
-        # @return [Fixnum]
-        attr_reader :size_mib
+        # @return [String]
+        attr_accessor :content
 
-        def size_mib
-          get_size_mib
+        def content
+          get_content
+        end
+
+        def content=(v)
+          set_content(v)
         end
 
         protected
 
         # @return [bool]
-        attr_accessor :n_service_class
+        attr_accessor :n_annotation
 
         # (This method is generated in Translator_default#buildImpl)
         #
-        # @return [String]
-        def get_service_class
-          return @m_service_class
+        # @return [any]
+        def get_annotation
+          return @m_annotation
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @param [any] v
+        # @return [any]
+        def set_annotation(v)
+          @m_annotation = v
+          @n_annotation = true
+          return @m_annotation
         end
 
         public
 
-        # サービスクラス
+        # 注釈
         #
-        # @return [String]
-        attr_reader :service_class
+        # @return [any]
+        attr_accessor :annotation
 
-        def service_class
-          get_service_class
+        def annotation
+          get_annotation
         end
 
-        protected
-
-        # @return [bool]
-        attr_accessor :n_plan
-
-        # (This method is generated in Translator_default#buildImpl)
-        #
-        # @return [DiskPlan]
-        def get_plan
-          return @m_plan
-        end
-
-        public
-
-        # プラン
-        #
-        # @return [DiskPlan]
-        attr_reader :plan
-
-        def plan
-          get_plan
+        def annotation=(v)
+          set_annotation(v)
         end
 
         protected
@@ -418,6 +426,13 @@ module Saclient
             @is_incomplete = true
           end
           @n_scope = false
+          if Saclient::Util::exists_path(r, 'Class')
+            @m_clazz = (Saclient::Util::get_by_path(r, 'Class')).nil? ? nil : Saclient::Util::get_by_path(r, 'Class').to_s
+          else
+            @m_clazz = nil
+            @is_incomplete = true
+          end
+          @n_clazz = false
           if Saclient::Util::exists_path(r, 'Name')
             @m_name = (Saclient::Util::get_by_path(r, 'Name')).nil? ? nil : Saclient::Util::get_by_path(r, 'Name').to_s
           else
@@ -455,27 +470,20 @@ module Saclient
             @is_incomplete = true
           end
           @n_icon = false
-          if Saclient::Util::exists_path(r, 'SizeMB')
-            @m_size_mib = (Saclient::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saclient::Util::get_by_path(r, 'SizeMB').to_s).to_i(10)
+          if Saclient::Util::exists_path(r, 'Content')
+            @m_content = (Saclient::Util::get_by_path(r, 'Content')).nil? ? nil : Saclient::Util::get_by_path(r, 'Content').to_s
           else
-            @m_size_mib = nil
+            @m_content = nil
             @is_incomplete = true
           end
-          @n_size_mib = false
-          if Saclient::Util::exists_path(r, 'ServiceClass')
-            @m_service_class = (Saclient::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saclient::Util::get_by_path(r, 'ServiceClass').to_s
+          @n_content = false
+          if Saclient::Util::exists_path(r, 'Remark')
+            @m_annotation = Saclient::Util::get_by_path(r, 'Remark')
           else
-            @m_service_class = nil
+            @m_annotation = nil
             @is_incomplete = true
           end
-          @n_service_class = false
-          if Saclient::Util::exists_path(r, 'Plan')
-            @m_plan = (Saclient::Util::get_by_path(r, 'Plan')).nil? ? nil : Saclient::Cloud::Resource::DiskPlan.new(@_client, Saclient::Util::get_by_path(r, 'Plan'))
-          else
-            @m_plan = nil
-            @is_incomplete = true
-          end
-          @n_plan = false
+          @n_annotation = false
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -487,6 +495,7 @@ module Saclient
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Scope', @m_scope) if withClean || @n_scope
+          Saclient::Util::set_by_path(ret, 'Class', @m_clazz) if withClean || @n_clazz
           Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
           Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           if withClean || @n_tags
@@ -498,9 +507,8 @@ module Saclient
             end
           end
           Saclient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
-          Saclient::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
-          Saclient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
-          Saclient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
+          Saclient::Util::set_by_path(ret, 'Content', @m_content) if withClean || @n_content
+          Saclient::Util::set_by_path(ret, 'Remark', @m_annotation) if withClean || @n_annotation
           return ret
         end
 

@@ -80,6 +80,13 @@ describe 'Server' do
     archive = archives[0]
     # p archive.dump
     
+    # search scripts
+    puts 'searching scripts...'
+    scripts = @api.script.with_name_like('WordPress').with_shared_scope.limit(1).find
+    # printf "found %d script(s)\n", scripts.length
+    script = scripts[0]
+    # p script.dump
+    
     # create a disk
     puts 'creating a disk...'
     disk = @api.disk.create
@@ -137,6 +144,7 @@ describe 'Server' do
     diskconf.host_name = 'saclient-test'
     diskconf.password = SecureRandom.uuid[0, 8]
     diskconf.ssh_key = ssh_public_key
+    diskconf.scripts.push(script)
     diskconf.write
     
     # boot

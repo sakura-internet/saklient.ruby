@@ -2,6 +2,7 @@
 
 require_relative '../../util'
 require_relative '../client'
+require_relative 'script'
 
 module Saclient
   module Cloud
@@ -242,6 +243,26 @@ module Saclient
           set_network_mask_len(v)
         end
 
+        protected
+
+        # @private
+        # @return [Array<Script>]
+        attr_accessor :_scripts
+
+        # @return [Array<Script>]
+        def get_scripts
+          return @_scripts
+        end
+
+        public
+
+        # @return [Array<Script>]
+        attr_reader :scripts
+
+        def scripts
+          get_scripts
+        end
+
         # @private
         # @param [String] diskId
         # @param [Saclient::Cloud::Client] client
@@ -256,6 +277,7 @@ module Saclient
           @_ip_address = nil
           @_default_route = nil
           @_network_mask_len = nil
+          @_scripts = []
         end
 
         # *
@@ -269,6 +291,13 @@ module Saclient
           Saclient::Util::set_by_path(q, 'UserIPAddress', @_ip_address) if !(@_ip_address).nil?
           Saclient::Util::set_by_path(q, 'UserSubnet.DefaultRoute', @_default_route) if !(@_default_route).nil?
           Saclient::Util::set_by_path(q, 'UserSubnet.NetworkMaskLen', @_network_mask_len) if !(@_network_mask_len).nil?
+          if 0 < @_scripts.length
+            notes = []
+            for script in @_scripts
+              notes << { ID: script._id }
+            end
+            Saclient::Util::set_by_path(q, 'Notes', notes)
+          end
           path = '/disk/' + @_disk_id + '/config'
           result = @_client.request('PUT', path, q)
           return self

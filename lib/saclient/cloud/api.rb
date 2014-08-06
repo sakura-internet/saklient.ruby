@@ -13,6 +13,7 @@ require_relative 'model/model_iface'
 require_relative 'model/model_swytch'
 require_relative 'model/model_router'
 require_relative 'model/model_ipv6_net'
+require_relative 'model/model_script'
 
 module Saclient
   module Cloud
@@ -264,6 +265,26 @@ module Saclient
 
       protected
 
+      # @private
+      # @return [Saclient::Cloud::Model::Model_Script]
+      attr_accessor :_script
+
+      # @return [Saclient::Cloud::Model::Model_Script]
+      def get_script
+        return @_script
+      end
+
+      public
+
+      # @return [Saclient::Cloud::Model::Model_Script]
+      attr_reader :script
+
+      def script
+        get_script
+      end
+
+      protected
+
       # @param [Client] client
       def initialize(client)
         Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
@@ -279,6 +300,7 @@ module Saclient
         @_swytch = Saclient::Cloud::Model::Model_Swytch.new(client)
         @_router = Saclient::Cloud::Model::Model_Router.new(client)
         @_ipv6_net = Saclient::Cloud::Model::Model_Ipv6Net.new(client)
+        @_script = Saclient::Cloud::Model::Model_Script.new(client)
       end
 
       public
