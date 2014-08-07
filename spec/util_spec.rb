@@ -51,11 +51,21 @@ describe 'Util' do
     #
     ok = false
     begin
-      Saclient::Cloud::API::authorize('abc', []);
+      Saclient::Cloud::API::authorize('abc', [])
     rescue Saclient::Errors::SaclientException
       ok = true
     end
     fail '引数の型が異なる時は SaclientException がスローされなければなりません' unless ok
+    
+    #
+    ok = false
+    begin
+      server = Saclient::Cloud::API::authorize('a', 'a').server.create
+      server.availability = 'available'
+    rescue NoMethodError
+      ok = true
+    end
+    fail '未定義または読み取り専用フィールドへのset時は NoMethodError がスローされなければなりません' unless ok
     
   end
   

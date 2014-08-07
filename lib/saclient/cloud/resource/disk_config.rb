@@ -44,6 +44,8 @@ module Saclient
 
         public
 
+        # 修正対象のディスクID
+        #
         # @return [String]
         attr_reader :disk_id
 
@@ -72,6 +74,8 @@ module Saclient
 
         public
 
+        # ホスト名
+        #
         # @return [String]
         attr_accessor :host_name
 
@@ -104,6 +108,8 @@ module Saclient
 
         public
 
+        # ログインパスワード
+        #
         # @return [String]
         attr_accessor :password
 
@@ -136,6 +142,8 @@ module Saclient
 
         public
 
+        # SSHキー
+        #
         # @return [String]
         attr_accessor :ssh_key
 
@@ -168,6 +176,8 @@ module Saclient
 
         public
 
+        # IPアドレス
+        #
         # @return [String]
         attr_accessor :ip_address
 
@@ -200,6 +210,8 @@ module Saclient
 
         public
 
+        # デフォルトルート
+        #
         # @return [String]
         attr_accessor :default_route
 
@@ -232,6 +244,8 @@ module Saclient
 
         public
 
+        # ネットワークマスク長
+        #
         # @return [Fixnum]
         attr_accessor :network_mask_len
 
@@ -256,6 +270,8 @@ module Saclient
 
         public
 
+        # スタートアップスクリプト
+        #
         # @return [Array<Script>]
         attr_reader :scripts
 
@@ -280,7 +296,17 @@ module Saclient
           @_scripts = []
         end
 
-        # *
+        # スタートアップスクリプトを追加します.
+        #
+        # @param [Script] script
+        # @return [DiskConfig]
+        def add_script(script)
+          Saclient::Util::validate_type(script, 'Saclient::Cloud::Resource::Script')
+          @_scripts << script
+          return self
+        end
+
+        # 修正内容を実際のディスクに書き込みます.
         #
         # @return [DiskConfig]
         def write
