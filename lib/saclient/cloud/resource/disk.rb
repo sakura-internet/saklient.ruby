@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../errors/saclient_exception'
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
@@ -497,6 +498,7 @@ module Saclient
         # @return [Fixnum]
         def set_size_mib(v)
           Saclient::Util::validate_type(v, 'Fixnum')
+          raise Saclient::Errors::SaclientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saclient::Cloud::Resource::Disk#size_mib') if !@is_new
           @m_size_mib = v
           @n_size_mib = true
           return @m_size_mib

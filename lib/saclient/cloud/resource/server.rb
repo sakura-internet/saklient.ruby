@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../errors/saclient_exception'
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
@@ -471,6 +472,7 @@ module Saclient
         # @return [ServerPlan]
         def set_plan(v)
           Saclient::Util::validate_type(v, 'Saclient::Cloud::Resource::ServerPlan')
+          raise Saclient::Errors::SaclientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saclient::Cloud::Resource::Server#plan') if !@is_new
           @m_plan = v
           @n_plan = true
           return @m_plan

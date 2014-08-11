@@ -97,6 +97,17 @@ describe 'Server' do
     disk.save
     # p disk.dump
     
+    # check an immutable field
+    puts 'updating the disk...'
+    ok = false
+    begin
+      disk.size_mib = 20480
+      disk.save
+    rescue Saclient::Errors::SaclientException
+      ok = true
+    end
+    fail 'Immutableフィールドの再set時は SaclientException がスローされなければなりません' unless ok
+    
     # create a server
     puts 'creating a server...'
     server = @api.server.create

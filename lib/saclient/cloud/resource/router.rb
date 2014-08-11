@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../errors/saclient_exception'
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
@@ -313,6 +314,7 @@ module Saclient
         # @return [Fixnum]
         def set_network_mask_len(v)
           Saclient::Util::validate_type(v, 'Fixnum')
+          raise Saclient::Errors::SaclientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saclient::Cloud::Resource::Router#network_mask_len') if !@is_new
           @m_network_mask_len = v
           @n_network_mask_len = true
           return @m_network_mask_len
@@ -351,6 +353,7 @@ module Saclient
         # @return [Fixnum]
         def set_band_width_mbps(v)
           Saclient::Util::validate_type(v, 'Fixnum')
+          raise Saclient::Errors::SaclientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saclient::Cloud::Resource::Router#band_width_mbps') if !@is_new
           @m_band_width_mbps = v
           @n_band_width_mbps = true
           return @m_band_width_mbps

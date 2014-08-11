@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../errors/saclient_exception'
 require_relative '../client'
 require_relative 'resource'
 
@@ -203,6 +204,7 @@ module Saclient
         # @return [String]
         def set_server_id(v)
           Saclient::Util::validate_type(v, 'String')
+          raise Saclient::Errors::SaclientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saclient::Cloud::Resource::Iface#server_id') if !@is_new
           @m_server_id = v
           @n_server_id = true
           return @m_server_id

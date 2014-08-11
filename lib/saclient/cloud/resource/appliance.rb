@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../errors/saclient_exception'
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
@@ -177,6 +178,7 @@ module Saclient
         # @return [String]
         def set_clazz(v)
           Saclient::Util::validate_type(v, 'String')
+          raise Saclient::Errors::SaclientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saclient::Cloud::Resource::Appliance#clazz') if !@is_new
           @m_clazz = v
           @n_clazz = true
           return @m_clazz
