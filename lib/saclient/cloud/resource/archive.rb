@@ -3,9 +3,13 @@
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
+require_relative 'ftp_info'
 require_relative 'disk_plan'
 require_relative 'server'
+require_relative 'archive'
+require_relative 'disk'
 require_relative '../enums/escope'
+require_relative '../enums/eavailability'
 require_relative '../../errors/saclient_exception'
 
 module Saclient
@@ -62,6 +66,11 @@ module Saclient
         # @return [DiskPlan]
         attr_accessor :m_plan
 
+        # 有効状態
+        #
+        # @return [String]
+        attr_accessor :m_availability
+
         # @private
         # @return [String]
         def _api_path
@@ -115,21 +124,35 @@ module Saclient
 
         protected
 
-        # @private
-        # @param [any] root
-        # @param [any] r
-        # @return [void]
-        def _on_after_api_deserialize(r, root)
-          return nil if (root).nil?
-          if !root.nil? && root.key?(:FTPServer)
-            ftp = root[:FTPServer]
-            @_ftp_info = FtpInfo.new(ftp) if !(ftp).nil?
-          end
+        # @return [bool]
+        def get_is_available
+          return get_availability == Saclient::Cloud::Enums::EAvailability::available
         end
+
+        public
+
+        # ディスクが利用可能なときtrueを返します.
+        #
+        # @return [bool]
+        attr_reader :is_available
+
+        def is_available
+          get_is_available
+        end
+
+        protected
 
         # @return [Fixnum]
         def get_size_gib
           return get_size_mib >> 10
+        end
+
+        # @param [Fixnum] sizeGib
+        # @return [Fixnum]
+        def set_size_gib(sizeGib)
+          Saclient::Util::validate_type(sizeGib, 'Fixnum')
+          set_size_mib(sizeGib * 1024)
+          return sizeGib
         end
 
         public
@@ -137,10 +160,47 @@ module Saclient
         # サイズ[GiB]
         #
         # @return [Fixnum]
-        attr_reader :size_gib
+        attr_accessor :size_gib
 
         def size_gib
           get_size_gib
+        end
+
+        def size_gib=(v)
+          set_size_gib(v)
+        end
+
+        protected
+
+        # @private
+        # @return [any]
+        attr_accessor :_source
+
+        public
+
+        # @return [any]
+        def get_source
+          return @_source
+        end
+
+        # @param [any] source
+        # @return [any]
+        def set_source(source)
+          @_source = source
+          return source
+        end
+
+        # アーカイブのコピー元
+        #
+        # @return [any]
+        attr_accessor :source
+
+        def source
+          get_source
+        end
+
+        def source=(v)
+          set_source(v)
         end
 
         protected
@@ -165,6 +225,64 @@ module Saclient
           get_ftp_info
         end
 
+        protected
+
+        # @private
+        # @param [any] root
+        # @param [any] r
+        # @return [void]
+        def _on_after_api_deserialize(r, root)
+          if !(root).nil?
+            if !root.nil? && root.key?(:FTPServer)
+              ftp = root[:FTPServer]
+              @_ftp_info = Saclient::Cloud::Resource::FtpInfo.new(ftp) if !(ftp).nil?
+            end
+          end
+          if !(r).nil?
+            if !r.nil? && r.key?(:SourceArchive)
+              s = r[:SourceArchive]
+              if !(s).nil?
+                id = s[:ID]
+                @_source = Saclient::Cloud::Resource::Archive.new(@_client, s) if !(id).nil?
+              end
+            end
+            if !r.nil? && r.key?(:SourceDisk)
+              s = r[:SourceDisk]
+              if !(s).nil?
+                id = s[:ID]
+                @_source = Saclient::Cloud::Resource::Disk.new(@_client, s) if !(id).nil?
+              end
+            end
+          end
+        end
+
+        # @private
+        # @param [bool] withClean
+        # @param [any] r
+        # @return [void]
+        def _on_after_api_serialize(r, withClean)
+          Saclient::Util::validate_type(withClean, 'bool')
+          return nil if (r).nil?
+          if !(@_source).nil?
+            if @_source.is_a?(Saclient::Cloud::Resource::Archive)
+              archive = @_source
+              s = withClean ? archive.api_serialize(true) : { ID: archive._id }
+              r[:SourceArchive] = s
+            else
+              if @_source.is_a?(Saclient::Cloud::Resource::Disk)
+                disk = @_source
+                s = withClean ? disk.api_serialize(true) : { ID: disk._id }
+                r[:SourceDisk] = s
+              else
+                @_source = nil
+                Saclient::Util::validate_type(@_source, 'Disk or Archive', true)
+              end
+            end
+          end
+        end
+
+        public
+
         # @param [bool] reset
         # @return [Archive]
         def open_ftp(reset = false)
@@ -185,6 +303,37 @@ module Saclient
           result = @_client.request('DELETE', path)
           @_ftp_info = nil
           return self
+        end
+
+        # コピー中のアーカイブが利用可能になるまで待機します.
+        #
+        # @yield [Saclient::Cloud::Resource::Archive, bool]
+        # @yieldreturn [void]
+        # @param [Fixnum] timeoutSec
+        # @return [void]
+        def after_copy(timeoutSec, &callback)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
+          Saclient::Util::validate_type(callback, 'Proc')
+          ret = sleep_while_copying(timeoutSec)
+          callback.call(self, ret)
+        end
+
+        # コピー中のアーカイブが利用可能になるまで待機します.
+        #
+        # @param [Fixnum] timeoutSec
+        # @return [bool]
+        def sleep_while_copying(timeoutSec = 3600)
+          Saclient::Util::validate_type(timeoutSec, 'Fixnum')
+          step = 3
+          while 0 < timeoutSec do
+            reload
+            a = get_availability
+            return true if a == Saclient::Cloud::Enums::EAvailability::available
+            timeoutSec = 0 if a != Saclient::Cloud::Enums::EAvailability::migrating
+            timeoutSec -= step
+            sleep step if 0 < timeoutSec
+          end
+          return false
         end
 
         protected
@@ -472,6 +621,29 @@ module Saclient
 
         protected
 
+        # @return [bool]
+        attr_accessor :n_availability
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @return [String]
+        def get_availability
+          return @m_availability
+        end
+
+        public
+
+        # 有効状態
+        #
+        # @return [String]
+        attr_reader :availability
+
+        def availability
+          get_availability
+        end
+
+        protected
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
@@ -551,6 +723,13 @@ module Saclient
             @is_incomplete = true
           end
           @n_plan = false
+          if Saclient::Util::exists_path(r, 'Availability')
+            @m_availability = (Saclient::Util::get_by_path(r, 'Availability')).nil? ? nil : Saclient::Util::get_by_path(r, 'Availability').to_s
+          else
+            @m_availability = nil
+            @is_incomplete = true
+          end
+          @n_availability = false
         end
 
         # (This method is generated in Translator_default#buildImpl)
@@ -576,6 +755,7 @@ module Saclient
           Saclient::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
           Saclient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           Saclient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
+          Saclient::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
           return ret
         end
 

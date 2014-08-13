@@ -7,6 +7,7 @@ require_relative 'icon'
 require_relative 'disk_plan'
 require_relative 'server'
 require_relative 'archive'
+require_relative 'disk'
 require_relative 'disk_config'
 require_relative '../enums/eavailability'
 require_relative '../enums/edisk_connection'
@@ -209,19 +210,20 @@ module Saclient
         # @param [any] r
         # @return [void]
         def _on_after_api_deserialize(r, root)
-          return nil if (r).nil?
-          if !r.nil? && r.key?(:SourceArchive)
-            s = r[:SourceArchive]
-            if !(s).nil?
-              id = s[:ID]
-              @_source = Saclient::Cloud::Resource::Archive.new(@_client, s) if !(id).nil?
+          if !(r).nil?
+            if !r.nil? && r.key?(:SourceArchive)
+              s = r[:SourceArchive]
+              if !(s).nil?
+                id = s[:ID]
+                @_source = Saclient::Cloud::Resource::Archive.new(@_client, s) if !(id).nil?
+              end
             end
-          end
-          if !r.nil? && r.key?(:SourceDisk)
-            s = r[:SourceDisk]
-            if !(s).nil?
-              id = s[:ID]
-              @_source = Saclient::Cloud::Resource::Disk.new(@_client, s) if !(id).nil?
+            if !r.nil? && r.key?(:SourceDisk)
+              s = r[:SourceDisk]
+              if !(s).nil?
+                id = s[:ID]
+                @_source = Saclient::Cloud::Resource::Disk.new(@_client, s) if !(id).nil?
+              end
             end
           end
         end
@@ -244,7 +246,8 @@ module Saclient
                 s = withClean ? disk.api_serialize(true) : { ID: disk._id }
                 r[:SourceDisk] = s
               else
-                r[:SourceArchive] = { ID: 1 }
+                @_source = nil
+                Saclient::Util::validate_type(@_source, 'Disk or Archive', true)
               end
             end
           end

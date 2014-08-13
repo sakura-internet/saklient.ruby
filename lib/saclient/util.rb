@@ -97,18 +97,20 @@ module Saclient
     # @param [any] value
     # @param [String] typeName
     # @return [void]
-    def self.validate_type(value, typeName)
-      return if typeName=="any" || typeName=="void" || value.nil?
+    def self.validate_type(value, typeName, force=false)
       isOk = false
-      clazz = value.class.to_s
-      if typeName=="bool"
-        isOk = clazz=="TrueClass" || clazz=="FalseClass"
-      elsif typeName=="Float"
-        isOk = clazz=="Fixnum" || clazz=="Float"
-      elsif typeName=="String"
-        isOk = clazz=="Fixnum" || clazz=="Float" || clazz=="String"
-      else
-        isOk = value.is_a?(Object.const_get(typeName))
+      if !force then
+        return if typeName=="any" || typeName=="void" || value.nil?
+        clazz = value.class.to_s
+        if typeName=="bool"
+          isOk = clazz=="TrueClass" || clazz=="FalseClass"
+        elsif typeName=="Float"
+          isOk = clazz=="Fixnum" || clazz=="Float"
+        elsif typeName=="String"
+          isOk = clazz=="Fixnum" || clazz=="Float" || clazz=="String"
+        else
+          isOk = value.is_a?(Object.const_get(typeName))
+        end
       end
       raise Saclient::Errors::SaclientException.new('argument_type_mismatch', 'Argument type mismatch (expected '+typeName+' but got '+clazz+')') unless isOk
     end
