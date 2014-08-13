@@ -6,6 +6,7 @@ require_relative 'icon'
 require_relative 'disk_plan'
 require_relative 'server'
 require_relative '../enums/escope'
+require_relative '../../errors/saclient_exception'
 
 module Saclient
   module Cloud
@@ -102,15 +103,29 @@ module Saclient
         end
 
         # @private
+        # @param [any] obj
+        # @param [bool] wrapped
         # @param [Saclient::Cloud::Client] client
-        # @param [any] r
-        def initialize(client, r)
+        def initialize(client, obj, wrapped = false)
           super(client)
           Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
-          api_deserialize(r)
+          Saclient::Util::validate_type(wrapped, 'bool')
+          api_deserialize(obj, wrapped)
         end
 
         protected
+
+        # @private
+        # @param [any] root
+        # @param [any] r
+        # @return [void]
+        def _on_after_api_deserialize(r, root)
+          return nil if (root).nil?
+          if !root.nil? && root.key?(:FTPServer)
+            ftp = root[:FTPServer]
+            @_ftp_info = FtpInfo.new(ftp) if !(ftp).nil?
+          end
+        end
 
         # @return [Fixnum]
         def get_size_gib
@@ -126,6 +141,50 @@ module Saclient
 
         def size_gib
           get_size_gib
+        end
+
+        protected
+
+        # @private
+        # @return [FtpInfo]
+        attr_accessor :_ftp_info
+
+        public
+
+        # @return [FtpInfo]
+        def get_ftp_info
+          return @_ftp_info
+        end
+
+        # FTP情報
+        #
+        # @return [FtpInfo]
+        attr_reader :ftp_info
+
+        def ftp_info
+          get_ftp_info
+        end
+
+        # @param [bool] reset
+        # @return [Archive]
+        def open_ftp(reset = false)
+          Saclient::Util::validate_type(reset, 'bool')
+          path = _api_path + '/' + Saclient::Util::url_encode(_id) + '/ftp'
+          q = {}
+          Saclient::Util::set_by_path(q, 'ChangePassword', reset)
+          result = @_client.request('PUT', path, q)
+          _on_after_api_deserialize(nil, result)
+          return self
+        end
+
+        # @param [bool] reset
+        # @return [Archive]
+        def close_ftp(reset = false)
+          Saclient::Util::validate_type(reset, 'bool')
+          path = _api_path + '/' + Saclient::Util::url_encode(_id) + '/ftp'
+          result = @_client.request('DELETE', path)
+          @_ftp_info = nil
+          return self
         end
 
         protected
@@ -338,15 +397,31 @@ module Saclient
           return @m_size_mib
         end
 
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @param [Fixnum] v
+        # @return [Fixnum]
+        def set_size_mib(v)
+          Saclient::Util::validate_type(v, 'Fixnum')
+          raise Saclient::Errors::SaclientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saclient::Cloud::Resource::Archive#size_mib') if !@is_new
+          @m_size_mib = v
+          @n_size_mib = true
+          return @m_size_mib
+        end
+
         public
 
         # サイズ[MiB]
         #
         # @return [Fixnum]
-        attr_reader :size_mib
+        attr_accessor :size_mib
 
         def size_mib
           get_size_mib
+        end
+
+        def size_mib=(v)
+          set_size_mib(v)
         end
 
         protected

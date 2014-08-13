@@ -24,6 +24,24 @@ module Saclient
         # @return [String]
         attr_accessor :m_service_class
 
+        # @private
+        # @return [String]
+        def _api_path
+          return '/product/internet'
+        end
+
+        # @private
+        # @return [String]
+        def _root_key
+          return 'InternetPlan'
+        end
+
+        # @private
+        # @return [String]
+        def _root_key_m
+          return 'InternetPlans'
+        end
+
         public
 
         # @private
@@ -33,12 +51,14 @@ module Saclient
         end
 
         # @private
+        # @param [any] obj
+        # @param [bool] wrapped
         # @param [Saclient::Cloud::Client] client
-        # @param [any] r
-        def initialize(client, r)
+        def initialize(client, obj, wrapped = false)
           super(client)
           Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
-          api_deserialize(r)
+          Saclient::Util::validate_type(wrapped, 'bool')
+          api_deserialize(obj, wrapped)
         end
 
         protected

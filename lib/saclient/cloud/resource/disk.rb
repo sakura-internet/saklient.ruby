@@ -111,12 +111,14 @@ module Saclient
         end
 
         # @private
+        # @param [any] obj
+        # @param [bool] wrapped
         # @param [Saclient::Cloud::Client] client
-        # @param [any] r
-        def initialize(client, r)
+        def initialize(client, obj, wrapped = false)
           super(client)
           Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
-          api_deserialize(r)
+          Saclient::Util::validate_type(wrapped, 'bool')
+          api_deserialize(obj, wrapped)
         end
 
         protected
@@ -203,9 +205,10 @@ module Saclient
         protected
 
         # @private
+        # @param [any] root
         # @param [any] r
         # @return [void]
-        def _on_after_api_deserialize(r)
+        def _on_after_api_deserialize(r, root)
           return nil if (r).nil?
           if !r.nil? && r.key?(:SourceArchive)
             s = r[:SourceArchive]

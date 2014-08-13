@@ -103,9 +103,10 @@ module Saclient
         end
 
         # @private
+        # @param [any] root
         # @param [any] r
         # @return [void]
-        def _on_after_api_deserialize(r)
+        def _on_after_api_deserialize(r, root)
         end
 
         # @private
@@ -123,11 +124,28 @@ module Saclient
 
         public
 
-        # @param [any] r
+        # @param [any] obj
+        # @param [bool] wrapped
         # @return [void]
-        def api_deserialize(r)
-          api_deserialize_impl(r)
-          _on_after_api_deserialize(r)
+        def api_deserialize(obj, wrapped = false)
+          Saclient::Util::validate_type(wrapped, 'bool')
+          root = nil
+          record = nil
+          rkey = _root_key
+          if !(obj).nil?
+            if !wrapped
+              if !(rkey).nil?
+                root = {}
+                root[rkey.to_sym] = obj
+              end
+              record = obj
+            else
+              root = obj
+              record = obj[rkey.to_sym]
+            end
+          end
+          api_deserialize_impl(record)
+          _on_after_api_deserialize(record, root)
         end
 
         protected
@@ -203,7 +221,7 @@ module Saclient
           q = {}
           q[_root_key.to_sym] = r
           result = @_client.request(method, path, q)
-          api_deserialize(result[_root_key.to_sym])
+          api_deserialize(result, true)
           return self
         end
 
@@ -226,7 +244,7 @@ module Saclient
         # @return [Resource] this
         def _reload
           result = @_client.request('GET', _api_path + '/' + Saclient::Util::url_encode(_id))
-          api_deserialize(result[_root_key.to_sym])
+          api_deserialize(result, true)
           return self
         end
 

@@ -204,8 +204,11 @@ module Saclient
           result = @_client.request('GET', _api_path + '/' + Saclient::Util::url_encode(id), params)
           @_total = 1
           @_count = 1
-          record = result[_root_key.to_sym]
-          return Saclient::Util::create_class_instance('saclient.cloud.resource.' + _class_name, [@_client, record])
+          return Saclient::Util::create_class_instance('saclient.cloud.resource.' + _class_name, [
+            @_client,
+            result,
+            true
+          ])
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.

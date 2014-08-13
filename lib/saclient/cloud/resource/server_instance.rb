@@ -38,12 +38,14 @@ module Saclient
         public
 
         # @private
+        # @param [any] obj
+        # @param [bool] wrapped
         # @param [Saclient::Cloud::Client] client
-        # @param [any] r
-        def initialize(client, r)
+        def initialize(client, obj, wrapped = false)
           super(client)
           Saclient::Util::validate_type(client, 'Saclient::Cloud::Client')
-          api_deserialize(r)
+          Saclient::Util::validate_type(wrapped, 'bool')
+          api_deserialize(obj, wrapped)
         end
 
         # サーバが起動しているときtrueを返します.
