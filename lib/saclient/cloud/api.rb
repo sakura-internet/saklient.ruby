@@ -326,7 +326,6 @@ module Saclient
       def in_zone(name)
         Saclient::Util::validate_type(name, 'String')
         ret = Saclient::Cloud::API.new(@_client.clone_instance)
-        ret._client.set_api_root('https://secure.sakura.ad.jp/cloud/')
         ret._client.set_api_root_suffix('zone/' + name)
         return ret
       end
