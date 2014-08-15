@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../../errors/saclient_exception'
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
@@ -466,9 +467,14 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           Saclient::Util::validate_type(withClean, 'bool')
+          missing = []
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          if withClean || @n_name
+            Saclient::Util::set_by_path(ret, 'Name', @m_name)
+          else
+            missing << 'name' if @is_new
+          end
           Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           Saclient::Util::set_by_path(ret, 'UserSubnet.DefaultRoute', @m_user_default_route) if withClean || @n_user_default_route
           Saclient::Util::set_by_path(ret, 'UserSubnet.NetworkMaskLen', @m_user_mask_len) if withClean || @n_user_mask_len
@@ -489,6 +495,7 @@ module Saclient
               ret[:IPv6Nets] << v
             end
           end
+          raise Saclient::Errors::SaclientException.new('required_field', 'Required fields must be set before the Swytch creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end
 

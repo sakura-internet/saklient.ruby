@@ -458,13 +458,27 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           Saclient::Util::validate_type(withClean, 'bool')
+          missing = []
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          if withClean || @n_name
+            Saclient::Util::set_by_path(ret, 'Name', @m_name)
+          else
+            missing << 'name' if @is_new
+          end
           Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
-          Saclient::Util::set_by_path(ret, 'NetworkMaskLen', @m_network_mask_len) if withClean || @n_network_mask_len
-          Saclient::Util::set_by_path(ret, 'BandWidthMbps', @m_band_width_mbps) if withClean || @n_band_width_mbps
+          if withClean || @n_network_mask_len
+            Saclient::Util::set_by_path(ret, 'NetworkMaskLen', @m_network_mask_len)
+          else
+            missing << 'networkMaskLen' if @is_new
+          end
+          if withClean || @n_band_width_mbps
+            Saclient::Util::set_by_path(ret, 'BandWidthMbps', @m_band_width_mbps)
+          else
+            missing << 'bandWidthMbps' if @is_new
+          end
           Saclient::Util::set_by_path(ret, 'Switch.ID', @m_swytch_id) if withClean || @n_swytch_id
+          raise Saclient::Errors::SaclientException.new('required_field', 'Required fields must be set before the Router creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end
 

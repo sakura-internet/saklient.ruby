@@ -712,9 +712,14 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           Saclient::Util::validate_type(withClean, 'bool')
+          missing = []
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
-          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          if withClean || @n_name
+            Saclient::Util::set_by_path(ret, 'Name', @m_name)
+          else
+            missing << 'name' if @is_new
+          end
           Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           if withClean || @n_tags
             Saclient::Util::set_by_path(ret, 'Tags', [])
@@ -730,6 +735,7 @@ module Saclient
           Saclient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
           Saclient::Util::set_by_path(ret, 'Server', withClean ? ((@m_server).nil? ? nil : @m_server.api_serialize(withClean)) : ((@m_server).nil? ? { ID: '0' } : @m_server.api_serialize_id)) if withClean || @n_server
           Saclient::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
+          raise Saclient::Errors::SaclientException.new('required_field', 'Required fields must be set before the Disk creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end
 

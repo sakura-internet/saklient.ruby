@@ -279,12 +279,18 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           Saclient::Util::validate_type(withClean, 'bool')
+          missing = []
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'MACAddress', @m_mac_address) if withClean || @n_mac_address
           Saclient::Util::set_by_path(ret, 'IPAddress', @m_ip_address) if withClean || @n_ip_address
           Saclient::Util::set_by_path(ret, 'UserIPAddress', @m_user_ip_address) if withClean || @n_user_ip_address
-          Saclient::Util::set_by_path(ret, 'Server.ID', @m_server_id) if withClean || @n_server_id
+          if withClean || @n_server_id
+            Saclient::Util::set_by_path(ret, 'Server.ID', @m_server_id)
+          else
+            missing << 'serverId' if @is_new
+          end
+          raise Saclient::Errors::SaclientException.new('required_field', 'Required fields must be set before the Iface creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end
 

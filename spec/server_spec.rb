@@ -90,6 +90,13 @@ describe 'Server' do
     # create a disk
     puts 'creating a disk...'
     disk = @api.disk.create
+    ok = false
+    begin
+      disk.save
+    rescue Saclient::Errors::SaclientException
+      ok = true
+    end
+    fail 'Requiredフィールドが未set時は SaclientException がスローされなければなりません' unless ok
     disk.name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
     disk.description = 'This instance was created by saclient.ruby rspec'
     disk.tags = ['saclient-test']

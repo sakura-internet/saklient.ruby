@@ -538,10 +538,15 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           Saclient::Util::validate_type(withClean, 'bool')
+          missing = []
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Scope', @m_scope) if withClean || @n_scope
-          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          if withClean || @n_name
+            Saclient::Util::set_by_path(ret, 'Name', @m_name)
+          else
+            missing << 'name' if @is_new
+          end
           Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           if withClean || @n_tags
             Saclient::Util::set_by_path(ret, 'Tags', [])
@@ -552,8 +557,13 @@ module Saclient
             end
           end
           Saclient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
-          Saclient::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
+          if withClean || @n_size_mib
+            Saclient::Util::set_by_path(ret, 'SizeMB', @m_size_mib)
+          else
+            missing << 'sizeMib' if @is_new
+          end
           Saclient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
+          raise Saclient::Errors::SaclientException.new('required_field', 'Required fields must be set before the IsoImage creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end
 

@@ -737,10 +737,15 @@ module Saclient
         # @return [any]
         def api_serialize_impl(withClean = false)
           Saclient::Util::validate_type(withClean, 'bool')
+          missing = []
           ret = {}
           Saclient::Util::set_by_path(ret, 'ID', @m_id) if withClean || @n_id
           Saclient::Util::set_by_path(ret, 'Scope', @m_scope) if withClean || @n_scope
-          Saclient::Util::set_by_path(ret, 'Name', @m_name) if withClean || @n_name
+          if withClean || @n_name
+            Saclient::Util::set_by_path(ret, 'Name', @m_name)
+          else
+            missing << 'name' if @is_new
+          end
           Saclient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
           if withClean || @n_tags
             Saclient::Util::set_by_path(ret, 'Tags', [])
@@ -755,6 +760,7 @@ module Saclient
           Saclient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           Saclient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
           Saclient::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
+          raise Saclient::Errors::SaclientException.new('required_field', 'Required fields must be set before the Archive creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end
 

@@ -52,9 +52,6 @@ module Saclient
         unless path =~ /^http/
           url_root = @config[:api_root]
           if @config[:api_root_suffix]
-            if @config[:api_root_suffix] =~ /is1[v-z]/
-              url_root = url_root.sub %r|/cloud/$|, '/cloud-test/'
-            end
             url_root += @config[:api_root_suffix]
             url_root = url_root.sub %r|/?$|, '/'
           end
