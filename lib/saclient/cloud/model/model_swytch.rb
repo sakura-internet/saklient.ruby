@@ -108,6 +108,16 @@ module Saclient
           return self
         end
 
+        # 名前でソートします.
+        #
+        # @param [bool] reverse
+        # @return [Model_Swytch]
+        def sort_by_name(reverse = false)
+          Saclient::Util::validate_type(reverse, 'bool')
+          _sort('Name', reverse)
+          return self
+        end
+
       end
 
     end

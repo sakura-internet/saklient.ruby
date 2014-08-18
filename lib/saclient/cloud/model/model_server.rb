@@ -175,6 +175,46 @@ module Saclient
           return self
         end
 
+        # 名前でソートします.
+        #
+        # @param [bool] reverse
+        # @return [Model_Server]
+        def sort_by_name(reverse = false)
+          Saclient::Util::validate_type(reverse, 'bool')
+          _sort('Name', reverse)
+          return self
+        end
+
+        # プランでソートします.
+        #
+        # @param [bool] reverse
+        # @return [Model_Server]
+        def sort_by_plan(reverse = false)
+          Saclient::Util::validate_type(reverse, 'bool')
+          _sort('ServerPlan.ID', reverse)
+          return self
+        end
+
+        # 仮想コア数でソートします.
+        #
+        # @param [bool] reverse
+        # @return [Model_Server]
+        def sort_by_cpu(reverse = false)
+          Saclient::Util::validate_type(reverse, 'bool')
+          _sort('ServerPlan.CPU', reverse)
+          return self
+        end
+
+        # メモリ容量でソートします.
+        #
+        # @param [bool] reverse
+        # @return [Model_Server]
+        def sort_by_memory(reverse = false)
+          Saclient::Util::validate_type(reverse, 'bool')
+          _sort('ServerPlan.MemoryMB', reverse)
+          return self
+        end
+
       end
 
     end

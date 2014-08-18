@@ -42,10 +42,11 @@ describe 'Server' do
   
   it 'should be found' do
     
-    servers = @api.server.find
+    servers = @api.server.sort_by_memory.find
     expect(servers).to be_an_instance_of Array
     expect(servers.length).to be > 0
     
+    mem = 0
     servers.each {|server|
       expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
       expect(server.plan).to be_an_instance_of Saclient::Cloud::Resource::ServerPlan
@@ -57,6 +58,8 @@ describe 'Server' do
       server.tags.each {|tag|
         expect(tag).to be_an_instance_of String
       }
+      expect(server.plan.memory_gib).to be >= mem
+      mem = server.plan.memory_gib
     }
     
   end

@@ -151,6 +151,22 @@ module Saclient
           return self
         end
 
+        # 次に取得するリストのソートカラムを指定します.
+        #
+        # @private
+        # @param [bool] reverse
+        # @param [String] column カラム名
+        # @return [Model] this
+        def _sort(column, reverse = false)
+          Saclient::Util::validate_type(column, 'String')
+          Saclient::Util::validate_type(reverse, 'bool')
+          @_params[:Sort] = [] if !(!@_params.nil? && @_params.key?(:Sort))
+          sort = @_params[:Sort]
+          op = reverse ? '-' : ''
+          sort << op + column
+          return self
+        end
+
         # APIのフィルタリング設定を直接指定します.
         #
         # @private
