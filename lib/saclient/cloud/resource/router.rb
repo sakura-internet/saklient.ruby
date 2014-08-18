@@ -67,6 +67,11 @@ module Saclient
 
         public
 
+        # @return [String]
+        def class_name
+          return 'Router'
+        end
+
         # @private
         # @return [String]
         def _id

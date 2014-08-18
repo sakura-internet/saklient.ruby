@@ -66,13 +66,12 @@ module Saclient
           return nil
         end
 
-        # @private
+        public
+
         # @return [String]
-        def _class_name
+        def class_name
           return nil
         end
-
-        public
 
         # @private
         # @return [String]

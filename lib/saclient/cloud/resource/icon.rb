@@ -53,6 +53,11 @@ module Saclient
 
         public
 
+        # @return [String]
+        def class_name
+          return 'Icon'
+        end
+
         # @private
         # @return [String]
         def _id

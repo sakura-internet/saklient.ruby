@@ -79,6 +79,11 @@ module Saclient
 
         public
 
+        # @return [String]
+        def class_name
+          return 'Script'
+        end
+
         # @private
         # @return [String]
         def _id

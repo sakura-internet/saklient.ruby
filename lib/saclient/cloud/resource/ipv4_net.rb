@@ -48,6 +48,11 @@ module Saclient
 
         public
 
+        # @return [String]
+        def class_name
+          return 'Ipv4Net'
+        end
+
         # @private
         # @return [String]
         def _id

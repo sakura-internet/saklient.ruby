@@ -45,6 +45,11 @@ module Saclient
 
         public
 
+        # @return [String]
+        def class_name
+          return 'Ipv6Net'
+        end
+
         # @private
         # @return [String]
         def _id

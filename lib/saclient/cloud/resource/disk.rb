@@ -6,7 +6,6 @@ require_relative 'resource'
 require_relative 'icon'
 require_relative 'disk_plan'
 require_relative 'server'
-require_relative 'archive'
 require_relative 'disk_config'
 require_relative '../enums/eavailability'
 require_relative '../enums/edisk_connection'
@@ -90,6 +89,11 @@ module Saclient
 
         public
 
+        # @return [String]
+        def class_name
+          return 'Disk'
+        end
+
         # @private
         # @return [String]
         def _id
@@ -172,26 +176,27 @@ module Saclient
         protected
 
         # @private
-        # @return [any]
+        # @return [Resource]
         attr_accessor :_source
 
         public
 
-        # @return [any]
+        # @return [Resource]
         def get_source
           return @_source
         end
 
-        # @param [any] source
-        # @return [any]
+        # @param [Resource] source
+        # @return [Resource]
         def set_source(source)
+          Saclient::Util::validate_type(source, 'Saclient::Cloud::Resource::Resource')
           @_source = source
           return source
         end
 
         # ディスクのコピー元
         #
-        # @return [any]
+        # @return [Resource]
         attr_accessor :source
 
         def source
@@ -210,18 +215,21 @@ module Saclient
         # @return [void]
         def _on_after_api_deserialize(r, root)
           if !(r).nil?
-            if !r.nil? && r.key?(:SourceArchive)
-              s = r[:SourceArchive]
-              if !(s).nil?
-                id = s[:ID]
-                @_source = Saclient::Cloud::Resource::Archive.new(@_client, s) if !(id).nil?
-              end
-            end
             if !r.nil? && r.key?(:SourceDisk)
               s = r[:SourceDisk]
               if !(s).nil?
                 id = s[:ID]
                 @_source = Saclient::Cloud::Resource::Disk.new(@_client, s) if !(id).nil?
+              end
+            end
+            if !r.nil? && r.key?(:SourceArchive)
+              s = r[:SourceArchive]
+              if !(s).nil?
+                id = s[:ID]
+                if !(id).nil?
+                  obj = Saclient::Util::create_class_instance('saclient.cloud.resource.Archive', [@_client, s])
+                  @_source = obj
+                end
               end
             end
           end
@@ -235,15 +243,13 @@ module Saclient
           Saclient::Util::validate_type(withClean, 'bool')
           return nil if (r).nil?
           if !(@_source).nil?
-            if @_source.is_a?(Saclient::Cloud::Resource::Archive)
-              archive = @_source
-              s = withClean ? archive.api_serialize(true) : { ID: archive._id }
-              r[:SourceArchive] = s
+            if @_source.class_name == 'Disk'
+              s = withClean ? @_source.api_serialize(true) : { ID: @_source._id }
+              r[:SourceDisk] = s
             else
-              if @_source.is_a?(Saclient::Cloud::Resource::Disk)
-                disk = @_source
-                s = withClean ? disk.api_serialize(true) : { ID: disk._id }
-                r[:SourceDisk] = s
+              if @_source.class_name == 'Archive'
+                s = withClean ? @_source.api_serialize(true) : { ID: @_source._id }
+                r[:SourceArchive] = s
               else
                 @_source = nil
                 Saclient::Util::validate_type(@_source, 'Disk or Archive', true)
