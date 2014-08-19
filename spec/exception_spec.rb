@@ -1,10 +1,10 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/cloud/errors/exception_factory'
+require 'saklient/cloud/errors/exception_factory'
 
-ExceptionFactory = Saclient::Errors::ExceptionFactory
-HttpException = Saclient::Errors::HttpException
-HttpNotFoundException = Saclient::Errors::HttpNotFoundException
-ServerPowerMustBeUpException = Saclient::Cloud::Errors::ServerPowerMustBeUpException
+ExceptionFactory = Saklient::Errors::ExceptionFactory
+HttpException = Saklient::Errors::HttpException
+HttpNotFoundException = Saklient::Errors::HttpNotFoundException
+ServerPowerMustBeUpException = Saklient::Cloud::Errors::ServerPowerMustBeUpException
 
 describe 'Exception' do
   

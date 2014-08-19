@@ -1,5 +1,5 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/cloud/api'
+require 'saklient/cloud/api'
 require 'date'
 require 'SecureRandom'
 require 'tempfile'
@@ -33,9 +33,9 @@ describe 'Archive' do
     #expect(@config[:SACLOUD_ZONE]).not_to be_empty #'SACLOUD_ZONE must be defined in config.sh'
     
     # authorize
-    @api = Saclient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
+    @api = Saklient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
     @api = @api.in_zone(@config[:SACLOUD_ZONE]) if @config[:SACLOUD_ZONE]
-    expect(@api).to be_an_instance_of Saclient::Cloud::API
+    expect(@api).to be_an_instance_of Saklient::Cloud::API
     
   end
   
@@ -43,11 +43,11 @@ describe 'Archive' do
   
   it 'should be CRUDed' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    description = 'This instance was created by saclient.ruby rspec'
-    tag = 'saclient-test'
+    description = 'This instance was created by saklient.ruby rspec'
+    tag = 'saklient-test'
     
     archive = @api.archive.create
-    expect(archive).to be_an_instance_of Saclient::Cloud::Resource::Archive 
+    expect(archive).to be_an_instance_of Saklient::Cloud::Resource::Archive 
     archive.name = name
     archive.description = description
     archive.tags = [tag]
@@ -56,19 +56,19 @@ describe 'Archive' do
     
     #
     ftp = archive.ftp_info
-    expect(ftp).to be_an_instance_of Saclient::Cloud::Resource::FtpInfo 
+    expect(ftp).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo 
     expect(ftp.host_name).not_to be_nil
     expect(ftp.user).not_to be_nil
     expect(ftp.password).not_to be_nil
     ftp2 = archive.open_ftp(true).ftp_info
-    expect(ftp2).to be_an_instance_of Saclient::Cloud::Resource::FtpInfo 
+    expect(ftp2).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo 
     expect(ftp2.host_name).not_to be_nil
     expect(ftp2.user).not_to be_nil
     expect(ftp2.password).not_to be_nil
     expect(ftp2.password).not_to eq ftp.password
     
     #
-    temp = Tempfile.new('saclient-')
+    temp = Tempfile.new('saklient-')
     path = temp.path
     temp.close!
     cmd = "dd if=/dev/urandom bs=4096 count=64 > #{path}; ls -l #{path}"
@@ -98,8 +98,8 @@ describe 'Archive' do
   
   it 'should be copied' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    description = 'This instance was created by saclient.ruby rspec'
-    tag = 'saclient-test'
+    description = 'This instance was created by saklient.ruby rspec'
+    tag = 'saklient-test'
     
     disk = @api.disk.create
     disk.name = name
@@ -120,7 +120,7 @@ describe 'Archive' do
     disk.destroy
     
     ftp = archive.open_ftp.ftp_info
-    expect(ftp).to be_an_instance_of Saclient::Cloud::Resource::FtpInfo
+    expect(ftp).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo
     expect(ftp.host_name).not_to be_nil
     expect(ftp.user).not_to be_nil
     expect(ftp.password).not_to be_nil

@@ -1,7 +1,7 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/cloud/enums/eserver_instance_status'
+require 'saklient/cloud/enums/eserver_instance_status'
 
-EServerInstanceStatus = Saclient::Cloud::Enums::EServerInstanceStatus
+EServerInstanceStatus = Saklient::Cloud::Enums::EServerInstanceStatus
 
 describe 'Enum' do
   

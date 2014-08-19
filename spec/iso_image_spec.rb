@@ -1,5 +1,5 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/cloud/api'
+require 'saklient/cloud/api'
 require 'date'
 require 'SecureRandom'
 require 'tempfile'
@@ -33,9 +33,9 @@ describe 'IsoImage' do
     #expect(@config[:SACLOUD_ZONE]).not_to be_empty #'SACLOUD_ZONE must be defined in config.sh'
     
     # authorize
-    @api = Saclient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
+    @api = Saklient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
     @api = @api.in_zone(@config[:SACLOUD_ZONE]) if @config[:SACLOUD_ZONE]
-    expect(@api).to be_an_instance_of Saclient::Cloud::API
+    expect(@api).to be_an_instance_of Saklient::Cloud::API
     
   end
   
@@ -43,11 +43,11 @@ describe 'IsoImage' do
   
   it 'should be CRUDed' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    description = 'This instance was created by saclient.ruby rspec'
-    tag = 'saclient-test'
+    description = 'This instance was created by saklient.ruby rspec'
+    tag = 'saklient-test'
     
     iso = @api.iso_image.create
-    expect(iso).to be_an_instance_of Saclient::Cloud::Resource::IsoImage
+    expect(iso).to be_an_instance_of Saklient::Cloud::Resource::IsoImage
     iso.name = name
     iso.description = description
     iso.tags = [tag]
@@ -56,19 +56,19 @@ describe 'IsoImage' do
     
     #
     ftp = iso.ftp_info
-    expect(ftp).to be_an_instance_of Saclient::Cloud::Resource::FtpInfo
+    expect(ftp).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo
     expect(ftp.host_name).not_to be_nil
     expect(ftp.user).not_to be_nil
     expect(ftp.password).not_to be_nil
     ftp2 = iso.open_ftp(true).ftp_info
-    expect(ftp2).to be_an_instance_of Saclient::Cloud::Resource::FtpInfo
+    expect(ftp2).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo
     expect(ftp2.host_name).not_to be_nil
     expect(ftp2.user).not_to be_nil
     expect(ftp2.password).not_to be_nil
     expect(ftp2.password).not_to eq ftp.password
     
     #
-    temp = Tempfile.new('saclient-')
+    temp = Tempfile.new('saklient-')
     path = temp.path
     temp.close!
     cmd = "dd if=/dev/urandom bs=4096 count=64 > #{path}; ls -l #{path}"
@@ -98,8 +98,8 @@ describe 'IsoImage' do
   
   it 'should be inserted and ejected' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    description = 'This instance was created by saclient.ruby rspec'
-    tag = 'saclient-test'
+    description = 'This instance was created by saklient.ruby rspec'
+    tag = 'saklient-test'
     
     # search iso images
     puts 'searching iso images...'
@@ -114,7 +114,7 @@ describe 'IsoImage' do
     # create a server
     puts 'creating a server...'
     server = @api.server.create
-    expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
+    expect(server).to be_an_instance_of Saklient::Cloud::Resource::Server
     server.name = name
     server.description = description
     server.tags = [tag]
@@ -124,7 +124,7 @@ describe 'IsoImage' do
     # insert iso image while the server is down
     puts 'inserting an ISO image to the server...'
     server.insert_iso_image(iso)
-    expect(server.instance.iso_image).to be_an_instance_of Saclient::Cloud::Resource::IsoImage
+    expect(server.instance.iso_image).to be_an_instance_of Saklient::Cloud::Resource::IsoImage
     expect(server.instance.iso_image.id).to eq iso.id
     
     # eject iso image while the server is down
@@ -140,7 +140,7 @@ describe 'IsoImage' do
     # insert iso image while the server is up
     puts 'inserting an ISO image to the server...'
     server.insert_iso_image(iso)
-    expect(server.instance.iso_image).to be_an_instance_of Saclient::Cloud::Resource::IsoImage
+    expect(server.instance.iso_image).to be_an_instance_of Saklient::Cloud::Resource::IsoImage
     expect(server.instance.iso_image.id).to eq iso.id
     
     # eject iso image while the server is up

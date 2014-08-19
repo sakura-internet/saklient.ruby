@@ -17,7 +17,7 @@ This library gives you an easy interface to control your resources on
 
 ```bash
 gem install specific_install
-gem specific_install -l git@github.com:sakura-internet/saclient.rb.git
+gem specific_install -l git@github.com:sakura-internet/saklient.rb.git
 ```
 
 
@@ -25,8 +25,8 @@ gem specific_install -l git@github.com:sakura-internet/saclient.rb.git
 
 
 ```ruby
-require 'saclient/cloud/api'
-api = Saclient::Cloud::API.authorize(YOUR_API_TOKEN, YOUR_API_SECRET)
+require 'saklient/cloud/api'
+api = Saklient::Cloud::API.authorize(YOUR_API_TOKEN, YOUR_API_SECRET)
 
 # To access resources in the specified zone
 api_is1b = api.in_zone("is1b")

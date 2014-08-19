@@ -1,5 +1,5 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/cloud/api'
+require 'saklient/cloud/api'
 require 'date'
 require 'SecureRandom'
 
@@ -32,9 +32,9 @@ describe 'Server' do
     #expect(@config[:SACLOUD_ZONE]).not_to be_empty #'SACLOUD_ZONE must be defined in config.sh'
     
     # authorize
-    @api = Saclient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
+    @api = Saklient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
     @api = @api.in_zone(@config[:SACLOUD_ZONE]) if @config[:SACLOUD_ZONE]
-    expect(@api).to be_an_instance_of Saclient::Cloud::API
+    expect(@api).to be_an_instance_of Saklient::Cloud::API
     
   end
   
@@ -48,8 +48,8 @@ describe 'Server' do
     
     mem = 0
     servers.each {|server|
-      expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
-      expect(server.plan).to be_an_instance_of Saclient::Cloud::Resource::ServerPlan
+      expect(server).to be_an_instance_of Saklient::Cloud::Resource::Server
+      expect(server.plan).to be_an_instance_of Saklient::Cloud::Resource::ServerPlan
       expect(server.plan.cpu).to be > 0
       expect(server.plan.memory_mib).to be > 0
       expect(server.plan.memory_gib).to be > 0
@@ -68,12 +68,12 @@ describe 'Server' do
   
   it 'should be CRUDed' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    description = 'This instance was created by saclient.ruby rspec'
-    tag = 'saclient-test'
+    description = 'This instance was created by saklient.ruby rspec'
+    tag = 'saklient-test'
     cpu = 1
     mem = 2
-    host_name = 'saclient-test'
-    ssh_public_key = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3sSg8Vfxrs3eFTx3G//wMRlgqmFGxh5Ia8DZSSf2YrkZGqKbL1t2AsiUtIMwxGiEVVBc0K89lORzra7qoHQj5v5Xlcdqodgcs9nwuSeS38XWO6tXNF4a8LvKnfGS55+uzmBmVUwAztr3TIJR5TTWxZXpcxSsSEHx7nIcr31zcvosjgdxqvSokAsIgJyPQyxCxsPK8SFIsUV+aATqBCWNyp+R1jECPkd74ipEBoccnA0pYZnRhIsKNWR9phBRXIVd5jx/gK5jHqouhFWvCucUs0gwilEGwpng3b/YxrinNskpfOpMhOD9zjNU58OCoMS8MA17yqoZv59l3u16CrnrD saclient-test@local'
+    host_name = 'saklient-test'
+    ssh_public_key = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3sSg8Vfxrs3eFTx3G//wMRlgqmFGxh5Ia8DZSSf2YrkZGqKbL1t2AsiUtIMwxGiEVVBc0K89lORzra7qoHQj5v5Xlcdqodgcs9nwuSeS38XWO6tXNF4a8LvKnfGS55+uzmBmVUwAztr3TIJR5TTWxZXpcxSsSEHx7nIcr31zcvosjgdxqvSokAsIgJyPQyxCxsPK8SFIsUV+aATqBCWNyp+R1jECPkd74ipEBoccnA0pYZnRhIsKNWR9phBRXIVd5jx/gK5jHqouhFWvCucUs0gwilEGwpng3b/YxrinNskpfOpMhOD9zjNU58OCoMS8MA17yqoZv59l3u16CrnrD saklient-test@local'
     ssh_private_key_file = File.dirname(__dir__) + '/test-sshkey.txt'
     
     # search archives
@@ -96,13 +96,13 @@ describe 'Server' do
     ok = false
     begin
       disk.save
-    rescue Saclient::Errors::SaclientException
+    rescue Saklient::Errors::SaklientException
       ok = true
     end
-    fail 'Requiredフィールドが未set時は SaclientException がスローされなければなりません' unless ok
+    fail 'Requiredフィールドが未set時は SaklientException がスローされなければなりません' unless ok
     disk.name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    disk.description = 'This instance was created by saclient.ruby rspec'
-    disk.tags = ['saclient-test']
+    disk.description = 'This instance was created by saklient.ruby rspec'
+    disk.tags = ['saklient-test']
     disk.source = archive
     disk.save
     # p disk.dump
@@ -113,15 +113,15 @@ describe 'Server' do
     begin
       disk.size_mib = 20480
       disk.save
-    rescue Saclient::Errors::SaclientException
+    rescue Saklient::Errors::SaklientException
       ok = true
     end
-    fail 'Immutableフィールドの再set時は SaclientException がスローされなければなりません' unless ok
+    fail 'Immutableフィールドの再set時は SaklientException がスローされなければなりません' unless ok
     
     # create a server
     puts 'creating a server...'
     server = @api.server.create
-    expect(server).to be_an_instance_of Saclient::Cloud::Resource::Server
+    expect(server).to be_an_instance_of Saklient::Cloud::Resource::Server
     server.name = name
     server.description = description
     server.tags = [tag]
@@ -141,7 +141,7 @@ describe 'Server' do
     # connect to shared segment
     puts 'connecting the server to shared segment...'
     iface = server.add_iface
-    expect(iface).to be_an_instance_of Saclient::Cloud::Resource::Iface
+    expect(iface).to be_an_instance_of Saklient::Cloud::Resource::Iface
     expect(iface.id.to_i).to be > 0
     iface.connect_to_shared_segment
     
@@ -151,7 +151,7 @@ describe 'Server' do
     # p disk.dump
     disk.source = nil
     disk.reload
-    expect(disk.source).to be_an_instance_of Saclient::Cloud::Resource::Archive
+    expect(disk.source).to be_an_instance_of Saklient::Cloud::Resource::Archive
     expect(disk.source.id).to eq archive.id
     expect(disk.size_gib).to eq archive.size_gib
     
@@ -162,7 +162,7 @@ describe 'Server' do
     # config the disk
     puts 'writing configuration to the disk...'
     diskconf = disk.create_config
-    diskconf.host_name = 'saclient-test'
+    diskconf.host_name = 'saklient-test'
     diskconf.password = SecureRandom.uuid[0, 8]
     diskconf.ssh_key = ssh_public_key
     diskconf.scripts.push(script)
@@ -173,14 +173,14 @@ describe 'Server' do
     server.boot
     sleep 3
     server.reload
-    expect(server.instance.status).to eq Saclient::Cloud::Enums::EServerInstanceStatus::up
+    expect(server.instance.status).to eq Saklient::Cloud::Enums::EServerInstanceStatus::up
     
     # boot conflict
     puts 'checking the server power conflicts...'
     ok = false
     begin
       server.boot
-    rescue Saclient::Errors::HttpConflictException
+    rescue Saklient::Errors::HttpConflictException
       ok = true
     end
     fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
@@ -236,7 +236,7 @@ describe 'Server' do
     fail 'ディスクの複製がタイムアウトしました' unless disk2.sleep_while_copying
     disk2.source = nil
     disk2.reload
-    expect(disk2.source).to be_an_instance_of Saclient::Cloud::Resource::Disk
+    expect(disk2.source).to be_an_instance_of Saklient::Cloud::Resource::Disk
     expect(disk2.source.id).to eq disk.id
     expect(disk2.size_gib).to eq 40
     

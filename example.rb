@@ -1,26 +1,26 @@
-#require 'saclient/cloud/api'
-require './lib/saclient/cloud/api.rb'
+#require 'saklient/cloud/api'
+require './lib/saklient/cloud/api.rb'
 require 'JSON'
 
-api = Saclient::Cloud::API.authorize(ARGV[0], ARGV[1])
+api = Saklient::Cloud::API.authorize(ARGV[0], ARGV[1])
 
 server = api.server.create
-server.name = 'saclient.rb'
-server.description = 'This instance was created by saclient.rb example'
-server.tags = ['saclient-test']
+server.name = 'saklient.rb'
+server.description = 'This instance was created by saklient.rb example'
+server.tags = ['saklient-test']
 server.plan = api.product.server.get_by_spec(1, 1)
 server.save
-servers = api.server.with_name_like('saclient.rb').find
+servers = api.server.with_name_like('saklient.rb').find
 printf "%s\n", servers[0].name
 printf "%s\n", servers[0].description
 printf "%s\n", servers[0].tags[0]
 server.destroy
 
 
-# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.down
-# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("aaa", "down").nil?
-# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("up", "down")
-# printf "%s\n", Saclient::Cloud::Enums::EServerInstanceStatus.compare("down", "up")
+# printf "%s\n", Saklient::Cloud::Enums::EServerInstanceStatus.down
+# printf "%s\n", Saklient::Cloud::Enums::EServerInstanceStatus.compare("aaa", "down").nil?
+# printf "%s\n", Saklient::Cloud::Enums::EServerInstanceStatus.compare("up", "down")
+# printf "%s\n", Saklient::Cloud::Enums::EServerInstanceStatus.compare("down", "up")
 
 
 # # 停止中のサーバに接続されているディスクを一覧

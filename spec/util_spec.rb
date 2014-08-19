@@ -1,8 +1,8 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/util'
-require 'saclient/cloud/api'
+require 'saklient/util'
+require 'saklient/cloud/api'
 
-Util = Saclient::Util
+Util = Saklient::Util
 
 describe 'Util' do
   
@@ -44,23 +44,23 @@ describe 'Util' do
     Util::validate_type(1, 'String')
     Util::validate_type(1.1, 'Float')
     Util::validate_type(1.1, 'String')
-    ex = Saclient::Errors::SaclientException.new('a','a')
-    Util::validate_type(ex, 'Saclient::Errors::SaclientException')
+    ex = Saklient::Errors::SaklientException.new('a','a')
+    Util::validate_type(ex, 'Saklient::Errors::SaklientException')
     Util::validate_type(ex, 'StandardError')
     
     #
     ok = false
     begin
-      Saclient::Cloud::API::authorize('abc', [])
-    rescue Saclient::Errors::SaclientException
+      Saklient::Cloud::API::authorize('abc', [])
+    rescue Saklient::Errors::SaklientException
       ok = true
     end
-    fail '引数の型が異なる時は SaclientException がスローされなければなりません' unless ok
+    fail '引数の型が異なる時は SaklientException がスローされなければなりません' unless ok
     
     #
     ok = false
     begin
-      server = Saclient::Cloud::API::authorize('a', 'a').server.create
+      server = Saklient::Cloud::API::authorize('a', 'a').server.create
       server.availability = 'available'
     rescue NoMethodError
       ok = true

@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in saclient.gemspec
+# Specify your gem's dependencies in saklient.gemspec
 gemspec

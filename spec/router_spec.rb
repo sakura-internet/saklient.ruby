@@ -1,5 +1,5 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saclient/cloud/api'
+require 'saklient/cloud/api'
 require 'date'
 require 'SecureRandom'
 require 'ipaddr'
@@ -33,9 +33,9 @@ describe 'Router' do
     #expect(@config[:SACLOUD_ZONE]).not_to be_empty #'SACLOUD_ZONE must be defined in config.sh'
     
     # authorize
-    @api = Saclient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
+    @api = Saklient::Cloud::API::authorize(@config[:SACLOUD_TOKEN], @config[:SACLOUD_SECRET])
     @api = @api.in_zone(@config[:SACLOUD_ZONE]) if @config[:SACLOUD_ZONE]
-    expect(@api).to be_an_instance_of Saclient::Cloud::API
+    expect(@api).to be_an_instance_of Saklient::Cloud::API
     
   end
   
@@ -43,7 +43,7 @@ describe 'Router' do
   
   it 'should be CRUDed' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    description = 'This instance was created by saclient.ruby rspec'
+    description = 'This instance was created by saklient.ruby rspec'
     mask_len = 28
   
     #
@@ -53,7 +53,7 @@ describe 'Router' do
       plans = @api.product.router.find
       min_mbps = 0x7FFFFFFF
       for plan in plans do
-        expect(plan).to be_an_instance_of Saclient::Cloud::Resource::RouterPlan
+        expect(plan).to be_an_instance_of Saklient::Cloud::Resource::RouterPlan
         expect(plan.band_width_mbps).to be > 0
         min_mbps = [plan.band_width_mbps, min_mbps].min
       end
@@ -71,14 +71,14 @@ describe 'Router' do
       swytch = router.get_swytch
     else
       puts '既存のルータ＋スイッチを取得しています...'
-      swytches = @api.swytch.with_name_like('saclient-static-1').limit(1).find
+      swytches = @api.swytch.with_name_like('saklient-static-1').limit(1).find
       expect(swytches.length).to eq 1
       swytch = swytches[0]
     end
     
-    expect(swytch).to be_an_instance_of Saclient::Cloud::Resource::Swytch
+    expect(swytch).to be_an_instance_of Saklient::Cloud::Resource::Swytch
     expect(swytch.ipv4_nets.length).to be > 0
-    expect(swytch.ipv4_nets[0]).to be_an_instance_of Saclient::Cloud::Resource::Ipv4Net
+    expect(swytch.ipv4_nets[0]).to be_an_instance_of Saklient::Cloud::Resource::Ipv4Net
     
     #
     puts 'ルータ＋スイッチの帯域プランを変更しています...'
@@ -93,7 +93,7 @@ describe 'Router' do
     end
     puts 'ルータ＋スイッチにIPv6ネットワークを割り当てています...'
     v6net = swytch.add_ipv6_net
-    expect(v6net).to be_an_instance_of Saclient::Cloud::Resource::Ipv6Net
+    expect(v6net).to be_an_instance_of Saklient::Cloud::Resource::Ipv6Net
     expect(swytch.ipv6_nets.length).to eq 1
     
     #
@@ -107,7 +107,7 @@ describe 'Router' do
     net0 = swytch.ipv4_nets[0]
     next_hop = IPAddr.new(IPAddr.new(net0.address).to_i + 4, Socket::AF_INET).to_s
     sroute = swytch.add_static_route(28, next_hop)
-    expect(sroute).to be_an_instance_of Saclient::Cloud::Resource::Ipv4Net
+    expect(sroute).to be_an_instance_of Saklient::Cloud::Resource::Ipv4Net
     expect(swytch.ipv4_nets.length).to eq 2
     
   end

@@ -1,0 +1,18 @@
+# -*- encoding: UTF-8 -*-
+
+require_relative '../../errors/http_conflict_exception'
+
+module Saklient
+  module Cloud
+    module Errors
+
+      # 要求された操作を行えません. サーバと接続された状態では変更できない値が含まれています.
+      class DisconnectB4UpdateException < Saklient::Errors::HttpConflictException
+
+        # (static var) @@default_message = '要求された操作を行えません。サーバと接続された状態では変更できない値が含まれています。'
+
+      end
+
+    end
+  end
+end
