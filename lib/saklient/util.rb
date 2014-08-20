@@ -5,6 +5,7 @@ require 'uri'
 
 module Saklient
 
+  # @private
   class Util
 
     # @param [any] obj

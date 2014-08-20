@@ -64,10 +64,10 @@ module Saklient
           return get_id
         end
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -82,6 +82,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_id
           return @m_id
@@ -105,6 +106,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_name
           return @m_name
@@ -128,6 +130,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Fixnum]
         def get_band_width_mbps
           return @m_band_width_mbps
@@ -151,6 +154,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_service_class
           return @m_service_class
@@ -206,8 +210,7 @@ module Saklient
           @n_service_class = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

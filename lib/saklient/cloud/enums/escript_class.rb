@@ -15,6 +15,7 @@ module Saklient
           'ansible'
         end
 
+        # @private
         def self.compare(lhs, rhs)
           return nil if lhs.nil? || rhs.nil?
           l = @@_map[lhs.to_sym]
@@ -24,6 +25,7 @@ module Saklient
           0 < ret ? 1 : (ret < 0 ? -1 : 0)
         end
 
+        # @private
         @@_map = {
           shell:200,
           ansible:300

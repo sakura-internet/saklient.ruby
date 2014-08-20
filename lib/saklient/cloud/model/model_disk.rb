@@ -56,11 +56,11 @@ module Saklient
           return _limit(count)
         end
 
-        # APIのフィルタリング設定を直接指定します.
+        # Web APIのフィルタリング設定を直接指定します.
         #
-        # @param [any] value
-        # @param [bool] multiple
-        # @param [String] key
+        # @param [String] key キー
+        # @param [any] value 値
+        # @param [bool] multiple valueに配列を与え, OR条件で完全一致検索する場合にtrueを指定します. 通常, valueはスカラ値であいまい検索されます.
         # @return [Model_Disk]
         def filter_by(key, value, multiple = false)
           Saklient::Util::validate_type(key, 'String')
@@ -101,6 +101,7 @@ module Saklient
         end
 
         # 指定した文字列を名前に含むリソースに絞り込みます.
+        #
         # 大文字・小文字は区別されません.
         # 半角スペースで区切られた複数の文字列は, それらをすべて含むことが条件とみなされます.
         #
@@ -112,6 +113,7 @@ module Saklient
         end
 
         # 指定したタグを持つリソースに絞り込みます.
+        #
         # 複数のタグを指定する場合は withTags() を利用してください.
         #
         # @param [String] tag

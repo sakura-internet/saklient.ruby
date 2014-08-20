@@ -69,10 +69,10 @@ module Saklient
           return get_id
         end
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -82,6 +82,7 @@ module Saklient
 
         protected
 
+        # @private
         # @return [Fixnum]
         def get_memory_gib
           return get_memory_mib >> 10
@@ -103,6 +104,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_id
           return @m_id
@@ -126,6 +128,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_name
           return @m_name
@@ -149,6 +152,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Fixnum]
         def get_cpu
           return @m_cpu
@@ -172,6 +176,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Fixnum]
         def get_memory_mib
           return @m_memory_mib
@@ -195,6 +200,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_service_class
           return @m_service_class
@@ -257,8 +263,7 @@ module Saklient
           @n_service_class = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

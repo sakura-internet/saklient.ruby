@@ -56,11 +56,11 @@ module Saklient
           return _limit(count)
         end
 
-        # APIのフィルタリング設定を直接指定します.
+        # Web APIのフィルタリング設定を直接指定します.
         #
-        # @param [any] value
-        # @param [bool] multiple
-        # @param [String] key
+        # @param [String] key キー
+        # @param [any] value 値
+        # @param [bool] multiple valueに配列を与え, OR条件で完全一致検索する場合にtrueを指定します. 通常, valueはスカラ値であいまい検索されます.
         # @return [Model_RouterPlan]
         def filter_by(key, value, multiple = false)
           Saklient::Util::validate_type(key, 'String')

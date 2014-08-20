@@ -93,10 +93,10 @@ module Saklient
           return _reload
         end
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -106,7 +106,7 @@ module Saklient
 
         # 作成中のルータが利用可能になるまで待機します.
         #
-        # @ignore
+        # @private
         # @yield [Saklient::Cloud::Resource::Router, bool]
         # @yieldreturn [void]
         # @param [Fixnum] timeoutSec
@@ -215,6 +215,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_id
           return @m_id
@@ -238,6 +239,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_name
           return @m_name
@@ -245,6 +247,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_name(v)
@@ -276,6 +279,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_description
           return @m_description
@@ -283,6 +287,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_description(v)
@@ -314,6 +319,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Fixnum]
         def get_network_mask_len
           return @m_network_mask_len
@@ -321,6 +327,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [Fixnum] v
         # @return [Fixnum]
         def set_network_mask_len(v)
@@ -353,6 +360,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Fixnum]
         def get_band_width_mbps
           return @m_band_width_mbps
@@ -360,6 +368,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [Fixnum] v
         # @return [Fixnum]
         def set_band_width_mbps(v)
@@ -392,6 +401,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_swytch_id
           return @m_swytch_id
@@ -461,8 +471,7 @@ module Saklient
           @n_swytch_id = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

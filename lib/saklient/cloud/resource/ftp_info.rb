@@ -17,6 +17,7 @@ module Saklient
 
         public
 
+        # @private
         # @return [String]
         def get_host_name
           return @_host_name
@@ -39,6 +40,7 @@ module Saklient
 
         public
 
+        # @private
         # @return [String]
         def get_user
           return @_user
@@ -61,6 +63,7 @@ module Saklient
 
         public
 
+        # @private
         # @return [String]
         def get_password
           return @_password
@@ -75,7 +78,7 @@ module Saklient
           get_password
         end
 
-        # @ignore
+        # @private
         # @param [any] obj
         def initialize(obj)
           @_host_name = obj[:HostName]

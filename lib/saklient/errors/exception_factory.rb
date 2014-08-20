@@ -154,9 +154,9 @@ module Saklient
 
     class ExceptionFactory
 
-      # @param [String] message
       # @param [Fixnum] status
       # @param [String] code
+      # @param [String] message
       # @return [HttpException]
       def self.create(status, code = nil, message = '')
         case (code)

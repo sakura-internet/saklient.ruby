@@ -103,10 +103,10 @@ module Saklient
           return _reload
         end
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -175,6 +175,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_id
           return @m_id
@@ -198,6 +199,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_name
           return @m_name
@@ -205,6 +207,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_name(v)
@@ -236,6 +239,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_description
           return @m_description
@@ -243,6 +247,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_description(v)
@@ -274,6 +279,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_user_default_route
           return @m_user_default_route
@@ -297,6 +303,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Fixnum]
         def get_user_mask_len
           return @m_user_mask_len
@@ -320,6 +327,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Router]
         def get_router
           return @m_router
@@ -343,6 +351,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Array<Ipv4Net>]
         def get_ipv4_nets
           return @m_ipv4_nets
@@ -366,6 +375,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Array<Ipv6Net>]
         def get_ipv6_nets
           return @m_ipv6_nets
@@ -467,8 +477,7 @@ module Saklient
           @n_ipv6_nets = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

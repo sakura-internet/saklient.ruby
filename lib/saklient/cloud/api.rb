@@ -29,6 +29,7 @@ module Saklient
       # @return [Client]
       attr_accessor :_client
 
+      # @private
       # @return [Client]
       def get_client
         return @_client
@@ -36,7 +37,7 @@ module Saklient
 
       public
 
-      # @ignore
+      # @private
       # @return [Client]
       attr_reader :client
 
@@ -50,6 +51,7 @@ module Saklient
       # @return [Product]
       attr_accessor :_product
 
+      # @private
       # @return [Product]
       def get_product
         return @_product
@@ -72,6 +74,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Icon]
       attr_accessor :_icon
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Icon]
       def get_icon
         return @_icon
@@ -94,6 +97,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Server]
       attr_accessor :_server
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Server]
       def get_server
         return @_server
@@ -116,6 +120,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Disk]
       attr_accessor :_disk
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Disk]
       def get_disk
         return @_disk
@@ -138,6 +143,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Appliance]
       attr_accessor :_appliance
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Appliance]
       def get_appliance
         return @_appliance
@@ -160,6 +166,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Archive]
       attr_accessor :_archive
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Archive]
       def get_archive
         return @_archive
@@ -182,6 +189,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_IsoImage]
       attr_accessor :_iso_image
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_IsoImage]
       def get_iso_image
         return @_iso_image
@@ -204,6 +212,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Iface]
       attr_accessor :_iface
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Iface]
       def get_iface
         return @_iface
@@ -226,6 +235,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Swytch]
       attr_accessor :_swytch
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Swytch]
       def get_swytch
         return @_swytch
@@ -248,6 +258,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Router]
       attr_accessor :_router
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Router]
       def get_router
         return @_router
@@ -270,6 +281,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Ipv6Net]
       attr_accessor :_ipv6_net
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Ipv6Net]
       def get_ipv6_net
         return @_ipv6_net
@@ -292,6 +304,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_Script]
       attr_accessor :_script
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_Script]
       def get_script
         return @_script
@@ -310,7 +323,7 @@ module Saklient
 
       protected
 
-      # @ignore
+      # @private
       # @param [Client] client
       def initialize(client)
         Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')

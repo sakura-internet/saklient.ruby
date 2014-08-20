@@ -4,14 +4,12 @@ require 'json'
 require 'uri'
 require_relative '../errors/exception_factory'
 
-# example
-#
-#   client = saklient::cloud::Client.new 'token', 'secret'
-#   servers = client.request 'GET', '/server' 
-
 module Saklient
   module Cloud
+    
+    # @private
     class Client
+      
       def initialize(token, secret)
         @config = {
           api_root: 'https://secure.sakura.ad.jp/cloud/',
@@ -106,6 +104,8 @@ module Saklient
         
         ret
       end
+      
     end
+    
   end
 end

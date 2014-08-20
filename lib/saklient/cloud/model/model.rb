@@ -7,7 +7,7 @@ module Saklient
   module Cloud
     module Model
 
-      # @ignore
+      # @private
       class Model
 
         protected
@@ -16,6 +16,7 @@ module Saklient
         # @return [Saklient::Cloud::Client]
         attr_accessor :_client
 
+        # @private
         # @return [Saklient::Cloud::Client]
         def get_client
           return @_client
@@ -36,6 +37,7 @@ module Saklient
         # @return [TQueryParams]
         attr_accessor :_params
 
+        # @private
         # @return [TQueryParams]
         def get_params
           return @_params
@@ -56,6 +58,7 @@ module Saklient
         # @return [Fixnum]
         attr_accessor :_total
 
+        # @private
         # @return [Fixnum]
         def get_total
           return @_total
@@ -76,6 +79,7 @@ module Saklient
         # @return [Fixnum]
         attr_accessor :_count
 
+        # @private
         # @return [Fixnum]
         def get_count
           return @_count
@@ -154,8 +158,8 @@ module Saklient
         # 次に取得するリストのソートカラムを指定します.
         #
         # @private
-        # @param [bool] reverse
         # @param [String] column カラム名
+        # @param [bool] reverse
         # @return [Model] this
         def _sort(column, reverse = false)
           Saklient::Util::validate_type(column, 'String')
@@ -167,12 +171,12 @@ module Saklient
           return self
         end
 
-        # APIのフィルタリング設定を直接指定します.
+        # Web APIのフィルタリング設定を直接指定します.
         #
         # @private
-        # @param [any] value
-        # @param [bool] multiple
-        # @param [String] key
+        # @param [String] key キー
+        # @param [any] value 値
+        # @param [bool] multiple valueに配列を与え, OR条件で完全一致検索する場合にtrueを指定します. 通常, valueはスカラ値であいまい検索されます.
         # @return [Model]
         def _filter_by(key, value, multiple = false)
           Saklient::Util::validate_type(key, 'String')
@@ -264,6 +268,7 @@ module Saklient
         end
 
         # 指定した文字列を名前に含むリソースに絞り込みます.
+        #
         # 大文字・小文字は区別されません.
         # 半角スペースで区切られた複数の文字列は, それらをすべて含むことが条件とみなされます.
         #
@@ -276,6 +281,7 @@ module Saklient
         end
 
         # 指定したタグを持つリソースに絞り込みます.
+        #
         # 複数のタグを指定する場合は withTags() を利用してください.
         #
         # @private

@@ -72,10 +72,10 @@ module Saklient
           return _reload
         end
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -90,6 +90,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_id
           return @m_id
@@ -113,6 +114,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_prefix
           return @m_prefix
@@ -136,6 +138,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Fixnum]
         def get_prefix_len
           return @m_prefix_len
@@ -159,6 +162,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_prefix_tail
           return @m_prefix_tail
@@ -214,8 +218,7 @@ module Saklient
           @n_prefix_tail = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

@@ -15,12 +15,12 @@ module Saklient
 
         protected
 
-        # 起動状態 {@link EServerInstanceStatus}
+        # 起動状態 {Saklient::Cloud::Enums::EServerInstanceStatus}
         #
         # @return [String]
         attr_accessor :m_status
 
-        # 前回の起動状態 {@link EServerInstanceStatus}
+        # 前回の起動状態 {Saklient::Cloud::Enums::EServerInstanceStatus}
         #
         # @return [String]
         attr_accessor :m_before_status
@@ -37,10 +37,10 @@ module Saklient
 
         public
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -69,6 +69,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_status
           return @m_status
@@ -76,7 +77,7 @@ module Saklient
 
         public
 
-        # 起動状態 {@link EServerInstanceStatus}
+        # 起動状態 {Saklient::Cloud::Enums::EServerInstanceStatus}
         #
         # @return [String]
         attr_reader :status
@@ -92,6 +93,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_before_status
           return @m_before_status
@@ -99,7 +101,7 @@ module Saklient
 
         public
 
-        # 前回の起動状態 {@link EServerInstanceStatus}
+        # 前回の起動状態 {Saklient::Cloud::Enums::EServerInstanceStatus}
         #
         # @return [String]
         attr_reader :before_status
@@ -115,6 +117,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [NativeDate]
         def get_status_changed_at
           return @m_status_changed_at
@@ -138,6 +141,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [IsoImage]
         def get_iso_image
           return @m_iso_image
@@ -193,8 +197,7 @@ module Saklient
           @n_iso_image = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

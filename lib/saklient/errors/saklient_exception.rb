@@ -12,8 +12,8 @@ module Saklient
       # @return [String]
       attr_accessor :message
 
-      # @param [String] message
       # @param [String] code
+      # @param [String] message
       def initialize(code = nil, message = '')
         super(message)
         @code = code

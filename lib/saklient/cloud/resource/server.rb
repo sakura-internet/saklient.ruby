@@ -61,7 +61,7 @@ module Saklient
         # @return [ServerInstance]
         attr_accessor :m_instance
 
-        # 有効状態 {@link EAvailability}
+        # 有効状態 {Saklient::Cloud::Enums::EAvailability}
         #
         # @return [String]
         attr_accessor :m_availability
@@ -112,10 +112,10 @@ module Saklient
           return _reload
         end
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -185,11 +185,11 @@ module Saklient
 
         # サーバが指定のステータスに遷移するまで待機します.
         #
-        # @ignore
+        # @private
         # @yield [Saklient::Cloud::Resource::Server, bool]
         # @yieldreturn [void]
-        # @param [Fixnum] timeoutSec
         # @param [String] status
+        # @param [Fixnum] timeoutSec
         # @return [void]
         def after_status(status, timeoutSec, &callback)
           Saklient::Util::validate_type(status, 'String')
@@ -214,9 +214,9 @@ module Saklient
 
         # サーバが指定のステータスに遷移するまで待機します.
         #
-        # @ignore
-        # @param [Fixnum] timeoutSec
+        # @private
         # @param [String] status
+        # @param [Fixnum] timeoutSec
         # @return [bool]
         def sleep_until(status, timeoutSec = 180)
           Saklient::Util::validate_type(status, 'String')
@@ -297,6 +297,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_id
           return @m_id
@@ -320,6 +321,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_name
           return @m_name
@@ -327,6 +329,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_name(v)
@@ -358,6 +361,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_description
           return @m_description
@@ -365,6 +369,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_description(v)
@@ -396,6 +401,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Array<String>]
         def get_tags
           return @m_tags
@@ -403,6 +409,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [Array<String>] v
         # @return [Array<String>]
         def set_tags(v)
@@ -434,6 +441,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Icon]
         def get_icon
           return @m_icon
@@ -441,6 +449,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [Icon] v
         # @return [Icon]
         def set_icon(v)
@@ -472,6 +481,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [ServerPlan]
         def get_plan
           return @m_plan
@@ -479,6 +489,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [ServerPlan] v
         # @return [ServerPlan]
         def set_plan(v)
@@ -511,6 +522,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Array<Iface>]
         def get_ifaces
           return @m_ifaces
@@ -534,6 +546,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [ServerInstance]
         def get_instance
           return @m_instance
@@ -557,6 +570,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_availability
           return @m_availability
@@ -564,7 +578,7 @@ module Saklient
 
         public
 
-        # 有効状態 {@link EAvailability}
+        # 有効状態 {Saklient::Cloud::Enums::EAvailability}
         #
         # @return [String]
         attr_reader :availability
@@ -665,8 +679,7 @@ module Saklient
           @n_availability = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

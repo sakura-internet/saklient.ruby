@@ -21,7 +21,7 @@ module Saklient
         # @return [String]
         attr_accessor :m_id
 
-        # クラス {@link EApplianceClass}
+        # クラス {Saklient::Cloud::Enums::EApplianceClass}
         #
         # @return [String]
         attr_accessor :m_clazz
@@ -102,10 +102,10 @@ module Saklient
           return _reload
         end
 
-        # @ignore
+        # @private
+        # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
-        # @param [Saklient::Cloud::Client] client
         def initialize(client, obj, wrapped = false)
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -152,6 +152,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_id
           return @m_id
@@ -175,6 +176,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_clazz
           return @m_clazz
@@ -182,6 +184,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_clazz(v)
@@ -194,7 +197,7 @@ module Saklient
 
         public
 
-        # クラス {@link EApplianceClass}
+        # クラス {Saklient::Cloud::Enums::EApplianceClass}
         #
         # @return [String]
         attr_accessor :clazz
@@ -214,6 +217,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_name
           return @m_name
@@ -221,6 +225,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_name(v)
@@ -252,6 +257,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_description
           return @m_description
@@ -259,6 +265,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [String] v
         # @return [String]
         def set_description(v)
@@ -290,6 +297,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Array<String>]
         def get_tags
           return @m_tags
@@ -297,6 +305,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [Array<String>] v
         # @return [Array<String>]
         def set_tags(v)
@@ -328,6 +337,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Icon]
         def get_icon
           return @m_icon
@@ -335,6 +345,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @param [Icon] v
         # @return [Icon]
         def set_icon(v)
@@ -366,6 +377,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [Array<Iface>]
         def get_ifaces
           return @m_ifaces
@@ -389,6 +401,7 @@ module Saklient
 
         # (This method is generated in Translator_default#buildImpl)
         #
+        # @private
         # @return [String]
         def get_service_class
           return @m_service_class
@@ -490,8 +503,7 @@ module Saklient
           @n_service_class = false
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)

@@ -17,6 +17,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_ServerPlan]
       attr_accessor :_server
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_ServerPlan]
       def get_server
         return @_server
@@ -39,6 +40,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_DiskPlan]
       attr_accessor :_disk
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_DiskPlan]
       def get_disk
         return @_disk
@@ -61,6 +63,7 @@ module Saklient
       # @return [Saklient::Cloud::Model::Model_RouterPlan]
       attr_accessor :_router
 
+      # @private
       # @return [Saklient::Cloud::Model::Model_RouterPlan]
       def get_router
         return @_router
@@ -77,7 +80,7 @@ module Saklient
         get_router
       end
 
-      # @ignore
+      # @private
       # @param [Client] client
       def initialize(client)
         Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')

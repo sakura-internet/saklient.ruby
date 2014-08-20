@@ -17,6 +17,7 @@ module Saklient
         # @return [Saklient::Cloud::Client]
         attr_accessor :_client
 
+        # @private
         # @return [Saklient::Cloud::Client]
         def get_client
           return @_client
@@ -24,7 +25,7 @@ module Saklient
 
         public
 
-        # @ignore
+        # @private
         # @return [Saklient::Cloud::Client]
         attr_reader :client
 
@@ -38,6 +39,7 @@ module Saklient
         # @return [String]
         attr_accessor :_disk_id
 
+        # @private
         # @return [String]
         def get_disk_id
           return @_disk_id
@@ -45,7 +47,7 @@ module Saklient
 
         public
 
-        # @ignore
+        # @private
         # @return [String]
         attr_reader :disk_id
 
@@ -59,11 +61,13 @@ module Saklient
         # @return [String]
         attr_accessor :_host_name
 
+        # @private
         # @return [String]
         def get_host_name
           return @_host_name
         end
 
+        # @private
         # @param [String] v
         # @return [String]
         def set_host_name(v)
@@ -93,11 +97,13 @@ module Saklient
         # @return [String]
         attr_accessor :_password
 
+        # @private
         # @return [String]
         def get_password
           return @_password
         end
 
+        # @private
         # @param [String] v
         # @return [String]
         def set_password(v)
@@ -127,11 +133,13 @@ module Saklient
         # @return [String]
         attr_accessor :_ssh_key
 
+        # @private
         # @return [String]
         def get_ssh_key
           return @_ssh_key
         end
 
+        # @private
         # @param [String] v
         # @return [String]
         def set_ssh_key(v)
@@ -161,11 +169,13 @@ module Saklient
         # @return [String]
         attr_accessor :_ip_address
 
+        # @private
         # @return [String]
         def get_ip_address
           return @_ip_address
         end
 
+        # @private
         # @param [String] v
         # @return [String]
         def set_ip_address(v)
@@ -195,11 +205,13 @@ module Saklient
         # @return [String]
         attr_accessor :_default_route
 
+        # @private
         # @return [String]
         def get_default_route
           return @_default_route
         end
 
+        # @private
         # @param [String] v
         # @return [String]
         def set_default_route(v)
@@ -229,11 +241,13 @@ module Saklient
         # @return [Fixnum]
         attr_accessor :_network_mask_len
 
+        # @private
         # @return [Fixnum]
         def get_network_mask_len
           return @_network_mask_len
         end
 
+        # @private
         # @param [Fixnum] v
         # @return [Fixnum]
         def set_network_mask_len(v)
@@ -263,6 +277,7 @@ module Saklient
         # @return [Array<Script>]
         attr_accessor :_scripts
 
+        # @private
         # @return [Array<Script>]
         def get_scripts
           return @_scripts
@@ -279,9 +294,9 @@ module Saklient
           get_scripts
         end
 
-        # @ignore
-        # @param [String] diskId
+        # @private
         # @param [Saklient::Cloud::Client] client
+        # @param [String] diskId
         def initialize(client, diskId)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
           Saklient::Util::validate_type(diskId, 'String')

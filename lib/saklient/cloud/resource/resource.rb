@@ -7,7 +7,7 @@ module Saklient
   module Cloud
     module Resource
 
-      # @ignore
+      # @private
       class Resource
 
         protected
@@ -16,6 +16,7 @@ module Saklient
         # @return [Saklient::Cloud::Client]
         attr_accessor :_client
 
+        # @private
         # @return [Saklient::Cloud::Client]
         def get_client
           return @_client
@@ -23,6 +24,7 @@ module Saklient
 
         public
 
+        # @private
         # @return [Saklient::Cloud::Client]
         attr_reader :client
 
@@ -38,8 +40,9 @@ module Saklient
 
         public
 
-        # @param [any] value
+        # @private
         # @param [String] key
+        # @param [any] value
         # @return [void]
         def set_param(key, value)
           Saklient::Util::validate_type(key, 'String')
@@ -80,7 +83,7 @@ module Saklient
           return nil
         end
 
-        # @ignore
+        # @private
         # @param [Saklient::Cloud::Client] client
         def initialize(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
@@ -90,9 +93,11 @@ module Saklient
 
         protected
 
+        # @private
         # @return [bool]
         attr_accessor :is_new
 
+        # @private
         # @return [bool]
         attr_accessor :is_incomplete
 
@@ -103,20 +108,21 @@ module Saklient
         end
 
         # @private
-        # @param [any] root
         # @param [any] r
+        # @param [any] root
         # @return [void]
         def _on_after_api_deserialize(r, root)
         end
 
         # @private
-        # @param [bool] withClean
         # @param [any] r
+        # @param [bool] withClean
         # @return [void]
         def _on_after_api_serialize(r, withClean)
           Saklient::Util::validate_type(withClean, 'bool')
         end
 
+        # @private
         # @param [any] r
         # @return [void]
         def api_deserialize_impl(r)
@@ -124,6 +130,7 @@ module Saklient
 
         public
 
+        # @private
         # @param [any] obj
         # @param [bool] wrapped
         # @return [void]
@@ -150,6 +157,7 @@ module Saklient
 
         protected
 
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize_impl(withClean = false)
@@ -159,6 +167,7 @@ module Saklient
 
         public
 
+        # @private
         # @param [bool] withClean
         # @return [any]
         def api_serialize(withClean = false)
@@ -170,6 +179,7 @@ module Saklient
 
         protected
 
+        # @private
         # @return [any]
         def api_serialize_id
           id = _id
@@ -179,6 +189,7 @@ module Saklient
           return r
         end
 
+        # @private
         # @param [String] name
         # @return [String]
         def normalize_field_name(name)
@@ -189,6 +200,7 @@ module Saklient
 
         public
 
+        # @private
         # @param [String] name
         # @param [any] value
         # @return [void]
@@ -261,6 +273,7 @@ module Saklient
           return result[:Count] == 1
         end
 
+        # @private
         # @return [any]
         def dump
           return api_serialize(true)
