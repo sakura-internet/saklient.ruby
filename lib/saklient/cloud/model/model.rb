@@ -126,9 +126,7 @@ module Saklient
         def initialize(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
           @_client = client
-          @_params = {}
-          @_total = nil
-          @_count = nil
+          _reset
         end
 
         protected
@@ -198,7 +196,7 @@ module Saklient
         # @private
         # @return [Model] this
         def _reset
-          @_params = {}
+          @_params = { Count: 0 }
           @_total = 0
           @_count = 0
           return self
