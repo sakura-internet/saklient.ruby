@@ -762,7 +762,11 @@ module Saklient
           Saklient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
           Saklient::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
           Saklient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
-          Saklient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
+          if withClean || @n_plan
+            Saklient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id))
+          else
+            missing << 'plan' if @is_new
+          end
           Saklient::Util::set_by_path(ret, 'Server', withClean ? ((@m_server).nil? ? nil : @m_server.api_serialize(withClean)) : ((@m_server).nil? ? { ID: '0' } : @m_server.api_serialize_id)) if withClean || @n_server
           Saklient::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Disk creation: ' + missing.join(', ')) if missing.length > 0

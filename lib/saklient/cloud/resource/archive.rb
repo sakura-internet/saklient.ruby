@@ -49,6 +49,11 @@ module Saklient
         # @return [Icon]
         attr_accessor :m_icon
 
+        # 表示順序
+        #
+        # @return [Fixnum]
+        attr_accessor :m_display_order
+
         # サイズ[MiB]
         #
         # @return [Fixnum]
@@ -564,6 +569,46 @@ module Saklient
         protected
 
         # @return [bool]
+        attr_accessor :n_display_order
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [Fixnum]
+        def get_display_order
+          return @m_display_order
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [Fixnum] v
+        # @return [Fixnum]
+        def set_display_order(v)
+          Saklient::Util::validate_type(v, 'Fixnum')
+          @m_display_order = v
+          @n_display_order = true
+          return @m_display_order
+        end
+
+        public
+
+        # 表示順序
+        #
+        # @return [Fixnum]
+        attr_accessor :display_order
+
+        def display_order
+          get_display_order
+        end
+
+        def display_order=(v)
+          set_display_order(v)
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_size_mib
 
         # (This method is generated in Translator_default#buildImpl)
@@ -734,6 +779,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_icon = false
+          if Saklient::Util::exists_path(r, 'DisplayOrder')
+            @m_display_order = (Saklient::Util::get_by_path(r, 'DisplayOrder')).nil? ? nil : (Saklient::Util::get_by_path(r, 'DisplayOrder').to_s).to_i(10)
+          else
+            @m_display_order = nil
+            @is_incomplete = true
+          end
+          @n_display_order = false
           if Saklient::Util::exists_path(r, 'SizeMB')
             @m_size_mib = (Saklient::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saklient::Util::get_by_path(r, 'SizeMB').to_s).to_i(10)
           else
@@ -788,6 +840,7 @@ module Saklient
             end
           end
           Saklient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
+          Saklient::Util::set_by_path(ret, 'DisplayOrder', @m_display_order) if withClean || @n_display_order
           Saklient::Util::set_by_path(ret, 'SizeMB', @m_size_mib) if withClean || @n_size_mib
           Saklient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           Saklient::Util::set_by_path(ret, 'Plan', withClean ? ((@m_plan).nil? ? nil : @m_plan.api_serialize(withClean)) : ((@m_plan).nil? ? { ID: '0' } : @m_plan.api_serialize_id)) if withClean || @n_plan
