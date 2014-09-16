@@ -2,6 +2,7 @@
 
 require_relative '../client'
 require_relative '../resource/resource'
+require_relative 'query_params'
 require_relative '../../errors/saklient_exception'
 
 module Saklient
@@ -35,18 +36,18 @@ module Saklient
         protected
 
         # @private
-        # @return [TQueryParams]
+        # @return [QueryParams]
         attr_accessor :_query
 
         # @private
-        # @return [TQueryParams]
+        # @return [QueryParams]
         def get_query
           return @_query
         end
 
         public
 
-        # @return [TQueryParams]
+        # @return [QueryParams]
         attr_reader :query
 
         def query
@@ -139,7 +140,7 @@ module Saklient
         # @return [Model] this
         def _offset(offset)
           Saklient::Util::validate_type(offset, 'Fixnum')
-          @_query[:Begin] = offset
+          @_query.begin = offset
           return self
         end
 
@@ -150,7 +151,7 @@ module Saklient
         # @return [Model] this
         def _limit(count)
           Saklient::Util::validate_type(count, 'Fixnum')
-          @_query[:Count] = count
+          @_query.count = count
           return self
         end
 
@@ -163,10 +164,8 @@ module Saklient
         def _sort(column, reverse = false)
           Saklient::Util::validate_type(column, 'String')
           Saklient::Util::validate_type(reverse, 'bool')
-          @_query[:Sort] = [] if !(!@_query.nil? && @_query.key?(:Sort))
-          sort = @_query[:Sort]
           op = reverse ? '-' : ''
-          sort << op + column
+          @_query.sort << op + column
           return self
         end
 
@@ -180,8 +179,7 @@ module Saklient
         def _filter_by(key, value, multiple = false)
           Saklient::Util::validate_type(key, 'String')
           Saklient::Util::validate_type(multiple, 'bool')
-          @_query[:Filter] = {} if !(!@_query.nil? && @_query.key?(:Filter))
-          filter = @_query[:Filter]
+          filter = @_query.filter
           if multiple
             filter[key.to_sym] = [] if !(!filter.nil? && filter.key?(key.to_sym))
             values = filter[key.to_sym]
@@ -198,7 +196,7 @@ module Saklient
         # @private
         # @return [Model] this
         def _reset
-          @_query = { Count: 0 }
+          @_query = Saklient::Cloud::Model::QueryParams.new()
           @_total = 0
           @_count = 0
           return self
@@ -221,7 +219,7 @@ module Saklient
         # @return [Saklient::Cloud::Resource::Resource] リソースオブジェクト
         def _get_by_id(id)
           Saklient::Util::validate_type(id, 'String')
-          query = @_query
+          query = @_query.build
           _reset
           result = @_client.request('GET', _api_path + '/' + Saklient::Util::url_encode(id), query)
           @_total = 1
@@ -238,7 +236,7 @@ module Saklient
         # @private
         # @return [Array<Saklient::Cloud::Resource::Resource>] リソースオブジェクトの配列
         def _find
-          query = @_query
+          query = @_query.build
           _reset
           result = @_client.request('GET', _api_path, query)
           @_total = result[:Total]
@@ -257,7 +255,7 @@ module Saklient
         # @private
         # @return [Saklient::Cloud::Resource::Resource] リソースオブジェクト
         def _find_one
-          query = @_query
+          query = @_query.build
           _reset
           result = @_client.request('GET', _api_path, query)
           @_total = result[:Total]
@@ -278,7 +276,7 @@ module Saklient
         # @return [Model]
         def _with_name_like(name)
           Saklient::Util::validate_type(name, 'String')
-          return _filter_by('Name', [name])
+          return _filter_by('Name', name)
         end
 
         # 指定したタグを持つリソースに絞り込みます.

@@ -103,6 +103,7 @@ describe 'Server' do
     disk.name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
     disk.description = 'This instance was created by saklient.ruby rspec'
     disk.tags = ['saklient-test']
+    disk.plan = @api.product.disk.ssd
     disk.source = archive
     disk.save
     # p disk.dump
@@ -227,6 +228,7 @@ describe 'Server' do
     disk2.name = name + "-copy"
     disk2.description = description
     disk2.tags = [tag]
+    disk2.plan = @api.product.disk.hdd
     disk2.source = disk
     disk2.size_gib = 40
     disk2.save
