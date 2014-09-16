@@ -53,7 +53,7 @@ describe 'Router' do
       plans = @api.product.router.find
       min_mbps = 0x7FFFFFFF
       for plan in plans do
-        expect(plan).to be_an_instance_of Saklient::Cloud::Resource::RouterPlan
+        expect(plan).to be_an_instance_of Saklient::Cloud::Resources::RouterPlan
         expect(plan.band_width_mbps).to be > 0
         min_mbps = [plan.band_width_mbps, min_mbps].min
       end
@@ -76,9 +76,9 @@ describe 'Router' do
       swytch = swytches[0]
     end
     
-    expect(swytch).to be_an_instance_of Saklient::Cloud::Resource::Swytch
+    expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
     expect(swytch.ipv4_nets.length).to be > 0
-    expect(swytch.ipv4_nets[0]).to be_an_instance_of Saklient::Cloud::Resource::Ipv4Net
+    expect(swytch.ipv4_nets[0]).to be_an_instance_of Saklient::Cloud::Resources::Ipv4Net
     
     #
     puts 'ルータ＋スイッチの帯域プランを変更しています...'
@@ -93,7 +93,7 @@ describe 'Router' do
     end
     puts 'ルータ＋スイッチにIPv6ネットワークを割り当てています...'
     v6net = swytch.add_ipv6_net
-    expect(v6net).to be_an_instance_of Saklient::Cloud::Resource::Ipv6Net
+    expect(v6net).to be_an_instance_of Saklient::Cloud::Resources::Ipv6Net
     expect(swytch.ipv6_nets.length).to eq 1
     
     #
@@ -107,7 +107,7 @@ describe 'Router' do
     net0 = swytch.ipv4_nets[0]
     next_hop = IPAddr.new(IPAddr.new(net0.address).to_i + 4, Socket::AF_INET).to_s
     sroute = swytch.add_static_route(28, next_hop)
-    expect(sroute).to be_an_instance_of Saklient::Cloud::Resource::Ipv4Net
+    expect(sroute).to be_an_instance_of Saklient::Cloud::Resources::Ipv4Net
     expect(swytch.ipv4_nets.length).to eq 2
     
   end

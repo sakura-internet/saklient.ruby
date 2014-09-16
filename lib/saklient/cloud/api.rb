@@ -3,17 +3,17 @@
 require_relative '../util'
 require_relative 'client'
 require_relative 'product'
-require_relative 'model/model_icon'
-require_relative 'model/model_server'
-require_relative 'model/model_disk'
-require_relative 'model/model_appliance'
-require_relative 'model/model_archive'
-require_relative 'model/model_iso_image'
-require_relative 'model/model_iface'
-require_relative 'model/model_swytch'
-require_relative 'model/model_router'
-require_relative 'model/model_ipv6_net'
-require_relative 'model/model_script'
+require_relative 'models/model_icon'
+require_relative 'models/model_server'
+require_relative 'models/model_disk'
+require_relative 'models/model_appliance'
+require_relative 'models/model_archive'
+require_relative 'models/model_iso_image'
+require_relative 'models/model_iface'
+require_relative 'models/model_swytch'
+require_relative 'models/model_router'
+require_relative 'models/model_ipv6_net'
+require_relative 'models/model_script'
 
 module Saklient
   module Cloud
@@ -71,11 +71,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Icon]
+      # @return [Saklient::Cloud::Models::Model_Icon]
       attr_accessor :_icon
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Icon]
+      # @return [Saklient::Cloud::Models::Model_Icon]
       def get_icon
         return @_icon
       end
@@ -84,7 +84,7 @@ module Saklient
 
       # アイコンにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Icon]
+      # @return [Saklient::Cloud::Models::Model_Icon]
       attr_reader :icon
 
       def icon
@@ -94,11 +94,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Server]
+      # @return [Saklient::Cloud::Models::Model_Server]
       attr_accessor :_server
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Server]
+      # @return [Saklient::Cloud::Models::Model_Server]
       def get_server
         return @_server
       end
@@ -107,7 +107,7 @@ module Saklient
 
       # サーバにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Server]
+      # @return [Saklient::Cloud::Models::Model_Server]
       attr_reader :server
 
       def server
@@ -117,11 +117,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Disk]
+      # @return [Saklient::Cloud::Models::Model_Disk]
       attr_accessor :_disk
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Disk]
+      # @return [Saklient::Cloud::Models::Model_Disk]
       def get_disk
         return @_disk
       end
@@ -130,7 +130,7 @@ module Saklient
 
       # ディスクにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Disk]
+      # @return [Saklient::Cloud::Models::Model_Disk]
       attr_reader :disk
 
       def disk
@@ -140,11 +140,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Appliance]
+      # @return [Saklient::Cloud::Models::Model_Appliance]
       attr_accessor :_appliance
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Appliance]
+      # @return [Saklient::Cloud::Models::Model_Appliance]
       def get_appliance
         return @_appliance
       end
@@ -153,7 +153,7 @@ module Saklient
 
       # アプライアンスにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Appliance]
+      # @return [Saklient::Cloud::Models::Model_Appliance]
       attr_reader :appliance
 
       def appliance
@@ -163,11 +163,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Archive]
+      # @return [Saklient::Cloud::Models::Model_Archive]
       attr_accessor :_archive
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Archive]
+      # @return [Saklient::Cloud::Models::Model_Archive]
       def get_archive
         return @_archive
       end
@@ -176,7 +176,7 @@ module Saklient
 
       # アーカイブにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Archive]
+      # @return [Saklient::Cloud::Models::Model_Archive]
       attr_reader :archive
 
       def archive
@@ -186,11 +186,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_IsoImage]
+      # @return [Saklient::Cloud::Models::Model_IsoImage]
       attr_accessor :_iso_image
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_IsoImage]
+      # @return [Saklient::Cloud::Models::Model_IsoImage]
       def get_iso_image
         return @_iso_image
       end
@@ -199,7 +199,7 @@ module Saklient
 
       # ISOイメージにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_IsoImage]
+      # @return [Saklient::Cloud::Models::Model_IsoImage]
       attr_reader :iso_image
 
       def iso_image
@@ -209,11 +209,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Iface]
+      # @return [Saklient::Cloud::Models::Model_Iface]
       attr_accessor :_iface
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Iface]
+      # @return [Saklient::Cloud::Models::Model_Iface]
       def get_iface
         return @_iface
       end
@@ -222,7 +222,7 @@ module Saklient
 
       # インタフェースにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Iface]
+      # @return [Saklient::Cloud::Models::Model_Iface]
       attr_reader :iface
 
       def iface
@@ -232,11 +232,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Swytch]
+      # @return [Saklient::Cloud::Models::Model_Swytch]
       attr_accessor :_swytch
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Swytch]
+      # @return [Saklient::Cloud::Models::Model_Swytch]
       def get_swytch
         return @_swytch
       end
@@ -245,7 +245,7 @@ module Saklient
 
       # スイッチにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Swytch]
+      # @return [Saklient::Cloud::Models::Model_Swytch]
       attr_reader :swytch
 
       def swytch
@@ -255,11 +255,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Router]
+      # @return [Saklient::Cloud::Models::Model_Router]
       attr_accessor :_router
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Router]
+      # @return [Saklient::Cloud::Models::Model_Router]
       def get_router
         return @_router
       end
@@ -268,7 +268,7 @@ module Saklient
 
       # ルータにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Router]
+      # @return [Saklient::Cloud::Models::Model_Router]
       attr_reader :router
 
       def router
@@ -278,11 +278,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Ipv6Net]
+      # @return [Saklient::Cloud::Models::Model_Ipv6Net]
       attr_accessor :_ipv6_net
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Ipv6Net]
+      # @return [Saklient::Cloud::Models::Model_Ipv6Net]
       def get_ipv6_net
         return @_ipv6_net
       end
@@ -291,7 +291,7 @@ module Saklient
 
       # IPv6ネットワークにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Ipv6Net]
+      # @return [Saklient::Cloud::Models::Model_Ipv6Net]
       attr_reader :ipv6_net
 
       def ipv6_net
@@ -301,11 +301,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Script]
+      # @return [Saklient::Cloud::Models::Model_Script]
       attr_accessor :_script
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_Script]
+      # @return [Saklient::Cloud::Models::Model_Script]
       def get_script
         return @_script
       end
@@ -314,7 +314,7 @@ module Saklient
 
       # スクリプトにアクセスするためのモデル.
       #
-      # @return [Saklient::Cloud::Model::Model_Script]
+      # @return [Saklient::Cloud::Models::Model_Script]
       attr_reader :script
 
       def script
@@ -329,17 +329,17 @@ module Saklient
         Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
         @_client = client
         @_product = Saklient::Cloud::Product.new(client)
-        @_icon = Saklient::Cloud::Model::Model_Icon.new(client)
-        @_server = Saklient::Cloud::Model::Model_Server.new(client)
-        @_disk = Saklient::Cloud::Model::Model_Disk.new(client)
-        @_appliance = Saklient::Cloud::Model::Model_Appliance.new(client)
-        @_archive = Saklient::Cloud::Model::Model_Archive.new(client)
-        @_iso_image = Saklient::Cloud::Model::Model_IsoImage.new(client)
-        @_iface = Saklient::Cloud::Model::Model_Iface.new(client)
-        @_swytch = Saklient::Cloud::Model::Model_Swytch.new(client)
-        @_router = Saklient::Cloud::Model::Model_Router.new(client)
-        @_ipv6_net = Saklient::Cloud::Model::Model_Ipv6Net.new(client)
-        @_script = Saklient::Cloud::Model::Model_Script.new(client)
+        @_icon = Saklient::Cloud::Models::Model_Icon.new(client)
+        @_server = Saklient::Cloud::Models::Model_Server.new(client)
+        @_disk = Saklient::Cloud::Models::Model_Disk.new(client)
+        @_appliance = Saklient::Cloud::Models::Model_Appliance.new(client)
+        @_archive = Saklient::Cloud::Models::Model_Archive.new(client)
+        @_iso_image = Saklient::Cloud::Models::Model_IsoImage.new(client)
+        @_iface = Saklient::Cloud::Models::Model_Iface.new(client)
+        @_swytch = Saklient::Cloud::Models::Model_Swytch.new(client)
+        @_router = Saklient::Cloud::Models::Model_Router.new(client)
+        @_ipv6_net = Saklient::Cloud::Models::Model_Ipv6Net.new(client)
+        @_script = Saklient::Cloud::Models::Model_Script.new(client)
       end
 
       public

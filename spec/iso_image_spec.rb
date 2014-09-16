@@ -47,7 +47,7 @@ describe 'IsoImage' do
     tag = 'saklient-test'
     
     iso = @api.iso_image.create
-    expect(iso).to be_an_instance_of Saklient::Cloud::Resource::IsoImage
+    expect(iso).to be_an_instance_of Saklient::Cloud::Resources::IsoImage
     iso.name = name
     iso.description = description
     iso.tags = [tag]
@@ -56,12 +56,12 @@ describe 'IsoImage' do
     
     #
     ftp = iso.ftp_info
-    expect(ftp).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo
+    expect(ftp).to be_an_instance_of Saklient::Cloud::Resources::FtpInfo
     expect(ftp.host_name).not_to be_nil
     expect(ftp.user).not_to be_nil
     expect(ftp.password).not_to be_nil
     ftp2 = iso.open_ftp(true).ftp_info
-    expect(ftp2).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo
+    expect(ftp2).to be_an_instance_of Saklient::Cloud::Resources::FtpInfo
     expect(ftp2.host_name).not_to be_nil
     expect(ftp2.user).not_to be_nil
     expect(ftp2.password).not_to be_nil
@@ -114,7 +114,7 @@ describe 'IsoImage' do
     # create a server
     puts 'creating a server...'
     server = @api.server.create
-    expect(server).to be_an_instance_of Saklient::Cloud::Resource::Server
+    expect(server).to be_an_instance_of Saklient::Cloud::Resources::Server
     server.name = name
     server.description = description
     server.tags = [tag]
@@ -124,7 +124,7 @@ describe 'IsoImage' do
     # insert iso image while the server is down
     puts 'inserting an ISO image to the server...'
     server.insert_iso_image(iso)
-    expect(server.instance.iso_image).to be_an_instance_of Saklient::Cloud::Resource::IsoImage
+    expect(server.instance.iso_image).to be_an_instance_of Saklient::Cloud::Resources::IsoImage
     expect(server.instance.iso_image.id).to eq iso.id
     
     # eject iso image while the server is down
@@ -140,7 +140,7 @@ describe 'IsoImage' do
     # insert iso image while the server is up
     puts 'inserting an ISO image to the server...'
     server.insert_iso_image(iso)
-    expect(server.instance.iso_image).to be_an_instance_of Saklient::Cloud::Resource::IsoImage
+    expect(server.instance.iso_image).to be_an_instance_of Saklient::Cloud::Resources::IsoImage
     expect(server.instance.iso_image.id).to eq iso.id
     
     # eject iso image while the server is up

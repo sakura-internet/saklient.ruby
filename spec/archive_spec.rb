@@ -47,7 +47,7 @@ describe 'Archive' do
     tag = 'saklient-test'
     
     archive = @api.archive.create
-    expect(archive).to be_an_instance_of Saklient::Cloud::Resource::Archive 
+    expect(archive).to be_an_instance_of Saklient::Cloud::Resources::Archive 
     archive.name = name
     archive.description = description
     archive.tags = [tag]
@@ -56,12 +56,12 @@ describe 'Archive' do
     
     #
     ftp = archive.ftp_info
-    expect(ftp).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo 
+    expect(ftp).to be_an_instance_of Saklient::Cloud::Resources::FtpInfo 
     expect(ftp.host_name).not_to be_nil
     expect(ftp.user).not_to be_nil
     expect(ftp.password).not_to be_nil
     ftp2 = archive.open_ftp(true).ftp_info
-    expect(ftp2).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo 
+    expect(ftp2).to be_an_instance_of Saklient::Cloud::Resources::FtpInfo 
     expect(ftp2.host_name).not_to be_nil
     expect(ftp2.user).not_to be_nil
     expect(ftp2.password).not_to be_nil
@@ -120,7 +120,7 @@ describe 'Archive' do
     disk.destroy
     
     ftp = archive.open_ftp.ftp_info
-    expect(ftp).to be_an_instance_of Saklient::Cloud::Resource::FtpInfo
+    expect(ftp).to be_an_instance_of Saklient::Cloud::Resources::FtpInfo
     expect(ftp.host_name).not_to be_nil
     expect(ftp.user).not_to be_nil
     expect(ftp.password).not_to be_nil

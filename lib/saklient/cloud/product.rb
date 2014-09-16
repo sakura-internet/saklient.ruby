@@ -1,8 +1,8 @@
 # -*- encoding: UTF-8 -*-
 
-require_relative 'model/model_server_plan'
-require_relative 'model/model_disk_plan'
-require_relative 'model/model_router_plan'
+require_relative 'models/model_server_plan'
+require_relative 'models/model_disk_plan'
+require_relative 'models/model_router_plan'
 require_relative 'client'
 
 module Saklient
@@ -14,11 +14,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_ServerPlan]
+      # @return [Saklient::Cloud::Models::Model_ServerPlan]
       attr_accessor :_server
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_ServerPlan]
+      # @return [Saklient::Cloud::Models::Model_ServerPlan]
       def get_server
         return @_server
       end
@@ -27,7 +27,7 @@ module Saklient
 
       # サーバプラン情報.
       #
-      # @return [Saklient::Cloud::Model::Model_ServerPlan]
+      # @return [Saklient::Cloud::Models::Model_ServerPlan]
       attr_reader :server
 
       def server
@@ -37,11 +37,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_DiskPlan]
+      # @return [Saklient::Cloud::Models::Model_DiskPlan]
       attr_accessor :_disk
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_DiskPlan]
+      # @return [Saklient::Cloud::Models::Model_DiskPlan]
       def get_disk
         return @_disk
       end
@@ -50,7 +50,7 @@ module Saklient
 
       # ディスクプラン情報.
       #
-      # @return [Saklient::Cloud::Model::Model_DiskPlan]
+      # @return [Saklient::Cloud::Models::Model_DiskPlan]
       attr_reader :disk
 
       def disk
@@ -60,11 +60,11 @@ module Saklient
       protected
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_RouterPlan]
+      # @return [Saklient::Cloud::Models::Model_RouterPlan]
       attr_accessor :_router
 
       # @private
-      # @return [Saklient::Cloud::Model::Model_RouterPlan]
+      # @return [Saklient::Cloud::Models::Model_RouterPlan]
       def get_router
         return @_router
       end
@@ -73,7 +73,7 @@ module Saklient
 
       # ルータ帯域プラン情報.
       #
-      # @return [Saklient::Cloud::Model::Model_RouterPlan]
+      # @return [Saklient::Cloud::Models::Model_RouterPlan]
       attr_reader :router
 
       def router
@@ -84,9 +84,9 @@ module Saklient
       # @param [Client] client
       def initialize(client)
         Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
-        @_server = Saklient::Cloud::Model::Model_ServerPlan.new(client)
-        @_disk = Saklient::Cloud::Model::Model_DiskPlan.new(client)
-        @_router = Saklient::Cloud::Model::Model_RouterPlan.new(client)
+        @_server = Saklient::Cloud::Models::Model_ServerPlan.new(client)
+        @_disk = Saklient::Cloud::Models::Model_DiskPlan.new(client)
+        @_router = Saklient::Cloud::Models::Model_RouterPlan.new(client)
       end
 
     end

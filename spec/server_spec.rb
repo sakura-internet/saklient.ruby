@@ -48,8 +48,8 @@ describe 'Server' do
     
     mem = 0
     servers.each {|server|
-      expect(server).to be_an_instance_of Saklient::Cloud::Resource::Server
-      expect(server.plan).to be_an_instance_of Saklient::Cloud::Resource::ServerPlan
+      expect(server).to be_an_instance_of Saklient::Cloud::Resources::Server
+      expect(server.plan).to be_an_instance_of Saklient::Cloud::Resources::ServerPlan
       expect(server.plan.cpu).to be > 0
       expect(server.plan.memory_mib).to be > 0
       expect(server.plan.memory_gib).to be > 0
@@ -122,7 +122,7 @@ describe 'Server' do
     # create a server
     puts 'creating a server...'
     server = @api.server.create
-    expect(server).to be_an_instance_of Saklient::Cloud::Resource::Server
+    expect(server).to be_an_instance_of Saklient::Cloud::Resources::Server
     server.name = name
     server.description = description
     server.tags = [tag]
@@ -142,7 +142,7 @@ describe 'Server' do
     # connect to shared segment
     puts 'connecting the server to shared segment...'
     iface = server.add_iface
-    expect(iface).to be_an_instance_of Saklient::Cloud::Resource::Iface
+    expect(iface).to be_an_instance_of Saklient::Cloud::Resources::Iface
     expect(iface.id.to_i).to be > 0
     iface.connect_to_shared_segment
     
@@ -152,7 +152,7 @@ describe 'Server' do
     # p disk.dump
     disk.source = nil
     disk.reload
-    expect(disk.source).to be_an_instance_of Saklient::Cloud::Resource::Archive
+    expect(disk.source).to be_an_instance_of Saklient::Cloud::Resources::Archive
     expect(disk.source.id).to eq archive.id
     expect(disk.size_gib).to eq archive.size_gib
     
@@ -238,7 +238,7 @@ describe 'Server' do
     fail 'ディスクの複製がタイムアウトしました' unless disk2.sleep_while_copying
     disk2.source = nil
     disk2.reload
-    expect(disk2.source).to be_an_instance_of Saklient::Cloud::Resource::Disk
+    expect(disk2.source).to be_an_instance_of Saklient::Cloud::Resources::Disk
     expect(disk2.source.id).to eq disk.id
     expect(disk2.size_gib).to eq 40
     
