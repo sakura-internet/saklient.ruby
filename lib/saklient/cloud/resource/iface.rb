@@ -316,7 +316,7 @@ module Saklient
           if withClean || @n_server_id
             Saklient::Util::set_by_path(ret, 'Server.ID', @m_server_id)
           else
-            missing << 'serverId' if @is_new
+            missing << 'server_id' if @is_new
           end
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Iface creation: ' + missing.join(', ')) if missing.length > 0
           return ret

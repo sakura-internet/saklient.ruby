@@ -105,6 +105,7 @@ module Saklient
         # 大文字・小文字は区別されません.
         # 半角スペースで区切られた複数の文字列は, それらをすべて含むことが条件とみなされます.
         #
+        # @todo Implement test case
         # @param [String] name
         # @return [Model_Swytch]
         def with_name_like(name)
@@ -114,6 +115,7 @@ module Saklient
 
         # 名前でソートします.
         #
+        # @todo Implement test case
         # @param [bool] reverse
         # @return [Model_Swytch]
         def sort_by_name(reverse = false)

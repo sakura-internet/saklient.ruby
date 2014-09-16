@@ -36,7 +36,7 @@ module Saklient
 
         # @private
         # @return [any]
-        attr_accessor :_params
+        attr_accessor :_query
 
         public
 
@@ -46,7 +46,7 @@ module Saklient
         # @return [void]
         def set_param(key, value)
           Saklient::Util::validate_type(key, 'String')
-          @_params[key.to_sym] = value
+          @_query[key.to_sym] = value
         end
 
         protected
@@ -88,7 +88,7 @@ module Saklient
         def initialize(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
           @_client = client
-          @_params = {}
+          @_query = {}
         end
 
         protected
@@ -219,11 +219,11 @@ module Saklient
         # @return [Resource] this
         def _save
           r = api_serialize
-          params = @_params
-          @_params = {}
-          keys = params.keys
+          query = @_query
+          @_query = {}
+          keys = query.keys
           for k in keys
-            v = params[k.to_sym]
+            v = query[k.to_sym]
             r[k.to_sym] = v
           end
           _on_before_save(r)
@@ -266,10 +266,10 @@ module Saklient
         #
         # @return [bool]
         def exists
-          params = {}
-          Saklient::Util::set_by_path(params, 'Filter.ID', [_id])
-          Saklient::Util::set_by_path(params, 'Include', ['ID'])
-          result = @_client.request('GET', _api_path, params)
+          query = {}
+          Saklient::Util::set_by_path(query, 'Filter.ID', [_id])
+          Saklient::Util::set_by_path(query, 'Include', ['ID'])
+          result = @_client.request('GET', _api_path, query)
           return result[:Count] == 1
         end
 

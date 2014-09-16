@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../client'
 require_relative 'model'
 require_relative '../resource/disk_plan'
 
@@ -89,6 +90,63 @@ module Saklient
         # @return [Array<Saklient::Cloud::Resource::DiskPlan>] リソースオブジェクトの配列
         def find
           return _find
+        end
+
+        # @private
+        # @param [Saklient::Cloud::Client] client
+        def initialize(client)
+          super(client)
+          Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
+          @_hdd = nil
+          @_ssd = nil
+        end
+
+        protected
+
+        # @private
+        # @return [Saklient::Cloud::Resource::DiskPlan]
+        attr_accessor :_hdd
+
+        # @private
+        # @return [Saklient::Cloud::Resource::DiskPlan]
+        def get_hdd
+          @_hdd = get_by_id('2') if (@_hdd).nil?
+          return @_hdd
+        end
+
+        public
+
+        # 標準プラン
+        #
+        # @return [Saklient::Cloud::Resource::DiskPlan]
+        attr_reader :hdd
+
+        def hdd
+          get_hdd
+        end
+
+        protected
+
+        # @private
+        # @return [Saklient::Cloud::Resource::DiskPlan]
+        attr_accessor :_ssd
+
+        # @private
+        # @return [Saklient::Cloud::Resource::DiskPlan]
+        def get_ssd
+          @_ssd = get_by_id('4') if (@_ssd).nil?
+          return @_ssd
+        end
+
+        public
+
+        # SSDプラン
+        #
+        # @return [Saklient::Cloud::Resource::DiskPlan]
+        attr_reader :ssd
+
+        def ssd
+          get_ssd
         end
 
       end

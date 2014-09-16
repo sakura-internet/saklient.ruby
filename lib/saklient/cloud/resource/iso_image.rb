@@ -638,7 +638,7 @@ module Saklient
           if withClean || @n_size_mib
             Saklient::Util::set_by_path(ret, 'SizeMB', @m_size_mib)
           else
-            missing << 'sizeMib' if @is_new
+            missing << 'size_mib' if @is_new
           end
           Saklient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the IsoImage creation: ' + missing.join(', ')) if missing.length > 0

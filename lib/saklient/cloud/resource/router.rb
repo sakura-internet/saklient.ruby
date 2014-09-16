@@ -488,12 +488,12 @@ module Saklient
           if withClean || @n_network_mask_len
             Saklient::Util::set_by_path(ret, 'NetworkMaskLen', @m_network_mask_len)
           else
-            missing << 'networkMaskLen' if @is_new
+            missing << 'network_mask_len' if @is_new
           end
           if withClean || @n_band_width_mbps
             Saklient::Util::set_by_path(ret, 'BandWidthMbps', @m_band_width_mbps)
           else
-            missing << 'bandWidthMbps' if @is_new
+            missing << 'band_width_mbps' if @is_new
           end
           Saklient::Util::set_by_path(ret, 'Switch.ID', @m_swytch_id) if withClean || @n_swytch_id
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Router creation: ' + missing.join(', ')) if missing.length > 0

@@ -588,15 +588,32 @@ module Saklient
           return @m_plan
         end
 
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [DiskPlan] v
+        # @return [DiskPlan]
+        def set_plan(v)
+          Saklient::Util::validate_type(v, 'Saklient::Cloud::Resource::DiskPlan')
+          raise Saklient::Errors::SaklientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saklient::Cloud::Resource::Disk#plan') if !@is_new
+          @m_plan = v
+          @n_plan = true
+          return @m_plan
+        end
+
         public
 
         # プラン
         #
         # @return [DiskPlan]
-        attr_reader :plan
+        attr_accessor :plan
 
         def plan
           get_plan
+        end
+
+        def plan=(v)
+          set_plan(v)
         end
 
         protected

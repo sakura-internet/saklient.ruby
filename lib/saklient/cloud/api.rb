@@ -351,12 +351,16 @@ module Saklient
       #
       # @param [String] token ACCESS TOKEN
       # @param [String] secret ACCESS TOKEN SECRET
+      # @param [String] zone
       # @return [API] APIクライアント
-      def self.authorize(token, secret)
+      def self.authorize(token, secret, zone = nil)
         Saklient::Util::validate_type(token, 'String')
         Saklient::Util::validate_type(secret, 'String')
+        Saklient::Util::validate_type(zone, 'String')
         c = Saklient::Cloud::Client.new(token, secret)
-        return Saklient::Cloud::API.new(c)
+        ret = Saklient::Cloud::API.new(c)
+        ret = ret.in_zone(zone) if !(zone).nil?
+        return ret
       end
 
       # 認証情報を引き継ぎ, 指定したゾーンへのアクセスを行うAPIクライアントを作成します.
@@ -366,6 +370,9 @@ module Saklient
       def in_zone(name)
         Saklient::Util::validate_type(name, 'String')
         ret = Saklient::Cloud::API.new(@_client.clone_instance)
+        suffix = ''
+        suffix = '-test' if name == 'is1x' || name == 'is1y'
+        ret._client.set_api_root('https://secure.sakura.ad.jp/cloud' + suffix + '/')
         ret._client.set_api_root_suffix('zone/' + name)
         return ret
       end

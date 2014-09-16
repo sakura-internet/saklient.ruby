@@ -99,8 +99,8 @@ module Saklient
         def get_by_spec(cores, memoryGib)
           Saklient::Util::validate_type(cores, 'Fixnum')
           Saklient::Util::validate_type(memoryGib, 'Fixnum')
-          _filter_by('CPU', cores, true)
-          _filter_by('MemoryMB', memoryGib * 1024, true)
+          _filter_by('CPU', [cores])
+          _filter_by('MemoryMB', [memoryGib * 1024])
           return _find_one
         end
 

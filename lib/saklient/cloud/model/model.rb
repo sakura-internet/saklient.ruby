@@ -2,6 +2,7 @@
 
 require_relative '../client'
 require_relative '../resource/resource'
+require_relative '../../errors/saklient_exception'
 
 module Saklient
   module Cloud
@@ -35,21 +36,21 @@ module Saklient
 
         # @private
         # @return [TQueryParams]
-        attr_accessor :_params
+        attr_accessor :_query
 
         # @private
         # @return [TQueryParams]
-        def get_params
-          return @_params
+        def get_query
+          return @_query
         end
 
         public
 
         # @return [TQueryParams]
-        attr_reader :params
+        attr_reader :query
 
-        def params
-          get_params
+        def query
+          get_query
         end
 
         protected
@@ -138,7 +139,7 @@ module Saklient
         # @return [Model] this
         def _offset(offset)
           Saklient::Util::validate_type(offset, 'Fixnum')
-          @_params[:Begin] = offset
+          @_query[:Begin] = offset
           return self
         end
 
@@ -149,7 +150,7 @@ module Saklient
         # @return [Model] this
         def _limit(count)
           Saklient::Util::validate_type(count, 'Fixnum')
-          @_params[:Count] = count
+          @_query[:Count] = count
           return self
         end
 
@@ -162,8 +163,8 @@ module Saklient
         def _sort(column, reverse = false)
           Saklient::Util::validate_type(column, 'String')
           Saklient::Util::validate_type(reverse, 'bool')
-          @_params[:Sort] = [] if !(!@_params.nil? && @_params.key?(:Sort))
-          sort = @_params[:Sort]
+          @_query[:Sort] = [] if !(!@_query.nil? && @_query.key?(:Sort))
+          sort = @_query[:Sort]
           op = reverse ? '-' : ''
           sort << op + column
           return self
@@ -179,13 +180,14 @@ module Saklient
         def _filter_by(key, value, multiple = false)
           Saklient::Util::validate_type(key, 'String')
           Saklient::Util::validate_type(multiple, 'bool')
-          @_params[:Filter] = {} if !(!@_params.nil? && @_params.key?(:Filter))
-          filter = @_params[:Filter]
+          @_query[:Filter] = {} if !(!@_query.nil? && @_query.key?(:Filter))
+          filter = @_query[:Filter]
           if multiple
             filter[key.to_sym] = [] if !(!filter.nil? && filter.key?(key.to_sym))
             values = filter[key.to_sym]
             values << value
           else
+            raise Saklient::Errors::SaklientException.new('filter_duplicated', 'The same filter key can be specified only once (by calling the same method \'withFooBar\')') if !filter.nil? && filter.key?(key.to_sym)
             filter[key.to_sym] = value
           end
           return self
@@ -196,7 +198,7 @@ module Saklient
         # @private
         # @return [Model] this
         def _reset
-          @_params = { Count: 0 }
+          @_query = { Count: 0 }
           @_total = 0
           @_count = 0
           return self
@@ -219,9 +221,9 @@ module Saklient
         # @return [Saklient::Cloud::Resource::Resource] リソースオブジェクト
         def _get_by_id(id)
           Saklient::Util::validate_type(id, 'String')
-          params = @_params
+          query = @_query
           _reset
-          result = @_client.request('GET', _api_path + '/' + Saklient::Util::url_encode(id), params)
+          result = @_client.request('GET', _api_path + '/' + Saklient::Util::url_encode(id), query)
           @_total = 1
           @_count = 1
           return Saklient::Util::create_class_instance('saklient.cloud.resource.' + _class_name, [
@@ -236,9 +238,9 @@ module Saklient
         # @private
         # @return [Array<Saklient::Cloud::Resource::Resource>] リソースオブジェクトの配列
         def _find
-          params = @_params
+          query = @_query
           _reset
-          result = @_client.request('GET', _api_path, params)
+          result = @_client.request('GET', _api_path, query)
           @_total = result[:Total]
           @_count = result[:Count]
           records = result[_root_key_m.to_sym]
@@ -255,9 +257,9 @@ module Saklient
         # @private
         # @return [Saklient::Cloud::Resource::Resource] リソースオブジェクト
         def _find_one
-          params = @_params
+          query = @_query
           _reset
-          result = @_client.request('GET', _api_path, params)
+          result = @_client.request('GET', _api_path, query)
           @_total = result[:Total]
           @_count = result[:Count]
           return nil if @_total == 0
@@ -271,11 +273,12 @@ module Saklient
         # 半角スペースで区切られた複数の文字列は, それらをすべて含むことが条件とみなされます.
         #
         # @private
+        # @todo Implement test case
         # @param [String] name
         # @return [Model]
         def _with_name_like(name)
           Saklient::Util::validate_type(name, 'String')
-          return _filter_by('Name', name)
+          return _filter_by('Name', [name])
         end
 
         # 指定したタグを持つリソースに絞り込みます.
@@ -283,26 +286,40 @@ module Saklient
         # 複数のタグを指定する場合は withTags() を利用してください.
         #
         # @private
+        # @todo Implement test case
         # @param [String] tag
         # @return [Model]
         def _with_tag(tag)
           Saklient::Util::validate_type(tag, 'String')
-          return _filter_by('Tags.Name', tag, true)
+          return _filter_by('Tags.Name', [tag])
         end
 
         # 指定したすべてのタグを持つリソースに絞り込みます.
         #
         # @private
+        # @todo Implement test case
         # @param [Array<String>] tags
         # @return [Model]
         def _with_tags(tags)
           Saklient::Util::validate_type(tags, 'Array')
-          return _filter_by('Tags.Name', tags, true)
+          return _filter_by('Tags.Name', [tags])
+        end
+
+        # 指定したDNFに合致するタグを持つリソースに絞り込みます.
+        #
+        # @private
+        # @todo Implement test case
+        # @param [Array<Array<String>>] dnf
+        # @return [Model]
+        def _with_tag_dnf(dnf)
+          Saklient::Util::validate_type(dnf, 'Array')
+          return _filter_by('Tags.Name', dnf)
         end
 
         # 名前でソートします.
         #
         # @private
+        # @todo Implement test case
         # @param [bool] reverse
         # @return [Model]
         def _sort_by_name(reverse = false)

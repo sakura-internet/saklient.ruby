@@ -97,6 +97,7 @@ module Saklient
         # 大文字・小文字は区別されません.
         # 半角スペースで区切られた複数の文字列は, それらをすべて含むことが条件とみなされます.
         #
+        # @todo Implement test case
         # @param [String] name
         # @return [Model_Icon]
         def with_name_like(name)
@@ -108,6 +109,7 @@ module Saklient
         #
         # 複数のタグを指定する場合は withTags() を利用してください.
         #
+        # @todo Implement test case
         # @param [String] tag
         # @return [Model_Icon]
         def with_tag(tag)
@@ -117,6 +119,7 @@ module Saklient
 
         # 指定したすべてのタグを持つリソースに絞り込みます.
         #
+        # @todo Implement test case
         # @param [Array<String>] tags
         # @return [Model_Icon]
         def with_tags(tags)
@@ -124,8 +127,19 @@ module Saklient
           return _with_tags(tags)
         end
 
+        # 指定したDNFに合致するタグを持つリソースに絞り込みます.
+        #
+        # @todo Implement test case
+        # @param [Array<Array<String>>] dnf
+        # @return [Model_Icon]
+        def with_tag_dnf(dnf)
+          Saklient::Util::validate_type(dnf, 'Array')
+          return _with_tag_dnf(dnf)
+        end
+
         # 名前でソートします.
         #
+        # @todo Implement test case
         # @param [bool] reverse
         # @return [Model_Icon]
         def sort_by_name(reverse = false)
@@ -137,7 +151,7 @@ module Saklient
         #
         # @return [Model_Icon]
         def with_shared_scope
-          _filter_by('Scope', Saklient::Cloud::Enums::EScope::shared)
+          _filter_by('Scope', [Saklient::Cloud::Enums::EScope::shared])
           return self
         end
 
@@ -145,7 +159,7 @@ module Saklient
         #
         # @return [Model_Icon]
         def with_user_scope
-          _filter_by('Scope', Saklient::Cloud::Enums::EScope::user)
+          _filter_by('Scope', [Saklient::Cloud::Enums::EScope::user])
           return self
         end
 
