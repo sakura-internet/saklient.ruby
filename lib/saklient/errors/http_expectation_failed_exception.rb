@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Expectation Failed.
     class HttpExpectationFailedException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Expectation Failed.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Expectation Failed.' : message)
       end
 
     end

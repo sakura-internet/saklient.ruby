@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Locked.
     class HttpLockedException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Locked.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Locked.' : message)
       end
 
     end

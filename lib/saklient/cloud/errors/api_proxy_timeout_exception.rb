@@ -9,13 +9,11 @@ module Saklient
       # APIプロクシがタイムアウトしました. サーバが混雑している可能性があります.
       class ApiProxyTimeoutException < Saklient::Errors::HttpGatewayTimeoutException
 
-        # (static var) @@default_message = 'APIプロクシがタイムアウトしました。サーバが混雑している可能性があります。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'APIプロクシがタイムアウトしました。サーバが混雑している可能性があります。' : message)
         end
 
       end

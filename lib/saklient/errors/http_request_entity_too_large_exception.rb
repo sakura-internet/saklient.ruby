@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Request Entity Too Large.
     class HttpRequestEntityTooLargeException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Request Entity Too Large.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Request Entity Too Large.' : message)
       end
 
     end

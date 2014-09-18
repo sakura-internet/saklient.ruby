@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Length Required.
     class HttpLengthRequiredException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Length Required.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Length Required.' : message)
       end
 
     end

@@ -12,9 +12,6 @@ module Saklient
       # @return [String]
       attr_accessor :code
 
-      # @return [String]
-      attr_accessor :message
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
@@ -22,7 +19,6 @@ module Saklient
         super(message)
         @status = status
         @code = code
-        @message = message
       end
 
     end

@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Proxy Authentication Required.
     class HttpProxyAuthenticationRequiredException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Proxy Authentication Required.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Proxy Authentication Required.' : message)
       end
 
     end

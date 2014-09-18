@@ -9,13 +9,11 @@ module Saklient
       # 要求された操作を行えません. このストレージ上への指定リソースの複製は実行されていません.
       class NotReplicatingException < Saklient::Errors::HttpConflictException
 
-        # (static var) @@default_message = '要求された操作を行えません。このストレージ上への指定リソースの複製は実行されていません。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '要求された操作を行えません。このストレージ上への指定リソースの複製は実行されていません。' : message)
         end
 
       end

@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Bad Gateway.
     class HttpBadGatewayException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Bad Gateway.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Bad Gateway.' : message)
       end
 
     end

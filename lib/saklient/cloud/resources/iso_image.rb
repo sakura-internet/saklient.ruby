@@ -207,7 +207,7 @@ module Saklient
         # @return [IsoImage] this
         def close_ftp
           path = _api_path + '/' + Saklient::Util::url_encode(_id) + '/ftp'
-          result = @_client.request('DELETE', path)
+          @_client.request('DELETE', path)
           @_ftp_info = nil
           return self
         end

@@ -11,6 +11,8 @@ require_relative 'server_instance'
 require_relative 'iso_image'
 require_relative '../enums/eserver_instance_status'
 require_relative '../enums/eavailability'
+require_relative '../models/model_disk'
+require_relative '../models/model_iface'
 
 module Saklient
   module Cloud
@@ -275,7 +277,7 @@ module Saklient
           Saklient::Util::validate_type(iso, 'Saklient::Cloud::Resources::IsoImage')
           path = _api_path + '/' + Saklient::Util::url_encode(_id) + '/cdrom'
           q = { CDROM: { ID: iso._id } }
-          result = @_client.request('PUT', path, q)
+          @_client.request('PUT', path, q)
           reload
           return self
         end
@@ -285,7 +287,7 @@ module Saklient
         # @return [Server] this
         def eject_iso_image
           path = _api_path + '/' + Saklient::Util::url_encode(_id) + '/cdrom'
-          result = @_client.request('DELETE', path)
+          @_client.request('DELETE', path)
           reload
           return self
         end

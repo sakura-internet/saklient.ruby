@@ -9,13 +9,11 @@ module Saklient
       # 要求された操作を行えません. このディスクへのコピー処理が進行中です. 完了後に再度お試しください.
       class DiskIsCopyingException < Saklient::Errors::HttpConflictException
 
-        # (static var) @@default_message = '要求された操作を行えません。このディスクへのコピー処理が進行中です。完了後に再度お試しください。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '要求された操作を行えません。このディスクへのコピー処理が進行中です。完了後に再度お試しください。' : message)
         end
 
       end

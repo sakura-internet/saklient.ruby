@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Payment Required.
     class HttpPaymentRequiredException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Payment Required.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Payment Required.' : message)
       end
 
     end

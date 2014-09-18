@@ -9,13 +9,11 @@ module Saklient
       # 要求された操作は許可されていません. このゾーンではこの操作は禁止されています. 他のゾーンでお試しください.
       class DisabledInSandboxException < Saklient::Errors::HttpForbiddenException
 
-        # (static var) @@default_message = '要求された操作は許可されていません。このゾーンではこの操作は禁止されています。他のゾーンでお試しください。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '要求された操作は許可されていません。このゾーンではこの操作は禁止されています。他のゾーンでお試しください。' : message)
         end
 
       end

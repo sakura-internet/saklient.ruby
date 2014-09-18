@@ -268,7 +268,11 @@ module Saklient
               if !(s).nil?
                 id = s[:ID]
                 if !(id).nil?
-                  obj = Saklient::Util::create_class_instance('saklient.cloud.resources.Disk', [@_client, s])
+                  obj = Saklient::Util::create_class_instance('saklient.cloud.resources.Disk', [
+                    @_client,
+                    s,
+                    false
+                  ])
                   @_source = obj
                 end
               end
@@ -322,7 +326,7 @@ module Saklient
         # @return [Archive] this
         def close_ftp
           path = _api_path + '/' + Saklient::Util::url_encode(_id) + '/ftp'
-          result = @_client.request('DELETE', path)
+          @_client.request('DELETE', path)
           @_ftp_info = nil
           return self
         end

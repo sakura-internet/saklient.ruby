@@ -359,8 +359,7 @@ module Saklient
         Saklient::Util::validate_type(zone, 'String')
         c = Saklient::Cloud::Client.new(token, secret)
         ret = Saklient::Cloud::API.new(c)
-        ret = ret.in_zone(zone) if !(zone).nil?
-        return ret
+        return !(zone).nil? ? ret.in_zone(zone) : ret
       end
 
       # 認証情報を引き継ぎ, 指定したゾーンへのアクセスを行うAPIクライアントを作成します.

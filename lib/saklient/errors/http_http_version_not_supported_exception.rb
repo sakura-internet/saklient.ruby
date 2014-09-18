@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Http Version Not Supported.
     class HttpHttpVersionNotSupportedException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Http Version Not Supported.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Http Version Not Supported.' : message)
       end
 
     end

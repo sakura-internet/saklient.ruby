@@ -9,13 +9,11 @@ module Saklient
       # お客様のご都合により操作を受け付けることができません.
       class PaymentUnpayableException < Saklient::Errors::HttpPaymentRequiredException
 
-        # (static var) @@default_message = 'お客様のご都合により操作を受け付けることができません。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'お客様のご都合により操作を受け付けることができません。' : message)
         end
 
       end

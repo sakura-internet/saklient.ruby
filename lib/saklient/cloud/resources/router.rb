@@ -7,6 +7,7 @@ require_relative 'icon'
 require_relative 'swytch'
 require_relative 'ipv4_net'
 require_relative 'ipv6_net'
+require_relative '../models/model_swytch'
 
 module Saklient
   module Cloud

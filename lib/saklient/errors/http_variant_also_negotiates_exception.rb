@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Variant Also Negotiates.
     class HttpVariantAlsoNegotiatesException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Variant Also Negotiates.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Variant Also Negotiates.' : message)
       end
 
     end

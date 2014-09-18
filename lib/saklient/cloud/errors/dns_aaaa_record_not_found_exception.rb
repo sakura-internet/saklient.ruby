@@ -9,13 +9,11 @@ module Saklient
       # 不適切な要求です. 対応するAAAAレコードが見つかりません.
       class DnsAaaaRecordNotFoundException < Saklient::Errors::HttpBadRequestException
 
-        # (static var) @@default_message = '不適切な要求です。対応するAAAAレコードが見つかりません。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '不適切な要求です。対応するAAAAレコードが見つかりません。' : message)
         end
 
       end

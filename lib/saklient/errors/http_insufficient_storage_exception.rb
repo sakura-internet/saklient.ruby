@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Insufficient Storage.
     class HttpInsufficientStorageException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Insufficient Storage.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Insufficient Storage.' : message)
       end
 
     end

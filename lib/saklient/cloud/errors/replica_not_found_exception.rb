@@ -9,13 +9,11 @@ module Saklient
       # 対象が見つかりません. このストレージには指定リソースの複製が存在しません.
       class ReplicaNotFoundException < Saklient::Errors::HttpNotFoundException
 
-        # (static var) @@default_message = '対象が見つかりません。このストレージには指定リソースの複製が存在しません。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '対象が見つかりません。このストレージには指定リソースの複製が存在しません。' : message)
         end
 
       end

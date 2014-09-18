@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Request Uri Too Long.
     class HttpRequestUriTooLongException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Request Uri Too Long.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Request Uri Too Long.' : message)
       end
 
     end

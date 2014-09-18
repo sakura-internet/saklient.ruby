@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Not Extended.
     class HttpNotExtendedException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Not Extended.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Not Extended.' : message)
       end
 
     end

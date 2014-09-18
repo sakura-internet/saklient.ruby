@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Gateway Timeout.
     class HttpGatewayTimeoutException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Gateway Timeout.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Gateway Timeout.' : message)
       end
 
     end

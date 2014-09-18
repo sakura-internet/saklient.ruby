@@ -9,13 +9,11 @@ module Saklient
       # 要求された操作は許可されていません. このAPIはユーザを特定できる認証方法でアクセスする必要があります.
       class UserNotSpecifiedException < Saklient::Errors::HttpForbiddenException
 
-        # (static var) @@default_message = '要求された操作は許可されていません。このAPIはユーザを特定できる認証方法でアクセスする必要があります。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '要求された操作は許可されていません。このAPIはユーザを特定できる認証方法でアクセスする必要があります。' : message)
         end
 
       end

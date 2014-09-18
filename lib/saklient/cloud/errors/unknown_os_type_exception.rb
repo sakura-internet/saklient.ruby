@@ -9,13 +9,11 @@ module Saklient
       # サービスが利用できません. ディスクにインストールされたOSが特定できないため, 正しく修正できません.
       class UnknownOsTypeException < Saklient::Errors::HttpServiceUnavailableException
 
-        # (static var) @@default_message = 'サービスが利用できません。ディスクにインストールされたOSが特定できないため、正しく修正できません。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'サービスが利用できません。ディスクにインストールされたOSが特定できないため、正しく修正できません。' : message)
         end
 
       end

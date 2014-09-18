@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Upgrade Required.
     class HttpUpgradeRequiredException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Upgrade Required.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Upgrade Required.' : message)
       end
 
     end

@@ -9,13 +9,11 @@ module Saklient
       # 要求された操作を行えません. ISOイメージが無効化されています. 排出後に再度お試しください.
       class CdromDisabledException < Saklient::Errors::HttpConflictException
 
-        # (static var) @@default_message = '要求された操作を行えません。ISOイメージが無効化されています。排出後に再度お試しください。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '要求された操作を行えません。ISOイメージが無効化されています。排出後に再度お試しください。' : message)
         end
 
       end

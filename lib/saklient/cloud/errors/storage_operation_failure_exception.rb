@@ -9,13 +9,11 @@ module Saklient
       # サービスが利用できません. ストレージの操作に失敗しました. サーバが混雑している可能性があります.
       class StorageOperationFailureException < Saklient::Errors::HttpServiceUnavailableException
 
-        # (static var) @@default_message = 'サービスが利用できません。ストレージの操作に失敗しました。サーバが混雑している可能性があります。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'サービスが利用できません。ストレージの操作に失敗しました。サーバが混雑している可能性があります。' : message)
         end
 
       end

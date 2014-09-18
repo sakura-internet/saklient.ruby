@@ -342,7 +342,7 @@ module Saklient
             Saklient::Util::set_by_path(q, 'Notes', notes)
           end
           path = '/disk/' + @_disk_id + '/config'
-          result = @_client.request('PUT', path, q)
+          @_client.request('PUT', path, q)
           return self
         end
 

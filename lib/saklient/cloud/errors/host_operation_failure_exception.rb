@@ -9,13 +9,11 @@ module Saklient
       # サービスが利用できません. サーバの操作に失敗しました. このエラーが繰り返し発生する場合は, メンテナンス情報, サポートサイトをご確認ください.
       class HostOperationFailureException < Saklient::Errors::HttpServiceUnavailableException
 
-        # (static var) @@default_message = 'サービスが利用できません。サーバの操作に失敗しました。このエラーが繰り返し発生する場合は、メンテナンス情報、サポートサイトをご確認ください。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'サービスが利用できません。サーバの操作に失敗しました。このエラーが繰り返し発生する場合は、メンテナンス情報、サポートサイトをご確認ください。' : message)
         end
 
       end

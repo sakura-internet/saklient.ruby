@@ -17,7 +17,7 @@ module Saklient
         # @return [any]
         attr_accessor :filter
 
-        # @return [Array]
+        # @return [Array<String>]
         attr_accessor :sort
 
         def initialize

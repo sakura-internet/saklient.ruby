@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Failed Dependency.
     class HttpFailedDependencyException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Failed Dependency.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Failed Dependency.' : message)
       end
 
     end

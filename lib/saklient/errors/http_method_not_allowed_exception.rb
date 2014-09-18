@@ -8,13 +8,11 @@ module Saklient
     # 要求されたHTTPメソッドは対応していません.
     class HttpMethodNotAllowedException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = '要求されたHTTPメソッドは対応していません。'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? '要求されたHTTPメソッドは対応していません。' : message)
       end
 
     end

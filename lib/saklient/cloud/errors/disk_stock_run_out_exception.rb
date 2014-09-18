@@ -9,13 +9,11 @@ module Saklient
       # サービスが利用できません. 作成済みディスクを確保できませんでした. サーバが混雑している可能性があります.
       class DiskStockRunOutException < Saklient::Errors::HttpServiceUnavailableException
 
-        # (static var) @@default_message = 'サービスが利用できません。作成済みディスクを確保できませんでした。サーバが混雑している可能性があります。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'サービスが利用できません。作成済みディスクを確保できませんでした。サーバが混雑している可能性があります。' : message)
         end
 
       end

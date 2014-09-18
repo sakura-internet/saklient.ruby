@@ -8,13 +8,11 @@ module Saklient
     # HTTPエラー. Request Timeout.
     class HttpRequestTimeoutException < Saklient::Errors::HttpException
 
-      # (static var) @@default_message = 'HTTPエラー。Request Timeout.'
-
       # @param [Fixnum] status
       # @param [String] code
       # @param [String] message
       def initialize(status, code = nil, message = '')
-        super(status, code, message)
+        super(status, code, (message).nil? || message == '' ? 'HTTPエラー。Request Timeout.' : message)
       end
 
     end

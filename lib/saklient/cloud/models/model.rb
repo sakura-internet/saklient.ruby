@@ -209,7 +209,11 @@ module Saklient
         # @private
         # @return [Saklient::Cloud::Resources::Resource] リソースオブジェクト
         def _create
-          a = [@_client, nil]
+          a = [
+            @_client,
+            nil,
+            false
+          ]
           return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
         end
 
@@ -225,11 +229,12 @@ module Saklient
           result = @_client.request('GET', _api_path + '/' + Saklient::Util::url_encode(id), query)
           @_total = 1
           @_count = 1
-          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, [
+          a = [
             @_client,
             result,
             true
-          ])
+          ]
+          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
@@ -242,10 +247,14 @@ module Saklient
           result = @_client.request('GET', _api_path, query)
           @_total = result[:Total]
           @_count = result[:Count]
-          records = result[_root_key_m.to_sym]
           data = []
+          records = result[_root_key_m.to_sym]
           for record in records
-            a = [@_client, record]
+            a = [
+              @_client,
+              record,
+              false
+            ]
             i = Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
             data << i
           end
@@ -264,7 +273,12 @@ module Saklient
           @_count = result[:Count]
           return nil if @_total == 0
           records = result[_root_key_m.to_sym]
-          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, [@_client, records[0]])
+          a = [
+            @_client,
+            records[0],
+            false
+          ]
+          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
         end
 
         # 指定した文字列を名前に含むリソースに絞り込みます.

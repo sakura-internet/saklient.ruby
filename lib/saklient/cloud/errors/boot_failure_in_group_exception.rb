@@ -9,13 +9,11 @@ module Saklient
       # サービスが利用できません. サーバ起動グループ指定に問題がある可能性があります.
       class BootFailureInGroupException < Saklient::Errors::HttpServiceUnavailableException
 
-        # (static var) @@default_message = 'サービスが利用できません。サーバ起動グループ指定に問題がある可能性があります。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'サービスが利用できません。サーバ起動グループ指定に問題がある可能性があります。' : message)
         end
 
       end

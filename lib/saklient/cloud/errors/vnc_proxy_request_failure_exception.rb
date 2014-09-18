@@ -9,13 +9,11 @@ module Saklient
       # サービスが利用できません. VNCプロクシの要求に失敗しました.
       class VncProxyRequestFailureException < Saklient::Errors::HttpServiceUnavailableException
 
-        # (static var) @@default_message = 'サービスが利用できません。VNCプロクシの要求に失敗しました。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? 'サービスが利用できません。VNCプロクシの要求に失敗しました。' : message)
         end
 
       end

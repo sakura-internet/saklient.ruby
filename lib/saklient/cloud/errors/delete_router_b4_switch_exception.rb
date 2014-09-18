@@ -9,13 +9,11 @@ module Saklient
       # 要求された操作を行えません. ルータを削除することでスイッチは同時に削除されます.
       class DeleteRouterB4SwitchException < Saklient::Errors::HttpConflictException
 
-        # (static var) @@default_message = '要求された操作を行えません。ルータを削除することでスイッチは同時に削除されます。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '要求された操作を行えません。ルータを削除することでスイッチは同時に削除されます。' : message)
         end
 
       end

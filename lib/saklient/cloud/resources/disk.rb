@@ -235,7 +235,11 @@ module Saklient
               if !(s).nil?
                 id = s[:ID]
                 if !(id).nil?
-                  obj = Saklient::Util::create_class_instance('saklient.cloud.resources.Archive', [@_client, s])
+                  obj = Saklient::Util::create_class_instance('saklient.cloud.resources.Archive', [
+                    @_client,
+                    s,
+                    false
+                  ])
                   @_source = obj
                 end
               end

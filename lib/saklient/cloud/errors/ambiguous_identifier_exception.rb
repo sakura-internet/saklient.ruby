@@ -9,13 +9,11 @@ module Saklient
       # 対象が見つかりません. 識別名から一意にリソースを特定できません.
       class AmbiguousIdentifierException < Saklient::Errors::HttpNotFoundException
 
-        # (static var) @@default_message = '対象が見つかりません。識別名から一意にリソースを特定できません。'
-
         # @param [Fixnum] status
         # @param [String] code
         # @param [String] message
         def initialize(status, code = nil, message = '')
-          super(status, code, message)
+          super(status, code, (message).nil? || message == '' ? '対象が見つかりません。識別名から一意にリソースを特定できません。' : message)
         end
 
       end
