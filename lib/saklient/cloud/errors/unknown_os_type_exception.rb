@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = 'サービスが利用できません。ディスクにインストールされたOSが特定できないため、正しく修正できません。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

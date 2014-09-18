@@ -209,7 +209,8 @@ module Saklient
         # @private
         # @return [Saklient::Cloud::Resources::Resource] リソースオブジェクト
         def _create
-          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, [@_client, nil])
+          a = [@_client, nil]
+          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.
@@ -244,7 +245,8 @@ module Saklient
           records = result[_root_key_m.to_sym]
           data = []
           for record in records
-            i = Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, [@_client, record])
+            a = [@_client, record]
+            i = Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
             data << i
           end
           return data

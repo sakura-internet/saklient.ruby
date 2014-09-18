@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '予期しないエラーが発生しました。このエラーが繰り返し発生する場合は、サポートサイトやメンテナンス情報をご確認ください。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

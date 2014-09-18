@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = 'お客様のご都合により操作を受け付けることができません。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

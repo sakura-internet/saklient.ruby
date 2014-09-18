@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = 'サービスが利用できません。この機能は一時的に利用できない状態にあります。メンテナンス情報、サポートサイトをご確認ください。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

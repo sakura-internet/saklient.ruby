@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '要求された操作を行えません。リソースが既に存在するか、リソース同士が既に関連付けられています。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

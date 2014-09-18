@@ -10,6 +10,13 @@ module Saklient
 
       # (static var) @@default_message = '対象が見つかりません。対象は利用できない状態か、IDまたはパスに誤りがあります。'
 
+      # @param [Fixnum] status
+      # @param [String] code
+      # @param [String] message
+      def initialize(status, code = nil, message = '')
+        super(status, code, message)
+      end
+
     end
 
   end

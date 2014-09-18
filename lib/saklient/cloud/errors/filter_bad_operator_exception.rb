@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '不適切な要求です。フィールドの型に対応していない演算子がフィルタ中に含まれています。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

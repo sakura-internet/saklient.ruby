@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../client'
 require_relative 'model'
 require_relative '../resources/router_plan'
 
@@ -89,6 +90,13 @@ module Saklient
         # @return [Array<Saklient::Cloud::Resources::RouterPlan>] リソースオブジェクトの配列
         def find
           return _find
+        end
+
+        # @private
+        # @param [Saklient::Cloud::Client] client
+        def initialize(client)
+          super(client)
+          Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
         end
 
       end

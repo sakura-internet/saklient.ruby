@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+require_relative '../client'
 require_relative 'model'
 require_relative '../resources/server'
 require_relative '../resources/server_plan'
@@ -156,6 +157,13 @@ module Saklient
         def sort_by_name(reverse = false)
           Saklient::Util::validate_type(reverse, 'bool')
           return _sort_by_name(reverse)
+        end
+
+        # @private
+        # @param [Saklient::Cloud::Client] client
+        def initialize(client)
+          super(client)
+          Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
         end
 
         # 指定したプランのサーバに絞り込みます.

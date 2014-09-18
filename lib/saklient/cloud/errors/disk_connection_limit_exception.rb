@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '要求された操作を行えません。この接続インタフェースにこれ以上のディスクを接続することができません。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

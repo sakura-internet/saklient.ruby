@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '不適切な要求です。対応するAレコードが見つかりません。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

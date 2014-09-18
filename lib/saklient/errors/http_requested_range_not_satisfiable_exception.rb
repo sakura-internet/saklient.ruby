@@ -10,6 +10,13 @@ module Saklient
 
       # (static var) @@default_message = 'HTTPエラー。Requested Range Not Satisfiable.'
 
+      # @param [Fixnum] status
+      # @param [String] code
+      # @param [String] message
+      def initialize(status, code = nil, message = '')
+        super(status, code, message)
+      end
+
     end
 
   end

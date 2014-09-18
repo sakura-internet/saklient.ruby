@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '不適切な要求です。この種類のリソースは要求された操作に対応しません。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

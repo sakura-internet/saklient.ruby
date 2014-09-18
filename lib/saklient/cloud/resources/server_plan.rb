@@ -85,7 +85,8 @@ module Saklient
         # @private
         # @return [Fixnum]
         def get_memory_gib
-          return get_memory_mib >> 10
+          memoryMib = get_memory_mib
+          return (memoryMib).nil? ? nil : memoryMib >> 10
         end
 
         public

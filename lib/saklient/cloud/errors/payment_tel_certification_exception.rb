@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '要求を受け付けできません。電話認証を先に実行してください。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

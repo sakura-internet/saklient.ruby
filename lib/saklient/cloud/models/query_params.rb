@@ -1,5 +1,6 @@
 # -*- encoding: UTF-8 -*-
 
+
 module Saklient
   module Cloud
     module Models
@@ -16,7 +17,7 @@ module Saklient
         # @return [any]
         attr_accessor :filter
 
-        # @return [Array<String>]
+        # @return [Array]
         attr_accessor :sort
 
         def initialize

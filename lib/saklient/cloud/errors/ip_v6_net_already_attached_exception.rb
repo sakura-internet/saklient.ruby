@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '要求された操作を行えません。ConnectedなIPv6ネットワークが既に割り当て済みです。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

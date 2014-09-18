@@ -11,6 +11,13 @@ module Saklient
 
         # (static var) @@default_message = '要求を受け付けできません。ネットワーク内リソース数上限により、リソースの割り当てに失敗しました。'
 
+        # @param [Fixnum] status
+        # @param [String] code
+        # @param [String] message
+        def initialize(status, code = nil, message = '')
+          super(status, code, message)
+        end
+
       end
 
     end

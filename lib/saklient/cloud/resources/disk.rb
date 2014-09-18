@@ -151,7 +151,8 @@ module Saklient
         # @private
         # @return [Fixnum]
         def get_size_gib
-          return get_size_mib >> 10
+          sizeMib = get_size_mib
+          return (sizeMib).nil? ? nil : sizeMib >> 10
         end
 
         # @private
@@ -159,7 +160,7 @@ module Saklient
         # @return [Fixnum]
         def set_size_gib(sizeGib)
           Saklient::Util::validate_type(sizeGib, 'Fixnum')
-          set_size_mib(sizeGib * 1024)
+          set_size_mib((sizeGib).nil? ? nil : sizeGib * 1024)
           return sizeGib
         end
 

@@ -60,6 +60,7 @@ require_relative '../cloud/errors/delete_ip_v6_nets_first_exception'
 require_relative '../cloud/errors/delete_res_b4_account_exception'
 require_relative '../cloud/errors/delete_router_b4_switch_exception'
 require_relative '../cloud/errors/delete_static_route_first_exception'
+require_relative '../cloud/errors/disabled_in_sandbox_exception'
 require_relative '../cloud/errors/disconnect_b4_delete_exception'
 require_relative '../cloud/errors/disconnect_b4_update_exception'
 require_relative '../cloud/errors/disk_connection_limit_exception'
@@ -71,6 +72,7 @@ require_relative '../cloud/errors/disk_stock_run_out_exception'
 require_relative '../cloud/errors/dns_arecord_not_found_exception'
 require_relative '../cloud/errors/dns_aaaa_record_not_found_exception'
 require_relative '../cloud/errors/dns_ptr_update_failure_exception'
+require_relative '../cloud/errors/dont_create_in_sandbox_exception'
 require_relative '../cloud/errors/duplicate_account_code_exception'
 require_relative '../cloud/errors/duplicate_entry_exception'
 require_relative '../cloud/errors/duplicate_user_code_exception'
@@ -222,6 +224,8 @@ module Saklient
             return Saklient::Cloud::Errors::DeleteRouterB4SwitchException.new(status, code, message)
           when 'delete_static_route_first'
             return Saklient::Cloud::Errors::DeleteStaticRouteFirstException.new(status, code, message)
+          when 'disabled_in_sandbox'
+            return Saklient::Cloud::Errors::DisabledInSandboxException.new(status, code, message)
           when 'disconnect_b4_delete'
             return Saklient::Cloud::Errors::DisconnectB4DeleteException.new(status, code, message)
           when 'disconnect_b4_update'
@@ -244,6 +248,8 @@ module Saklient
             return Saklient::Cloud::Errors::DnsAaaaRecordNotFoundException.new(status, code, message)
           when 'dns_ptr_update_failure'
             return Saklient::Cloud::Errors::DnsPtrUpdateFailureException.new(status, code, message)
+          when 'dont_create_in_sandbox'
+            return Saklient::Cloud::Errors::DontCreateInSandboxException.new(status, code, message)
           when 'duplicate_account_code'
             return Saklient::Cloud::Errors::DuplicateAccountCodeException.new(status, code, message)
           when 'duplicate_entry'
