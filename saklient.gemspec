@@ -9,10 +9,10 @@ Gem::Specification.new do |gem|
   gem.version       = Saklient::VERSION
   gem.licenses      = ['MIT']
   gem.authors       = ['townewgokgok']
-  gem.email         = ['townewgokgok@gmail.com']
+  gem.email         = ['dev-support-ml@sakura.ad.jp']
   gem.description   = %q{An easy interface to control your resources on SAKURA Cloud.}
   gem.summary       = %q{SAKURA Internet API Client Library for Ruby}
-  gem.homepage      = 'http://cloud.sakura.ad.jp/'
+  gem.homepage      = 'http://sakura-internet.github.io/saklient.doc/'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

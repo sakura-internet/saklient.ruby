@@ -351,7 +351,7 @@ module Saklient
       #
       # @param [String] token ACCESS TOKEN
       # @param [String] secret ACCESS TOKEN SECRET
-      # @param [String] zone
+      # @param [String] zone ゾーン名
       # @return [API] APIクライアント
       def self.authorize(token, secret, zone = nil)
         Saklient::Util::validate_type(token, 'String')

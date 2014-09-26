@@ -270,7 +270,8 @@ module Saklient
           Saklient::Util::set_by_path(query, 'Filter.ID', [_id])
           Saklient::Util::set_by_path(query, 'Include', ['ID'])
           result = @_client.request('GET', _api_path, query)
-          return result[:Count] == 1
+          cnt = result[:Count]
+          return cnt == 1
         end
 
         # @private
