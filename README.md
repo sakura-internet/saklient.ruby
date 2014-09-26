@@ -9,6 +9,7 @@ This library gives you an easy interface to control your resources on
 <!-- toc -->
 * [Installation](#installation)
 * [How to use this library in your project](#how-to-use-this-library-in-your-project)
+* [Examples](#examples)
 * [Copyright and license](#copyright-and-license)
 
 <!-- toc stop -->
@@ -16,8 +17,7 @@ This library gives you an easy interface to control your resources on
 ## Installation
 
 ```bash
-gem install specific_install
-gem specific_install -l git@github.com:sakura-internet/saklient.rb.git
+gem install saklient
 ```
 
 
@@ -26,13 +26,17 @@ gem specific_install -l git@github.com:sakura-internet/saklient.rb.git
 
 ```ruby
 require 'saklient/cloud/api'
-api = Saklient::Cloud::API.authorize(YOUR_API_TOKEN, YOUR_API_SECRET)
-
-# To access resources in the specified zone
-api_is1b = api.in_zone("is1b")
+api = Saklient::Cloud::API.authorize(YOUR_API_TOKEN, YOUR_API_SECRET, ZONE)
+# ZONE: "is1a" (Ishikari 1st zone), "is1b" (Ishikari 2nd zone), "tk1v" (Sandbox)
+# "tk1v" is recommended for tests
 
 # ...
 ```
+
+
+## Examples
+
+Code examples are available [here](http://sakura-internet.github.io/saklient.doc/).
 
 
 ## Copyright and license
