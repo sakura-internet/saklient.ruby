@@ -51,6 +51,20 @@ module Saklient
         # @return [Array<Iface>]
         attr_accessor :m_ifaces
 
+        # 注釈
+        #
+        # @return [any]
+        attr_accessor :m_annotation
+
+        # 設定の生データ
+        #
+        # @return [any]
+        attr_accessor :m_raw_settings
+
+        # @private
+        # @return [String]
+        attr_accessor :m_raw_settings_hash
+
         # サービスクラス
         #
         # @return [String]
@@ -103,6 +117,17 @@ module Saklient
         end
 
         # @private
+        # @return [String]
+        def true_class_name
+          case (@clazz)
+            when 'loadbalancer'
+              return 'LoadBalancer'
+            when 'vpcrouter'
+              return 'VpcRouter'
+          end
+        end
+
+        # @private
         # @param [Saklient::Cloud::Client] client
         # @param [any] obj
         # @param [bool] wrapped
@@ -112,6 +137,17 @@ module Saklient
           Saklient::Util::validate_type(wrapped, 'bool')
           api_deserialize(obj, wrapped)
         end
+
+        protected
+
+        # @private
+        # @param [any] query
+        # @return [void]
+        def _on_before_save(query)
+          Saklient::Util::set_by_path(query, 'OriginalSettingsHash', @raw_settings_hash)
+        end
+
+        public
 
         # アプライアンスを起動します.
         #
@@ -300,6 +336,7 @@ module Saklient
         # @private
         # @return [Array<String>]
         def get_tags
+          @n_tags = true
           return @m_tags
         end
 
@@ -392,6 +429,93 @@ module Saklient
 
         def ifaces
           get_ifaces
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_annotation
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [any]
+        def get_annotation
+          return @m_annotation
+        end
+
+        public
+
+        # 注釈
+        #
+        # @return [any]
+        attr_reader :annotation
+
+        def annotation
+          get_annotation
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_raw_settings
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [any]
+        def get_raw_settings
+          @n_raw_settings = true
+          return @m_raw_settings
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [any] v
+        # @return [any]
+        def set_raw_settings(v)
+          @m_raw_settings = v
+          @n_raw_settings = true
+          return @m_raw_settings
+        end
+
+        public
+
+        # 設定の生データ
+        #
+        # @return [any]
+        attr_accessor :raw_settings
+
+        def raw_settings
+          get_raw_settings
+        end
+
+        def raw_settings=(v)
+          set_raw_settings(v)
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_raw_settings_hash
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [String]
+        def get_raw_settings_hash
+          return @m_raw_settings_hash
+        end
+
+        public
+
+        # @private
+        # @return [String]
+        attr_reader :raw_settings_hash
+
+        def raw_settings_hash
+          get_raw_settings_hash
         end
 
         protected
@@ -494,6 +618,27 @@ module Saklient
             @is_incomplete = true
           end
           @n_ifaces = false
+          if Saklient::Util::exists_path(r, 'Remark')
+            @m_annotation = Saklient::Util::get_by_path(r, 'Remark')
+          else
+            @m_annotation = nil
+            @is_incomplete = true
+          end
+          @n_annotation = false
+          if Saklient::Util::exists_path(r, 'Settings')
+            @m_raw_settings = Saklient::Util::get_by_path(r, 'Settings')
+          else
+            @m_raw_settings = nil
+            @is_incomplete = true
+          end
+          @n_raw_settings = false
+          if Saklient::Util::exists_path(r, 'SettingsHash')
+            @m_raw_settings_hash = (Saklient::Util::get_by_path(r, 'SettingsHash')).nil? ? nil : Saklient::Util::get_by_path(r, 'SettingsHash').to_s
+          else
+            @m_raw_settings_hash = nil
+            @is_incomplete = true
+          end
+          @n_raw_settings_hash = false
           if Saklient::Util::exists_path(r, 'ServiceClass')
             @m_service_class = (Saklient::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saklient::Util::get_by_path(r, 'ServiceClass').to_s
           else
@@ -539,6 +684,9 @@ module Saklient
               ret[:Interfaces] << v
             end
           end
+          Saklient::Util::set_by_path(ret, 'Remark', @m_annotation) if withClean || @n_annotation
+          Saklient::Util::set_by_path(ret, 'Settings', @m_raw_settings) if withClean || @n_raw_settings
+          Saklient::Util::set_by_path(ret, 'SettingsHash', @m_raw_settings_hash) if withClean || @n_raw_settings_hash
           Saklient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Appliance creation: ' + missing.join(', ')) if missing.length > 0
           return ret

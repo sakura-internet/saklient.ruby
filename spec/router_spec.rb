@@ -48,7 +48,7 @@ describe 'Router' do
   
     #
     swytch = nil
-    if false then
+    if true then
       puts 'ルータ＋スイッチの帯域プランを検索しています...'
       plans = @api.product.router.find
       min_mbps = 0x7FFFFFFF

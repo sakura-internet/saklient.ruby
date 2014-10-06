@@ -406,6 +406,7 @@ module Saklient
         # @private
         # @return [Array<String>]
         def get_tags
+          @n_tags = true
           return @m_tags
         end
 

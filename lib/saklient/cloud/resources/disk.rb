@@ -234,14 +234,7 @@ module Saklient
               s = r[:SourceArchive]
               if !(s).nil?
                 id = s[:ID]
-                if !(id).nil?
-                  obj = Saklient::Util::create_class_instance('saklient.cloud.resources.Archive', [
-                    @_client,
-                    s,
-                    false
-                  ])
-                  @_source = obj
-                end
+                @_source = Saklient::Cloud::Resources::Resource::create_with('Archive', @_client, s) if !(id).nil?
               end
             end
           end
@@ -445,6 +438,7 @@ module Saklient
         # @private
         # @return [Array<String>]
         def get_tags
+          @n_tags = true
           return @m_tags
         end
 

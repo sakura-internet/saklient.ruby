@@ -202,6 +202,15 @@ module Saklient
           return self
         end
 
+        # @private
+        # @param [any] obj
+        # @param [bool] wrapped
+        # @return [Saklient::Cloud::Resources::Resource]
+        def _create_resource_with(obj, wrapped = false)
+          Saklient::Util::validate_type(wrapped, 'bool')
+          return Saklient::Cloud::Resources::Resource::create_with(_class_name, @_client, obj, wrapped)
+        end
+
         # 新規リソース作成用のオブジェクトを用意します.
         #
         # 返り値のオブジェクトにパラメータを設定し, save() を呼ぶことで実際のリソースが作成されます.
@@ -209,12 +218,7 @@ module Saklient
         # @private
         # @return [Saklient::Cloud::Resources::Resource] リソースオブジェクト
         def _create
-          a = [
-            @_client,
-            nil,
-            false
-          ]
-          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
+          return _create_resource_with(nil)
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.
@@ -229,12 +233,7 @@ module Saklient
           result = @_client.request('GET', _api_path + '/' + Saklient::Util::url_encode(id), query)
           @_total = 1
           @_count = 1
-          a = [
-            @_client,
-            result,
-            true
-          ]
-          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
+          return _create_resource_with(result, true)
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
@@ -250,13 +249,7 @@ module Saklient
           data = []
           records = result[_root_key_m.to_sym]
           for record in records
-            a = [
-              @_client,
-              record,
-              false
-            ]
-            i = Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
-            data << i
+            data << _create_resource_with(record)
           end
           return data
         end
@@ -273,12 +266,7 @@ module Saklient
           @_count = result[:Count]
           return nil if @_total == 0
           records = result[_root_key_m.to_sym]
-          a = [
-            @_client,
-            records[0],
-            false
-          ]
-          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + _class_name, a)
+          return _create_resource_with(records[0])
         end
 
         # 指定した文字列を名前に含むリソースに絞り込みます.

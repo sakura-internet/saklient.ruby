@@ -3,6 +3,8 @@
 require_relative '../client'
 require_relative 'model'
 require_relative '../resources/archive'
+require_relative '../resources/load_balancer'
+require_relative '../resources/vpc_router'
 require_relative '../enums/escope'
 
 module Saklient

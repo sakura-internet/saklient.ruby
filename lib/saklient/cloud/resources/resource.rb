@@ -102,9 +102,9 @@ module Saklient
         attr_accessor :is_incomplete
 
         # @private
-        # @param [any] r
+        # @param [any] query
         # @return [void]
-        def _on_before_save(r)
+        def _on_before_save(query)
         end
 
         # @private
@@ -226,12 +226,12 @@ module Saklient
             v = query[k.to_sym]
             r[k.to_sym] = v
           end
-          _on_before_save(r)
           method = @is_new ? 'POST' : 'PUT'
           path = _api_path
           path += '/' + Saklient::Util::url_encode(_id) if !@is_new
           q = {}
           q[_root_key.to_sym] = r
+          _on_before_save(q)
           result = @_client.request(method, path, q)
           api_deserialize(result, true)
           return self
@@ -278,6 +278,33 @@ module Saklient
         # @return [any]
         def dump
           return api_serialize(true)
+        end
+
+        # @private
+        # @return [String]
+        def true_class_name
+          return nil
+        end
+
+        # @private
+        # @param [String] className
+        # @param [Saklient::Cloud::Client] client
+        # @param [any] obj
+        # @param [bool] wrapped
+        # @return [Resource]
+        def self.create_with(className, client, obj, wrapped = false)
+          Saklient::Util::validate_type(className, 'String')
+          Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
+          Saklient::Util::validate_type(wrapped, 'bool')
+          a = [
+            client,
+            obj,
+            wrapped
+          ]
+          ret = Saklient::Util::create_class_instance('saklient.cloud.resources.' + className, a)
+          trueClassName = ret.true_class_name
+          ret = Saklient::Util::create_class_instance('saklient.cloud.resources.' + trueClassName, a) if !(trueClassName).nil?
+          return ret
         end
 
       end

@@ -280,6 +280,7 @@ module Saklient
         # @private
         # @return [Array<String>]
         def get_tags
+          @n_tags = true
           return @m_tags
         end
 
@@ -403,30 +404,15 @@ module Saklient
           return @m_annotation
         end
 
-        # (This method is generated in Translator_default#buildImpl)
-        #
-        # @private
-        # @param [any] v
-        # @return [any]
-        def set_annotation(v)
-          @m_annotation = v
-          @n_annotation = true
-          return @m_annotation
-        end
-
         public
 
         # 注釈
         #
         # @return [any]
-        attr_accessor :annotation
+        attr_reader :annotation
 
         def annotation
           get_annotation
-        end
-
-        def annotation=(v)
-          set_annotation(v)
         end
 
         protected
