@@ -6,6 +6,8 @@ require_relative 'resource'
 require_relative 'icon'
 require_relative 'iface'
 require_relative '../enums/eappliance_class'
+require_relative '../enums/eavailability'
+require_relative '../enums/eserver_instance_status'
 
 module Saklient
   module Cloud
@@ -48,13 +50,18 @@ module Saklient
 
         # プラン
         #
+        # @return [Fixnum]
+        attr_accessor :m_plan_id
+
+        # インタフェース
+        #
         # @return [Array<Iface>]
         attr_accessor :m_ifaces
 
         # 注釈
         #
         # @return [any]
-        attr_accessor :m_annotation
+        attr_accessor :m_raw_annotation
 
         # 設定の生データ
         #
@@ -65,10 +72,20 @@ module Saklient
         # @return [String]
         attr_accessor :m_raw_settings_hash
 
+        # 起動状態 {Saklient::Cloud::Enums::EServerInstanceStatus}
+        #
+        # @return [String]
+        attr_accessor :m_status
+
         # サービスクラス
         #
         # @return [String]
         attr_accessor :m_service_class
+
+        # 有効状態 {Saklient::Cloud::Enums::EAvailability}
+        #
+        # @return [String]
+        attr_accessor :m_availability
 
         # @private
         # @return [String]
@@ -119,12 +136,13 @@ module Saklient
         # @private
         # @return [String]
         def true_class_name
-          case (@clazz)
+          case (get_clazz)
             when 'loadbalancer'
               return 'LoadBalancer'
             when 'vpcrouter'
               return 'VpcRouter'
           end
+          return nil
         end
 
         # @private
@@ -144,7 +162,7 @@ module Saklient
         # @param [any] query
         # @return [void]
         def _on_before_save(query)
-          Saklient::Util::set_by_path(query, 'OriginalSettingsHash', @raw_settings_hash)
+          Saklient::Util::set_by_path(query, 'OriginalSettingsHash', get_raw_settings_hash)
         end
 
         public
@@ -181,7 +199,64 @@ module Saklient
           return self
         end
 
+        # 作成中のアプライアンスが利用可能になるまで待機します.
+        #
+        # @param [Fixnum] timeoutSec
+        # @return [bool] 成功時はtrue, タイムアウトやエラーによる失敗時はfalseを返します.
+        def sleep_while_creating(timeoutSec = 300)
+          Saklient::Util::validate_type(timeoutSec, 'Fixnum')
+          step = 10
+          while 0 < timeoutSec do
+            reload
+            a = get_availability
+            return true if a == Saklient::Cloud::Enums::EAvailability::available
+            timeoutSec = 0 if a != Saklient::Cloud::Enums::EAvailability::migrating
+            timeoutSec -= step
+            sleep(step) if 0 < timeoutSec
+          end
+          return false
+        end
+
+        # アプライアンスが起動するまで待機します.
+        #
+        # @param [Fixnum] timeoutSec
+        # @return [bool]
+        def sleep_until_up(timeoutSec = 180)
+          Saklient::Util::validate_type(timeoutSec, 'Fixnum')
+          return sleep_until(Saklient::Cloud::Enums::EServerInstanceStatus::up, timeoutSec)
+        end
+
+        # アプライアンスが停止するまで待機します.
+        #
+        # @param [Fixnum] timeoutSec
+        # @return [bool] 成功時はtrue, タイムアウトやエラーによる失敗時はfalseを返します.
+        def sleep_until_down(timeoutSec = 180)
+          Saklient::Util::validate_type(timeoutSec, 'Fixnum')
+          return sleep_until(Saklient::Cloud::Enums::EServerInstanceStatus::down, timeoutSec)
+        end
+
         protected
+
+        # アプライアンスが指定のステータスに遷移するまで待機します.
+        #
+        # @private
+        # @param [String] status
+        # @param [Fixnum] timeoutSec
+        # @return [bool]
+        def sleep_until(status, timeoutSec = 300)
+          Saklient::Util::validate_type(status, 'String')
+          Saklient::Util::validate_type(timeoutSec, 'Fixnum')
+          step = 10
+          while 0 < timeoutSec do
+            reload
+            s = get_status
+            s = Saklient::Cloud::Enums::EServerInstanceStatus::down if (s).nil?
+            return true if s == status
+            timeoutSec -= step
+            sleep(step) if 0 < timeoutSec
+          end
+          return false
+        end
 
         # @return [bool]
         attr_accessor :n_id
@@ -410,6 +485,47 @@ module Saklient
         protected
 
         # @return [bool]
+        attr_accessor :n_plan_id
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [Fixnum]
+        def get_plan_id
+          return @m_plan_id
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [Fixnum] v
+        # @return [Fixnum]
+        def set_plan_id(v)
+          Saklient::Util::validate_type(v, 'Fixnum')
+          raise Saklient::Errors::SaklientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saklient::Cloud::Resources::Appliance#plan_id') if !@is_new
+          @m_plan_id = v
+          @n_plan_id = true
+          return @m_plan_id
+        end
+
+        public
+
+        # プラン
+        #
+        # @return [Fixnum]
+        attr_accessor :plan_id
+
+        def plan_id
+          get_plan_id
+        end
+
+        def plan_id=(v)
+          set_plan_id(v)
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_ifaces
 
         # (This method is generated in Translator_default#buildImpl)
@@ -422,7 +538,7 @@ module Saklient
 
         public
 
-        # プラン
+        # インタフェース
         #
         # @return [Array<Iface>]
         attr_reader :ifaces
@@ -434,14 +550,26 @@ module Saklient
         protected
 
         # @return [bool]
-        attr_accessor :n_annotation
+        attr_accessor :n_raw_annotation
 
         # (This method is generated in Translator_default#buildImpl)
         #
         # @private
         # @return [any]
-        def get_annotation
-          return @m_annotation
+        def get_raw_annotation
+          return @m_raw_annotation
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [any] v
+        # @return [any]
+        def set_raw_annotation(v)
+          raise Saklient::Errors::SaklientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saklient::Cloud::Resources::Appliance#raw_annotation') if !@is_new
+          @m_raw_annotation = v
+          @n_raw_annotation = true
+          return @m_raw_annotation
         end
 
         public
@@ -449,10 +577,14 @@ module Saklient
         # 注釈
         #
         # @return [any]
-        attr_reader :annotation
+        attr_accessor :raw_annotation
 
-        def annotation
-          get_annotation
+        def raw_annotation
+          get_raw_annotation
+        end
+
+        def raw_annotation=(v)
+          set_raw_annotation(v)
         end
 
         protected
@@ -521,6 +653,30 @@ module Saklient
         protected
 
         # @return [bool]
+        attr_accessor :n_status
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [String]
+        def get_status
+          return @m_status
+        end
+
+        public
+
+        # 起動状態 {Saklient::Cloud::Enums::EServerInstanceStatus}
+        #
+        # @return [String]
+        attr_reader :status
+
+        def status
+          get_status
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_service_class
 
         # (This method is generated in Translator_default#buildImpl)
@@ -540,6 +696,30 @@ module Saklient
 
         def service_class
           get_service_class
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_availability
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [String]
+        def get_availability
+          return @m_availability
+        end
+
+        public
+
+        # 有効状態 {Saklient::Cloud::Enums::EAvailability}
+        #
+        # @return [String]
+        attr_reader :availability
+
+        def availability
+          get_availability
         end
 
         protected
@@ -602,6 +782,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_icon = false
+          if Saklient::Util::exists_path(r, 'Plan.ID')
+            @m_plan_id = (Saklient::Util::get_by_path(r, 'Plan.ID')).nil? ? nil : (Saklient::Util::get_by_path(r, 'Plan.ID').to_s).to_s().to_i(10)
+          else
+            @m_plan_id = nil
+            @is_incomplete = true
+          end
+          @n_plan_id = false
           if Saklient::Util::exists_path(r, 'Interfaces')
             if (Saklient::Util::get_by_path(r, 'Interfaces')).nil?
               @m_ifaces = []
@@ -619,12 +806,12 @@ module Saklient
           end
           @n_ifaces = false
           if Saklient::Util::exists_path(r, 'Remark')
-            @m_annotation = Saklient::Util::get_by_path(r, 'Remark')
+            @m_raw_annotation = Saklient::Util::get_by_path(r, 'Remark')
           else
-            @m_annotation = nil
+            @m_raw_annotation = nil
             @is_incomplete = true
           end
-          @n_annotation = false
+          @n_raw_annotation = false
           if Saklient::Util::exists_path(r, 'Settings')
             @m_raw_settings = Saklient::Util::get_by_path(r, 'Settings')
           else
@@ -639,6 +826,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_raw_settings_hash = false
+          if Saklient::Util::exists_path(r, 'Instance.Status')
+            @m_status = (Saklient::Util::get_by_path(r, 'Instance.Status')).nil? ? nil : Saklient::Util::get_by_path(r, 'Instance.Status').to_s
+          else
+            @m_status = nil
+            @is_incomplete = true
+          end
+          @n_status = false
           if Saklient::Util::exists_path(r, 'ServiceClass')
             @m_service_class = (Saklient::Util::get_by_path(r, 'ServiceClass')).nil? ? nil : Saklient::Util::get_by_path(r, 'ServiceClass').to_s
           else
@@ -646,6 +840,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_service_class = false
+          if Saklient::Util::exists_path(r, 'Availability')
+            @m_availability = (Saklient::Util::get_by_path(r, 'Availability')).nil? ? nil : Saklient::Util::get_by_path(r, 'Availability').to_s
+          else
+            @m_availability = nil
+            @is_incomplete = true
+          end
+          @n_availability = false
         end
 
         # @private
@@ -676,6 +877,11 @@ module Saklient
             end
           end
           Saklient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
+          if withClean || @n_plan_id
+            Saklient::Util::set_by_path(ret, 'Plan.ID', @m_plan_id)
+          else
+            missing << 'plan_id' if @is_new
+          end
           if withClean || @n_ifaces
             Saklient::Util::set_by_path(ret, 'Interfaces', [])
             for r2 in @m_ifaces
@@ -684,10 +890,16 @@ module Saklient
               ret[:Interfaces] << v
             end
           end
-          Saklient::Util::set_by_path(ret, 'Remark', @m_annotation) if withClean || @n_annotation
+          if withClean || @n_raw_annotation
+            Saklient::Util::set_by_path(ret, 'Remark', @m_raw_annotation)
+          else
+            missing << 'raw_annotation' if @is_new
+          end
           Saklient::Util::set_by_path(ret, 'Settings', @m_raw_settings) if withClean || @n_raw_settings
           Saklient::Util::set_by_path(ret, 'SettingsHash', @m_raw_settings_hash) if withClean || @n_raw_settings_hash
+          Saklient::Util::set_by_path(ret, 'Instance.Status', @m_status) if withClean || @n_status
           Saklient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
+          Saklient::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Appliance creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end

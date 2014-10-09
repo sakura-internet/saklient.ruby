@@ -195,7 +195,7 @@ module Saklient
           end
           @n_name = false
           if Saklient::Util::exists_path(r, 'BandWidthMbps')
-            @m_band_width_mbps = (Saklient::Util::get_by_path(r, 'BandWidthMbps')).nil? ? nil : (Saklient::Util::get_by_path(r, 'BandWidthMbps').to_s).to_i(10)
+            @m_band_width_mbps = (Saklient::Util::get_by_path(r, 'BandWidthMbps')).nil? ? nil : (Saklient::Util::get_by_path(r, 'BandWidthMbps').to_s).to_s().to_i(10)
           else
             @m_band_width_mbps = nil
             @is_incomplete = true

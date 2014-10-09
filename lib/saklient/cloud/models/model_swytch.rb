@@ -114,6 +114,38 @@ module Saklient
           return _with_name_like(name)
         end
 
+        # 指定したタグを持つリソースに絞り込みます.
+        #
+        # 複数のタグを指定する場合は withTags() を利用してください.
+        #
+        # @todo Implement test case
+        # @param [String] tag
+        # @return [Model_Swytch]
+        def with_tag(tag)
+          Saklient::Util::validate_type(tag, 'String')
+          return _with_tag(tag)
+        end
+
+        # 指定したすべてのタグを持つリソースに絞り込みます.
+        #
+        # @todo Implement test case
+        # @param [Array<String>] tags
+        # @return [Model_Swytch]
+        def with_tags(tags)
+          Saklient::Util::validate_type(tags, 'Array')
+          return _with_tags(tags)
+        end
+
+        # 指定したDNFに合致するタグを持つリソースに絞り込みます.
+        #
+        # @todo Implement test case
+        # @param [Array<Array<String>>] dnf
+        # @return [Model_Swytch]
+        def with_tag_dnf(dnf)
+          Saklient::Util::validate_type(dnf, 'Array')
+          return _with_tag_dnf(dnf)
+        end
+
         # 名前でソートします.
         #
         # @todo Implement test case

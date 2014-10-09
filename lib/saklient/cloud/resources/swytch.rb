@@ -430,7 +430,7 @@ module Saklient
           end
           @n_user_default_route = false
           if Saklient::Util::exists_path(r, 'UserSubnet.NetworkMaskLen')
-            @m_user_mask_len = (Saklient::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen').to_s).to_i(10)
+            @m_user_mask_len = (Saklient::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'UserSubnet.NetworkMaskLen').to_s).to_s().to_i(10)
           else
             @m_user_mask_len = nil
             @is_incomplete = true

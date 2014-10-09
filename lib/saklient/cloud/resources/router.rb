@@ -132,7 +132,7 @@ module Saklient
               return true
             end
             timeoutSec -= step
-            sleep step if 0 < timeoutSec
+            sleep(step) if 0 < timeoutSec
           end
           return false
         end
@@ -450,14 +450,14 @@ module Saklient
           end
           @n_description = false
           if Saklient::Util::exists_path(r, 'NetworkMaskLen')
-            @m_network_mask_len = (Saklient::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_i(10)
+            @m_network_mask_len = (Saklient::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_s().to_i(10)
           else
             @m_network_mask_len = nil
             @is_incomplete = true
           end
           @n_network_mask_len = false
           if Saklient::Util::exists_path(r, 'BandWidthMbps')
-            @m_band_width_mbps = (Saklient::Util::get_by_path(r, 'BandWidthMbps')).nil? ? nil : (Saklient::Util::get_by_path(r, 'BandWidthMbps').to_s).to_i(10)
+            @m_band_width_mbps = (Saklient::Util::get_by_path(r, 'BandWidthMbps')).nil? ? nil : (Saklient::Util::get_by_path(r, 'BandWidthMbps').to_s).to_s().to_i(10)
           else
             @m_band_width_mbps = nil
             @is_incomplete = true

@@ -3,6 +3,9 @@
 require_relative '../client'
 require_relative 'model'
 require_relative '../resources/appliance'
+require_relative '../resources/load_balancer'
+require_relative '../resources/vpc_router'
+require_relative '../resources/swytch'
 
 module Saklient
   module Cloud
@@ -74,6 +77,25 @@ module Saklient
         # @return [Model_Appliance] this
         def reset
           return _reset
+        end
+
+        # @param [Saklient::Cloud::Resources::Swytch] swytch
+        # @param [Fixnum] vrid
+        # @param [Array<String>] realIps
+        # @param [bool] isHighSpec
+        # @return [Saklient::Cloud::Resources::LoadBalancer]
+        def create_load_balancer(swytch, vrid, realIps, isHighSpec = false)
+          Saklient::Util::validate_type(swytch, 'Saklient::Cloud::Resources::Swytch')
+          Saklient::Util::validate_type(vrid, 'Fixnum')
+          Saklient::Util::validate_type(realIps, 'Array')
+          Saklient::Util::validate_type(isHighSpec, 'bool')
+          ret = _create('LoadBalancer')
+          return ret.set_initial_params(swytch, vrid, realIps, isHighSpec)
+        end
+
+        # @return [Saklient::Cloud::Resources::VpcRouter]
+        def create_vpc_router
+          return _create('VpcRouter')
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.

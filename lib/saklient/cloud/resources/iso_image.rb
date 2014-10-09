@@ -603,14 +603,14 @@ module Saklient
           end
           @n_icon = false
           if Saklient::Util::exists_path(r, 'DisplayOrder')
-            @m_display_order = (Saklient::Util::get_by_path(r, 'DisplayOrder')).nil? ? nil : (Saklient::Util::get_by_path(r, 'DisplayOrder').to_s).to_i(10)
+            @m_display_order = (Saklient::Util::get_by_path(r, 'DisplayOrder')).nil? ? nil : (Saklient::Util::get_by_path(r, 'DisplayOrder').to_s).to_s().to_i(10)
           else
             @m_display_order = nil
             @is_incomplete = true
           end
           @n_display_order = false
           if Saklient::Util::exists_path(r, 'SizeMB')
-            @m_size_mib = (Saklient::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saklient::Util::get_by_path(r, 'SizeMB').to_s).to_i(10)
+            @m_size_mib = (Saklient::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saklient::Util::get_by_path(r, 'SizeMB').to_s).to_s().to_i(10)
           else
             @m_size_mib = nil
             @is_incomplete = true
