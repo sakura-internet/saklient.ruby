@@ -2,6 +2,7 @@
 
 require_relative '../../util'
 require_relative '../client'
+require_relative '../../errors/http_exception'
 
 module Saklient
   module Cloud
@@ -115,6 +116,13 @@ module Saklient
         end
 
         # @private
+        # @param [bool] withClean
+        # @return [void]
+        def _on_before_api_serialize(withClean)
+          Saklient::Util::validate_type(withClean, 'bool')
+        end
+
+        # @private
         # @param [any] r
         # @param [bool] withClean
         # @return [void]
@@ -172,6 +180,7 @@ module Saklient
         # @return [any]
         def api_serialize(withClean = false)
           Saklient::Util::validate_type(withClean, 'bool')
+          _on_before_api_serialize(withClean)
           ret = api_serialize_impl(withClean)
           _on_after_api_serialize(ret, withClean)
           return ret
@@ -199,6 +208,15 @@ module Saklient
         end
 
         public
+
+        # @private
+        # @param [String] name
+        # @return [any]
+        def get_property(name)
+          Saklient::Util::validate_type(name, 'String')
+          name = normalize_field_name(name)
+          return instance_variable_get('@m_'+name)
+        end
 
         # @private
         # @param [String] name
@@ -245,7 +263,7 @@ module Saklient
         def destroy
           return nil if @is_new
           path = _api_path + '/' + Saklient::Util::url_encode(_id)
-          @_client.request('DELETE', path)
+          request_retry('DELETE', path)
         end
 
         protected
@@ -255,7 +273,7 @@ module Saklient
         # @private
         # @return [Resource] this
         def _reload
-          result = @_client.request('GET', _api_path + '/' + Saklient::Util::url_encode(_id))
+          result = request_retry('GET', _api_path + '/' + Saklient::Util::url_encode(_id))
           api_deserialize(result, true)
           return self
         end
@@ -269,7 +287,7 @@ module Saklient
           query = {}
           Saklient::Util::set_by_path(query, 'Filter.ID', [_id])
           Saklient::Util::set_by_path(query, 'Include', ['ID'])
-          result = @_client.request('GET', _api_path, query)
+          result = request_retry('GET', _api_path, query)
           cnt = result[:Count]
           return cnt == 1
         end
@@ -304,6 +322,37 @@ module Saklient
           ret = Saklient::Util::create_class_instance('saklient.cloud.resources.' + className, a)
           trueClassName = ret.true_class_name
           ret = Saklient::Util::create_class_instance('saklient.cloud.resources.' + trueClassName, a) if !(trueClassName).nil?
+          return ret
+        end
+
+        # @param [String] method
+        # @param [String] path
+        # @param [any] query
+        # @param [Fixnum] retryCount
+        # @param [Fixnum] retrySleep
+        # @return [any]
+        def request_retry(method, path, query = nil, retryCount = 5, retrySleep = 5)
+          Saklient::Util::validate_type(method, 'String')
+          Saklient::Util::validate_type(path, 'String')
+          Saklient::Util::validate_type(retryCount, 'Fixnum')
+          Saklient::Util::validate_type(retrySleep, 'Fixnum')
+          ret = nil
+          while 1 < retryCount do
+            isOk = false
+            begin
+              ret = @_client.request(method, path, query)
+              isOk = true
+            rescue Saklient::Errors::HttpException
+              isOk = false
+            end
+            if isOk
+              retryCount = -1
+            else
+              retryCount--
+              sleep(retrySleep)
+            end
+          end
+          ret = @_client.request(method, path, query) if retryCount == 0
           return ret
         end
 

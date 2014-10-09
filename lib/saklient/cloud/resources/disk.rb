@@ -294,32 +294,18 @@ module Saklient
 
         # コピー中のディスクが利用可能になるまで待機します.
         #
-        # @private
-        # @yield [Saklient::Cloud::Resources::Disk, bool]
-        # @yieldreturn [void]
-        # @param [Fixnum] timeoutSec
-        # @return [void]
-        def after_copy(timeoutSec, &callback)
-          Saklient::Util::validate_type(timeoutSec, 'Fixnum')
-          Saklient::Util::validate_type(callback, 'Proc')
-          ret = sleep_while_copying(timeoutSec)
-          callback.call(self, ret)
-        end
-
-        # コピー中のディスクが利用可能になるまで待機します.
-        #
         # @param [Fixnum] timeoutSec
         # @return [bool] 成功時はtrue, タイムアウトやエラーによる失敗時はfalseを返します.
         def sleep_while_copying(timeoutSec = 3600)
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
-          step = 3
+          step = 10
           while 0 < timeoutSec do
             reload
             a = get_availability
             return true if a == Saklient::Cloud::Enums::EAvailability::available
             timeoutSec = 0 if a != Saklient::Cloud::Enums::EAvailability::migrating
             timeoutSec -= step
-            sleep step if 0 < timeoutSec
+            sleep(step) if 0 < timeoutSec
           end
           return false
         end
@@ -717,7 +703,7 @@ module Saklient
           end
           @n_icon = false
           if Saklient::Util::exists_path(r, 'SizeMB')
-            @m_size_mib = (Saklient::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saklient::Util::get_by_path(r, 'SizeMB').to_s).to_i(10)
+            @m_size_mib = (Saklient::Util::get_by_path(r, 'SizeMB')).nil? ? nil : (Saklient::Util::get_by_path(r, 'SizeMB').to_s).to_s().to_i(10)
           else
             @m_size_mib = nil
             @is_incomplete = true

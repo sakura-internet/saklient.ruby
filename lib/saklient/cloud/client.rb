@@ -56,7 +56,7 @@ module Saklient
           url = url_root + 'api/cloud/1.1' + path
         end
 
-        url += '?' + URI.escape(json) if method == 'GET' and !params.empty?
+        url += '?' + URI.escape(json) if method == 'GET' and !params.nil?
 
         #println '// APIリクエスト中: #{method} #{path}'
 
@@ -73,7 +73,7 @@ module Saklient
 
         extra_headers = {
           'Content-Type'     => 'application/x-www-form-urlencoded',
-          'User-Agent'       => 'sacloud-client-ruby',
+          'User-Agent'       => 'saklient.ruby ver-0.0.2.1 rev-60b0d3ee5d98641b575c6fad2bc9683d094315ea',
           'X-Requested-With' => 'XMLHttpRequest',
           'X-Sakura-HTTP-Method' => method,
           'X-Sakura-Error-Level' => 'warning',

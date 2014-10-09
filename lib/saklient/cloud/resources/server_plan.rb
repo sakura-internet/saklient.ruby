@@ -242,14 +242,14 @@ module Saklient
           end
           @n_name = false
           if Saklient::Util::exists_path(r, 'CPU')
-            @m_cpu = (Saklient::Util::get_by_path(r, 'CPU')).nil? ? nil : (Saklient::Util::get_by_path(r, 'CPU').to_s).to_i(10)
+            @m_cpu = (Saklient::Util::get_by_path(r, 'CPU')).nil? ? nil : (Saklient::Util::get_by_path(r, 'CPU').to_s).to_s().to_i(10)
           else
             @m_cpu = nil
             @is_incomplete = true
           end
           @n_cpu = false
           if Saklient::Util::exists_path(r, 'MemoryMB')
-            @m_memory_mib = (Saklient::Util::get_by_path(r, 'MemoryMB')).nil? ? nil : (Saklient::Util::get_by_path(r, 'MemoryMB').to_s).to_i(10)
+            @m_memory_mib = (Saklient::Util::get_by_path(r, 'MemoryMB')).nil? ? nil : (Saklient::Util::get_by_path(r, 'MemoryMB').to_s).to_s().to_i(10)
           else
             @m_memory_mib = nil
             @is_incomplete = true

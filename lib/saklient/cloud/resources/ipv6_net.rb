@@ -203,7 +203,7 @@ module Saklient
           end
           @n_prefix = false
           if Saklient::Util::exists_path(r, 'IPv6PrefixLen')
-            @m_prefix_len = (Saklient::Util::get_by_path(r, 'IPv6PrefixLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'IPv6PrefixLen').to_s).to_i(10)
+            @m_prefix_len = (Saklient::Util::get_by_path(r, 'IPv6PrefixLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'IPv6PrefixLen').to_s).to_s().to_i(10)
           else
             @m_prefix_len = nil
             @is_incomplete = true

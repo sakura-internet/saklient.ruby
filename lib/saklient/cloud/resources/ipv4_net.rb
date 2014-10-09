@@ -232,7 +232,7 @@ module Saklient
           end
           @n_address = false
           if Saklient::Util::exists_path(r, 'NetworkMaskLen')
-            @m_mask_len = (Saklient::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_i(10)
+            @m_mask_len = (Saklient::Util::get_by_path(r, 'NetworkMaskLen')).nil? ? nil : (Saklient::Util::get_by_path(r, 'NetworkMaskLen').to_s).to_s().to_i(10)
           else
             @m_mask_len = nil
             @is_incomplete = true

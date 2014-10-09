@@ -171,37 +171,14 @@ module Saklient
           return reload
         end
 
-        # サーバが停止するまで待機します.
+        # サーバが起動するまで待機します.
         #
-        # @yield [Saklient::Cloud::Resources::Server, bool]
-        # @yieldreturn [void]
         # @param [Fixnum] timeoutSec
-        # @return [void] 成功時はtrue, タイムアウトやエラーによる失敗時はfalseを返します.
-        def after_down(timeoutSec, &callback)
+        # @return [bool]
+        def sleep_until_up(timeoutSec = 180)
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
-          Saklient::Util::validate_type(callback, 'Proc')
-          after_status(Saklient::Cloud::Enums::EServerInstanceStatus::down, timeoutSec, &callback)
+          return sleep_until(Saklient::Cloud::Enums::EServerInstanceStatus::up, timeoutSec)
         end
-
-        protected
-
-        # サーバが指定のステータスに遷移するまで待機します.
-        #
-        # @private
-        # @yield [Saklient::Cloud::Resources::Server, bool]
-        # @yieldreturn [void]
-        # @param [String] status
-        # @param [Fixnum] timeoutSec
-        # @return [void]
-        def after_status(status, timeoutSec, &callback)
-          Saklient::Util::validate_type(status, 'String')
-          Saklient::Util::validate_type(timeoutSec, 'Fixnum')
-          Saklient::Util::validate_type(callback, 'Proc')
-          ret = sleep_until(status, timeoutSec)
-          callback.call(self, ret)
-        end
-
-        public
 
         # サーバが停止するまで待機します.
         #
@@ -223,14 +200,16 @@ module Saklient
         def sleep_until(status, timeoutSec = 180)
           Saklient::Util::validate_type(status, 'String')
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
-          step = 3
+          step = 10
           while 0 < timeoutSec do
             reload
-            s = get_instance.status
+            s = nil
+            inst = get_instance
+            s = inst.get_property('status') if !(inst).nil?
             s = Saklient::Cloud::Enums::EServerInstanceStatus::down if (s).nil?
             return true if s == status
             timeoutSec -= step
-            sleep step if 0 < timeoutSec
+            sleep(step) if 0 < timeoutSec
           end
           return false
         end

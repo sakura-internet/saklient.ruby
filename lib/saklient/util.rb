@@ -37,6 +37,16 @@ module Saklient
       end
       return obj
     end
+  
+    def self.get_by_path_any(objects, pathes)
+      for obj in objects
+        for path in pathes
+          ret = get_by_path(obj, path)
+          return ret if !ret.nil?
+        end
+      end
+      return nil
+    end
 
     # @todo array support
     # @todo overwriting
