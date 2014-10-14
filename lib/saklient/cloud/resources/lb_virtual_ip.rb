@@ -24,13 +24,26 @@ module Saklient
           return @_virtual_ip_address
         end
 
+        # @private
+        # @param [String] v
+        # @return [String]
+        def set_virtual_ip_address(v)
+          Saklient::Util::validate_type(v, 'String')
+          @_virtual_ip_address = v
+          return @_virtual_ip_address
+        end
+
         # VIPアドレス
         #
         # @return [String]
-        attr_reader :virtual_ip_address
+        attr_accessor :virtual_ip_address
 
         def virtual_ip_address
           get_virtual_ip_address
+        end
+
+        def virtual_ip_address=(v)
+          set_virtual_ip_address(v)
         end
 
         protected
@@ -47,13 +60,26 @@ module Saklient
           return @_port
         end
 
+        # @private
+        # @param [Fixnum] v
+        # @return [Fixnum]
+        def set_port(v)
+          Saklient::Util::validate_type(v, 'Fixnum')
+          @_port = v
+          return @_port
+        end
+
         # ポート番号
         #
         # @return [Fixnum]
-        attr_reader :port
+        attr_accessor :port
 
         def port
           get_port
+        end
+
+        def port=(v)
+          set_port(v)
         end
 
         protected
@@ -70,13 +96,26 @@ module Saklient
           return @_delay_loop
         end
 
+        # @private
+        # @param [Fixnum] v
+        # @return [Fixnum]
+        def set_delay_loop(v)
+          Saklient::Util::validate_type(v, 'Fixnum')
+          @_delay_loop = v
+          return @_delay_loop
+        end
+
         # チェック間隔 [秒]
         #
         # @return [Fixnum]
-        attr_reader :delay_loop
+        attr_accessor :delay_loop
 
         def delay_loop
           get_delay_loop
+        end
+
+        def delay_loop=(v)
+          set_delay_loop(v)
         end
 
         protected
@@ -104,7 +143,8 @@ module Saklient
 
         # @private
         # @param [any] obj
-        def initialize(obj)
+        def initialize(obj = nil)
+          obj = {} if (obj).nil?
           vip = Saklient::Util::get_by_path_any([obj], [
             'VirtualIPAddress',
             'virtualIpAddress',
@@ -113,7 +153,8 @@ module Saklient
           ])
           @_virtual_ip_address = vip
           port = Saklient::Util::get_by_path_any([obj], ['Port', 'port'])
-          @_port = (port).nil? ? nil : (port).to_s().to_i(10)
+          @_port = nil
+          @_port = (port).to_s().to_i(10) if !(port).nil?
           @_port = nil if @_port == 0
           delayLoop = Saklient::Util::get_by_path_any([obj], [
             'DelayLoop',
@@ -121,7 +162,8 @@ module Saklient
             'delay_loop',
             'delay'
           ])
-          @_delay_loop = (delayLoop).nil? ? nil : (delayLoop).to_s().to_i(10)
+          @_delay_loop = nil
+          @_delay_loop = (delayLoop).to_s().to_i(10) if !(delayLoop).nil?
           @_delay_loop = nil if @_delay_loop == 0
           @_servers = []
           serversDyn = Saklient::Util::get_by_path_any([obj], ['Servers', 'servers'])
@@ -134,10 +176,11 @@ module Saklient
         end
 
         # @param [any] settings
-        # @return [LbVirtualIp]
-        def add_server(settings)
-          @_servers << Saklient::Cloud::Resources::LbServer.new(settings)
-          return self
+        # @return [LbServer]
+        def add_server(settings = nil)
+          ret = Saklient::Cloud::Resources::LbServer.new(settings)
+          @_servers << ret
+          return ret
         end
 
         # @return [any]
@@ -152,6 +195,29 @@ module Saklient
             DelayLoop: @_delay_loop,
             Servers: servers
           }
+        end
+
+        # @param [String] address
+        # @return [LbServer]
+        def get_server_by_address(address)
+          Saklient::Util::validate_type(address, 'String')
+          for srv in @_servers
+            return srv if srv.ip_address == address
+          end
+          return nil
+        end
+
+        # @param [Array] srvs
+        # @return [LbVirtualIp]
+        def update_status(srvs)
+          Saklient::Util::validate_type(srvs, 'Array')
+          for srvDyn in srvs
+            ip = srvDyn[:IPAddress]
+            srv = get_server_by_address(ip)
+            next if (srv).nil?
+            srv.update_status(srvDyn)
+          end
+          return self
         end
 
       end

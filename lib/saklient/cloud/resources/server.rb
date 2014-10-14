@@ -204,8 +204,8 @@ module Saklient
           while 0 < timeoutSec do
             reload
             s = nil
-            inst = get_instance
-            s = inst.get_property('status') if !(inst).nil?
+            inst = self.instance
+            s = inst.status if !(inst).nil?
             s = Saklient::Cloud::Enums::EServerInstanceStatus::down if (s).nil?
             return true if s == status
             timeoutSec -= step
@@ -244,7 +244,7 @@ module Saklient
         def add_iface
           model = Saklient::Util::create_class_instance('saklient.cloud.models.Model_Iface', [@_client])
           res = model.create
-          res.set_property('serverId', _id)
+          res.server_id = _id
           return res.save
         end
 

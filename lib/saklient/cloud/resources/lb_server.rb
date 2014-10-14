@@ -23,13 +23,26 @@ module Saklient
           return @_ip_address
         end
 
+        # @private
+        # @param [String] v
+        # @return [String]
+        def set_ip_address(v)
+          Saklient::Util::validate_type(v, 'String')
+          @_ip_address = v
+          return @_ip_address
+        end
+
         # IPアドレス
         #
         # @return [String]
-        attr_reader :ip_address
+        attr_accessor :ip_address
 
         def ip_address
           get_ip_address
+        end
+
+        def ip_address=(v)
+          set_ip_address(v)
         end
 
         protected
@@ -46,13 +59,26 @@ module Saklient
           return @_port
         end
 
+        # @private
+        # @param [Fixnum] v
+        # @return [Fixnum]
+        def set_port(v)
+          Saklient::Util::validate_type(v, 'Fixnum')
+          @_port = v
+          return @_port
+        end
+
         # ポート番号
         #
         # @return [Fixnum]
-        attr_reader :port
+        attr_accessor :port
 
         def port
           get_port
+        end
+
+        def port=(v)
+          set_port(v)
         end
 
         protected
@@ -69,13 +95,26 @@ module Saklient
           return @_protocol
         end
 
+        # @private
+        # @param [String] v
+        # @return [String]
+        def set_protocol(v)
+          Saklient::Util::validate_type(v, 'String')
+          @_protocol = v
+          return @_protocol
+        end
+
         # 監視方法
         #
         # @return [String]
-        attr_reader :protocol
+        attr_accessor :protocol
 
         def protocol
           get_protocol
+        end
+
+        def protocol=(v)
+          set_protocol(v)
         end
 
         protected
@@ -92,41 +131,114 @@ module Saklient
           return @_path_to_check
         end
 
-        # パス
+        # @private
+        # @param [String] v
+        # @return [String]
+        def set_path_to_check(v)
+          Saklient::Util::validate_type(v, 'String')
+          @_path_to_check = v
+          return @_path_to_check
+        end
+
+        # 監視対象パス
         #
         # @return [String]
-        attr_reader :path_to_check
+        attr_accessor :path_to_check
 
         def path_to_check
           get_path_to_check
+        end
+
+        def path_to_check=(v)
+          set_path_to_check(v)
         end
 
         protected
 
         # @private
         # @return [Fixnum]
-        attr_accessor :_expected_status
+        attr_accessor :_response_expected
 
         public
 
         # @private
         # @return [Fixnum]
-        def get_expected_status
-          return @_expected_status
+        def get_response_expected
+          return @_response_expected
+        end
+
+        # @private
+        # @param [Fixnum] v
+        # @return [Fixnum]
+        def set_response_expected(v)
+          Saklient::Util::validate_type(v, 'Fixnum')
+          @_response_expected = v
+          return @_response_expected
+        end
+
+        # 監視時に期待されるレスポンスコード
+        #
+        # @return [Fixnum]
+        attr_accessor :response_expected
+
+        def response_expected
+          get_response_expected
+        end
+
+        def response_expected=(v)
+          set_response_expected(v)
+        end
+
+        protected
+
+        # @private
+        # @return [Fixnum]
+        attr_accessor :_active_connections
+
+        public
+
+        # @private
+        # @return [Fixnum]
+        def get_active_connections
+          return @_active_connections
         end
 
         # レスポンスコード
         #
         # @return [Fixnum]
-        attr_reader :expected_status
+        attr_reader :active_connections
 
-        def expected_status
-          get_expected_status
+        def active_connections
+          get_active_connections
+        end
+
+        protected
+
+        # @private
+        # @return [String]
+        attr_accessor :_status
+
+        public
+
+        # @private
+        # @return [String]
+        def get_status
+          return @_status
+        end
+
+        # レスポンスコード
+        #
+        # @return [String]
+        attr_reader :status
+
+        def status
+          get_status
         end
 
         # @private
         # @param [any] obj
-        def initialize(obj)
+        def initialize(obj = nil)
+          obj = {} if (obj).nil?
           health = Saklient::Util::get_by_path_any([obj], [
             'HealthCheck',
             'healthCheck',
@@ -140,13 +252,25 @@ module Saklient
             'ip'
           ])
           @_protocol = Saklient::Util::get_by_path_any([health, obj], ['Protocol', 'protocol'])
-          @_path_to_check = Saklient::Util::get_by_path_any([health, obj], ['Path', 'path'])
+          @_path_to_check = Saklient::Util::get_by_path_any([health, obj], [
+            'Path',
+            'path',
+            'pathToCheck',
+            'path_to_check'
+          ])
           port = Saklient::Util::get_by_path_any([obj], ['Port', 'port'])
-          @_port = (port).nil? ? nil : (port).to_s().to_i(10)
+          @_port = nil
+          @_port = (port).to_s().to_i(10) if !(port).nil?
           @_port = nil if @_port == 0
-          status = Saklient::Util::get_by_path_any([health, obj], ['Status', 'status'])
-          @_expected_status = (status).nil? ? nil : (status).to_s().to_i(10)
-          @_expected_status = nil if @_expected_status == 0
+          responseExpected = Saklient::Util::get_by_path_any([health, obj], [
+            'Status',
+            'status',
+            'responseExpected',
+            'response_expected'
+          ])
+          @_response_expected = nil
+          @_response_expected = (responseExpected).to_s().to_i(10) if !(responseExpected).nil?
+          @_response_expected = nil if @_response_expected == 0
         end
 
         # @return [any]
@@ -157,9 +281,20 @@ module Saklient
             HealthCheck: {
               Protocol: @_protocol,
               Path: @_path_to_check,
-              Status: @_expected_status
+              Status: @_response_expected
             }
           }
+        end
+
+        # @param [any] obj
+        # @return [LbServer]
+        def update_status(obj)
+          connStr = obj[:ActiveConn]
+          @_active_connections = 0
+          @_active_connections = (connStr).to_s().to_i(10) if !(connStr).nil?
+          status = obj[:Status]
+          @_status = (status).nil? ? nil : status.downcase()
+          return self
         end
 
       end

@@ -207,30 +207,6 @@ module Saklient
           return name
         end
 
-        public
-
-        # @private
-        # @param [String] name
-        # @return [any]
-        def get_property(name)
-          Saklient::Util::validate_type(name, 'String')
-          name = normalize_field_name(name)
-          return instance_variable_get('@m_'+name)
-        end
-
-        # @private
-        # @param [String] name
-        # @param [any] value
-        # @return [void]
-        def set_property(name, value)
-          Saklient::Util::validate_type(name, 'String')
-          name = normalize_field_name(name)
-          instance_variable_set('@m_'+name, value)
-          instance_variable_set('@n_'+name, true)
-        end
-
-        protected
-
         # このローカルオブジェクトに現在設定されているリソース情報をAPIに送信し, 新規作成または上書き保存します.
         #
         # @private
@@ -348,7 +324,7 @@ module Saklient
             if isOk
               retryCount = -1
             else
-              retryCount--
+              retryCount -= 1
               sleep(retrySleep)
             end
           end

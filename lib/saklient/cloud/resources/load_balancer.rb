@@ -40,21 +40,6 @@ module Saklient
 
         # @private
         # @return [String]
-        def get_swytch_id
-          return Saklient::Util::get_by_path(self.raw_annotation, 'Switch.ID')
-        end
-
-        # スイッチID
-        #
-        # @return [String]
-        attr_reader :swytch_id
-
-        def swytch_id
-          get_swytch_id
-        end
-
-        # @private
-        # @return [String]
         def get_default_route
           return Saklient::Util::get_by_path(self.raw_annotation, 'Network.DefaultRoute')
         end
@@ -183,7 +168,7 @@ module Saklient
           end
           self.raw_settings = {} if (self.raw_settings).nil?
           self.raw_settings[:LoadBalancer] = lb
-          self.clazz = Saklient::Cloud::Enums::EApplianceClass::loadbalancer
+          self.clazz = Saklient::Cloud::Enums::EApplianceClass::loadbalancer if @is_new
         end
 
         public
@@ -202,7 +187,7 @@ module Saklient
           annot = self.raw_annotation
           self.vrid = vrid
           Saklient::Util::set_by_path(annot, 'Switch.ID', swytch._id)
-          if 0 < swytch.ipv4_nets.length
+          if !(swytch.ipv4_nets).nil? && 0 < swytch.ipv4_nets.length
             net = swytch.ipv4_nets[0]
             self.default_route = net.default_route
             self.mask_len = net.mask_len
@@ -219,11 +204,20 @@ module Saklient
           return self
         end
 
-        # @param [any] settings
         # @return [LoadBalancer]
-        def add_virtual_ip(settings)
-          @_virtual_ips << Saklient::Cloud::Resources::LbVirtualIp.new(settings)
+        def clear_virtual_ips
+          while 0 < @_virtual_ips.length do
+            @_virtual_ips.pop()
+          end
           return self
+        end
+
+        # @param [any] settings
+        # @return [LbVirtualIp]
+        def add_virtual_ip(settings = nil)
+          ret = Saklient::Cloud::Resources::LbVirtualIp.new(settings)
+          @_virtual_ips << ret
+          return ret
         end
 
         # @param [String] address
@@ -234,6 +228,19 @@ module Saklient
             return vip if vip.virtual_ip_address == address
           end
           return nil
+        end
+
+        # @return [LoadBalancer]
+        def reload_status
+          result = request_retry('GET', _api_path + '/' + Saklient::Util::url_encode(_id) + '/status')
+          vips = result[:LoadBalancer]
+          for vipDyn in vips
+            vipStr = vipDyn[:VirtualIPAddress]
+            vip = get_virtual_ip_by_address(vipStr)
+            next if (vip).nil?
+            vip.update_status(vipDyn[:Servers])
+          end
+          return self
         end
 
       end

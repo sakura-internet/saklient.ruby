@@ -5,6 +5,7 @@ require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
 require_relative 'iface'
+require_relative 'swytch'
 require_relative '../enums/eappliance_class'
 require_relative '../enums/eavailability'
 require_relative '../enums/eserver_instance_status'
@@ -87,6 +88,11 @@ module Saklient
         # @return [String]
         attr_accessor :m_availability
 
+        # 接続先スイッチID
+        #
+        # @return [String]
+        attr_accessor :m_swytch_id
+
         # @private
         # @return [String]
         def _api_path
@@ -136,7 +142,8 @@ module Saklient
         # @private
         # @return [String]
         def true_class_name
-          case (get_clazz)
+          return nil if (self.clazz).nil?
+          case (self.clazz)
             when 'loadbalancer'
               return 'LoadBalancer'
             when 'vpcrouter'
@@ -166,6 +173,23 @@ module Saklient
         end
 
         public
+
+        # このルータが接続されているスイッチを取得します.
+        #
+        # @return [Swytch]
+        def get_swytch
+          model = Saklient::Util::create_class_instance('saklient.cloud.models.Model_Swytch', [@_client])
+          id = get_swytch_id
+          return model.get_by_id(id)
+        end
+
+        # アプライアンスの設定を反映します.
+        #
+        # @return [Appliance] this
+        def apply
+          @_client.request('PUT', _api_path + '/' + Saklient::Util::url_encode(_id) + '/config')
+          return self
+        end
 
         # アプライアンスを起動します.
         #
@@ -203,7 +227,7 @@ module Saklient
         #
         # @param [Fixnum] timeoutSec
         # @return [bool] 成功時はtrue, タイムアウトやエラーによる失敗時はfalseを返します.
-        def sleep_while_creating(timeoutSec = 300)
+        def sleep_while_creating(timeoutSec = 600)
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 10
           while 0 < timeoutSec do
@@ -221,7 +245,7 @@ module Saklient
         #
         # @param [Fixnum] timeoutSec
         # @return [bool]
-        def sleep_until_up(timeoutSec = 180)
+        def sleep_until_up(timeoutSec = 600)
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           return sleep_until(Saklient::Cloud::Enums::EServerInstanceStatus::up, timeoutSec)
         end
@@ -230,7 +254,7 @@ module Saklient
         #
         # @param [Fixnum] timeoutSec
         # @return [bool] 成功時はtrue, タイムアウトやエラーによる失敗時はfalseを返します.
-        def sleep_until_down(timeoutSec = 180)
+        def sleep_until_down(timeoutSec = 600)
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           return sleep_until(Saklient::Cloud::Enums::EServerInstanceStatus::down, timeoutSec)
         end
@@ -243,7 +267,7 @@ module Saklient
         # @param [String] status
         # @param [Fixnum] timeoutSec
         # @return [bool]
-        def sleep_until(status, timeoutSec = 300)
+        def sleep_until(status, timeoutSec = 600)
           Saklient::Util::validate_type(status, 'String')
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 10
@@ -724,6 +748,30 @@ module Saklient
 
         protected
 
+        # @return [bool]
+        attr_accessor :n_swytch_id
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [String]
+        def get_swytch_id
+          return @m_swytch_id
+        end
+
+        public
+
+        # 接続先スイッチID
+        #
+        # @return [String]
+        attr_reader :swytch_id
+
+        def swytch_id
+          get_swytch_id
+        end
+
+        protected
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
@@ -847,6 +895,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_availability = false
+          if Saklient::Util::exists_path(r, 'Switch.ID')
+            @m_swytch_id = (Saklient::Util::get_by_path(r, 'Switch.ID')).nil? ? nil : Saklient::Util::get_by_path(r, 'Switch.ID').to_s
+          else
+            @m_swytch_id = nil
+            @is_incomplete = true
+          end
+          @n_swytch_id = false
         end
 
         # @private
@@ -900,6 +955,7 @@ module Saklient
           Saklient::Util::set_by_path(ret, 'Instance.Status', @m_status) if withClean || @n_status
           Saklient::Util::set_by_path(ret, 'ServiceClass', @m_service_class) if withClean || @n_service_class
           Saklient::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
+          Saklient::Util::set_by_path(ret, 'Switch.ID', @m_swytch_id) if withClean || @n_swytch_id
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Appliance creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end

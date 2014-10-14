@@ -2,10 +2,13 @@ $: << File.dirname(__dir__) + '/lib'
 require 'saklient/cloud/api'
 require 'date'
 require 'SecureRandom'
+require 'ipaddr'
 
-describe 'Server' do
+describe 'LoadBalancer' do
   
   
+	
+  TESTS_CONFIG_READYMADE_LB_ID = '112600809060'
   
   before do
     
@@ -44,228 +47,192 @@ describe 'Server' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
     description = 'This instance was created by saklient.ruby rspec'
     tag = 'saklient-test'
-    cpu = 1
-    mem = 2
-    host_name = 'saklient-test'
-    ssh_public_key = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3sSg8Vfxrs3eFTx3G//wMRlgqmFGxh5Ia8DZSSf2YrkZGqKbL1t2AsiUtIMwxGiEVVBc0K89lORzra7qoHQj5v5Xlcdqodgcs9nwuSeS38XWO6tXNF4a8LvKnfGS55+uzmBmVUwAztr3TIJR5TTWxZXpcxSsSEHx7nIcr31zcvosjgdxqvSokAsIgJyPQyxCxsPK8SFIsUV+aATqBCWNyp+R1jECPkd74ipEBoccnA0pYZnRhIsKNWR9phBRXIVd5jx/gK5jHqouhFWvCucUs0gwilEGwpng3b/YxrinNskpfOpMhOD9zjNU58OCoMS8MA17yqoZv59l3u16CrnrD saklient-test@local'
-    ssh_private_key_file = File.dirname(__dir__) + '/test-sshkey.txt'
     
-    # search a switch
-    puts 'searching a swytch...'
-    swytches = @api.swytch.with_tag('lb-attached').limit(1).find()
-    expect(swytches.length).to be > 0
-    swytch = swytches[0]
-    expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
-    expect(swytch.ipv4_nets.length).to be > 0
-    net = swytch.ipv4_nets[0]
-    printf '%s/%d -> %s\n', net.address, net.mask_len, net.default_route
     
-    # create a loadbalancer
-    puts 'creating a LB...'
-    vrid = 123
-    lb = @api.appliance.create_load_balancer(swytch, vrid, ['133.242.255.244', '133.242.255.245'], true)
     
-    ok = false
-    begin
-      lb.save()
-    rescue Saklient::Errors::SaklientException
-      ok = true
+    # create a LB
+    if ! TESTS_CONFIG_READYMADE_LB_ID then
+      
+      # search a switch
+      puts 'searching a swytch...'
+      swytches = @api.swytch.with_tag('lb-attached').limit(1).find()
+      expect(swytches.length).to be > 0
+      swytch = swytches[0]
+      expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
+      expect(swytch.ipv4_nets.length).to be > 0
+      net = swytch.ipv4_nets[0]
+      printf "%s/%d -> %s\n", net.address, net.mask_len, net.default_route
+      
+      # create a loadbalancer
+      puts 'creating a LB...'
+      vrid = 123
+      lb = @api.appliance.create_load_balancer(swytch, vrid, ['133.242.255.244', '133.242.255.245'], true)
+      
+      ok = false
+      begin
+        lb.save()
+      rescue Saklient::Errors::SaklientException
+        ok = true
+      end
+      fail 'Requiredフィールドが未set時は SaklientException がスローされなければなりません' unless ok
+      lb.name = name
+      lb.description = ''
+      lb.tags = [tag]
+      lb.save
+      
+      lb.reload
+      expect(lb.default_route).to eq net.default_route
+      expect(lb.mask_len).to eq net.mask_len
+      expect(lb.vrid).to eq vrid
+      expect(lb.swytch_id).to eq swytch.id
+      
+      # wait the LB becomes up
+      puts 'waiting the LB becomes up...'
+      fail 'ロードバランサが正常に起動しません' unless lb.sleep_until_up
+      
+    else
+      
+      lb = @api.appliance.get_by_id(TESTS_CONFIG_READYMADE_LB_ID)
+      expect(lb).to be_an_instance_of Saklient::Cloud::Resources::LoadBalancer
+      swytch = lb.get_swytch
+      expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
+      net = swytch.ipv4_nets[0]
+      expect(net).to be_an_instance_of Saklient::Cloud::Resources::Ipv4Net
+      printf "%s/%d -> %s\n", net.address, net.mask_len, net.default_route
+      
     end
-    fail 'Requiredフィールドが未set時は SaklientException がスローされなければなりません' unless ok
-    lb.name = name
-    lb.description = ''
-    lb.tags = [tag]
+    
+    
+    
+    # clear virtual ips
+    
+    lb.clear_virtual_ips
     lb.save
-    
     lb.reload
-    expect(lb.default_route).to eq net.default_route
-    expect(lb.mask_len).to eq net.mask_len
-    expect(lb.vrid).to eq vrid
-    expect(lb.swytch_id).to eq swytch.id
+    expect(lb.virtual_ips.length).to eq 0
     
-    # wait the LB becomes up
-    puts 'waiting the LB becomes up...'
-    fail 'ロードバランサが正常に起動しません' unless lb.sleep_until_up
     
-    # stop the LB
-    sleep 1
-    puts 'stopping the LB...'
-    fail 'ロードバランサが正常に停止しません' unless lb.stop.sleep_until_down
+    
+    # setting virtual ips test 1
+    
+    vip1Ip     = IPAddr.new(IPAddr.new(net.default_route).to_i + 5, Socket::AF_INET).to_s
+    vip1SrvIp1 = IPAddr.new(IPAddr.new(net.default_route).to_i + 6, Socket::AF_INET).to_s
+    vip1SrvIp2 = IPAddr.new(IPAddr.new(net.default_route).to_i + 7, Socket::AF_INET).to_s
+    vip1SrvIp3 = IPAddr.new(IPAddr.new(net.default_route).to_i + 8, Socket::AF_INET).to_s
+    vip1SrvIp4 = IPAddr.new(IPAddr.new(net.default_route).to_i + 9, Socket::AF_INET).to_s
+    
+    lb.add_virtual_ip({
+      :vip => vip1Ip,
+      :port => 80,
+      :delay => 15,
+      :servers => [
+        { :ip=>vip1SrvIp1, :port=>80, :protocol=>'http', :path_to_check=>'/index.html', :response_expected=>200 },
+        { :ip=>vip1SrvIp2, :port=>80, :protocol=>'https', :path_to_check=>'/', :response_expected=>200 },
+        { :ip=>vip1SrvIp3, :port=>80, :protocol=>'tcp' }
+      ]
+    })
+    
+    vip2Ip     = IPAddr.new(IPAddr.new(net.default_route).to_i + 10, Socket::AF_INET).to_s
+    vip2SrvIp1 = IPAddr.new(IPAddr.new(net.default_route).to_i + 11, Socket::AF_INET).to_s
+    vip2SrvIp2 = IPAddr.new(IPAddr.new(net.default_route).to_i + 12, Socket::AF_INET).to_s
+    
+    vip2 = lb.add_virtual_ip
+    vip2.virtual_ip_address = vip2Ip
+    vip2.port = 80
+    vip2.delay_loop = 15
+    vip2Srv1 = vip2.add_server
+    vip2Srv1.ip_address = vip2SrvIp1
+    vip2Srv1.port = 80
+    vip2Srv1.protocol = 'http'
+    vip2Srv1.path_to_check = '/index.html'
+    vip2Srv1.response_expected = 200
+    vip2Srv2 = vip2.add_server
+    vip2Srv2.ip_address = vip2SrvIp2
+    vip2Srv2.port = 80
+    vip2Srv2.protocol = 'tcp'
+    lb.save
+    lb.reload
+    
+    expect(lb.virtual_ips.length).to eq 2
+    expect(lb.virtual_ips[0].virtual_ip_address).to eq vip1Ip
+    expect(lb.virtual_ips[0].servers.length).to eq 3
+    expect(lb.virtual_ips[0].servers[0].ip_address).to eq vip1SrvIp1
+    expect(lb.virtual_ips[0].servers[0].port).to eq 80
+    expect(lb.virtual_ips[0].servers[0].protocol).to eq 'http'
+    expect(lb.virtual_ips[0].servers[0].path_to_check).to eq '/index.html'
+    expect(lb.virtual_ips[0].servers[0].response_expected).to eq 200
+    expect(lb.virtual_ips[0].servers[1].ip_address).to eq vip1SrvIp2
+    expect(lb.virtual_ips[0].servers[1].port).to eq 80
+    expect(lb.virtual_ips[0].servers[1].protocol).to eq 'https'
+    expect(lb.virtual_ips[0].servers[1].path_to_check).to eq '/'
+    expect(lb.virtual_ips[0].servers[1].response_expected).to eq 200
+    expect(lb.virtual_ips[0].servers[2].ip_address).to eq vip1SrvIp3
+    expect(lb.virtual_ips[0].servers[2].port).to eq 80
+    expect(lb.virtual_ips[0].servers[2].protocol).to eq 'tcp'
+    expect(lb.virtual_ips[1].virtual_ip_address).to eq vip2Ip
+    expect(lb.virtual_ips[1].servers.length).to eq 2
+    expect(lb.virtual_ips[1].servers[0].ip_address).to eq vip2SrvIp1
+    expect(lb.virtual_ips[1].servers[0].port).to eq 80
+    expect(lb.virtual_ips[1].servers[0].protocol).to eq 'http'
+    expect(lb.virtual_ips[1].servers[0].path_to_check).to eq '/index.html'
+    expect(lb.virtual_ips[1].servers[0].response_expected).to eq 200
+    expect(lb.virtual_ips[1].servers[1].ip_address).to eq vip2SrvIp2
+    expect(lb.virtual_ips[1].servers[1].port).to eq 80
+    expect(lb.virtual_ips[1].servers[1].protocol).to eq 'tcp'
+    
+    
+    
+    # setting virtual ips test 2
+    
+    lb.get_virtual_ip_by_address(vip1Ip).add_server({
+      :ip => vip1SrvIp4,
+      :port => 80,
+      :protocol => 'ping'
+    })
+    lb.save
+    lb.reload
+    
+    expect(lb.virtual_ips.length).to eq 2
+    expect(lb.virtual_ips[0].servers.length).to eq 4
+    expect(lb.virtual_ips[0].servers[3].ip_address).to eq vip1SrvIp4
+    expect(lb.virtual_ips[0].servers[3].port).to eq 80
+    expect(lb.virtual_ips[0].servers[3].protocol).to eq 'ping'
+    expect(lb.virtual_ips[1].servers.length).to eq 2
+    
+    
+    
+    # checking status
+    
+    lb.reload_status
+    for vip in lb.virtual_ips do
+      printf "  vip %s:%s every %ssec(s)\n", vip.virtual_ip_address, vip.port, vip.delay_loop
+      for server in vip.servers do
+        printf '    [%s(%s)]', server.status, server.active_connections
+        printf ' server %s://%s', server.protocol, server.ip_address
+        printf ':%d', server.port if server.port
+        print server.path_to_check if server.path_to_check
+        print ' answers'
+        printf ' %d', server.response_expected if server.response_expected
+        print "\n"
+        expect(server.status).to eq 'down'
+      end
+    end
+    
+    
     
     # delete the LB
-    puts 'deleting the LB...'
-    lb.destroy
-    
-    # # search archives
-    # puts 'searching archives...'
-    # archives = @api.archive.with_name_like('CentOS 6.5 64bit').with_size_gib(20).with_shared_scope.limit(1).find
-    # # printf "found %d archive(s)\n", archives.length
-    # archive = archives[0]
-    # # p archive.dump
-    # 
-    # # search scripts
-    # puts 'searching scripts...'
-    # scripts = @api.script.with_name_like('WordPress').with_shared_scope.limit(1).find
-    # # printf "found %d script(s)\n", scripts.length
-    # script = scripts[0]
-    # # p script.dump
-    # 
-    # # create a disk
-    # puts 'creating a disk...'
-    # disk = @api.disk.create
-    # ok = false
-    # begin
-    #   disk.save
-    # rescue Saklient::Errors::SaklientException
-    #   ok = true
-    # end
-    # fail 'Requiredフィールドが未set時は SaklientException がスローされなければなりません' unless ok
-    # disk.name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
-    # disk.description = 'This instance was created by saklient.ruby rspec'
-    # disk.tags = ['saklient-test']
-    # disk.plan = @api.product.disk.ssd
-    # disk.source = archive
-    # disk.save
-    # # p disk.dump
-    # 
-    # # check an immutable field
-    # puts 'updating the disk...'
-    # ok = false
-    # begin
-    #   disk.size_mib = 20480
-    #   disk.save
-    # rescue Saklient::Errors::SaklientException
-    #   ok = true
-    # end
-    # fail 'Immutableフィールドの再set時は SaklientException がスローされなければなりません' unless ok
-    # 
-    # # create a server
-    # puts 'creating a server...'
-    # server = @api.server.create
-    # expect(server).to be_an_instance_of Saklient::Cloud::Resources::Server
-    # server.name = name
-    # server.description = description
-    # server.tags = [tag]
-    # server.plan = @api.product.server.get_by_spec(cpu, mem)
-    # server.save
-    # 
-    # # check the server properties
-    # expect(server.id.to_i).to be > 0
-    # expect(server.name).to eq name
-    # expect(server.description).to eq description
-    # expect(server.tags).to be_an_instance_of Array
-    # expect(server.tags.length).to eq 1
-    # expect(server.tags[0]).to eq tag
-    # expect(server.plan.cpu).to eq cpu
-    # expect(server.plan.memory_gib).to eq mem
-    # 
-    # # connect to shared segment
-    # puts 'connecting the server to shared segment...'
-    # iface = server.add_iface
-    # expect(iface).to be_an_instance_of Saklient::Cloud::Resources::Iface
-    # expect(iface.id.to_i).to be > 0
-    # iface.connect_to_shared_segment
-    # 
-    # # wait disk copy
-    # puts 'waiting disk copy...'
-    # fail 'アーカイブからディスクへのコピーがタイムアウトしました' unless disk.sleep_while_copying
-    # # p disk.dump
-    # disk.source = nil
-    # disk.reload
-    # expect(disk.source).to be_an_instance_of Saklient::Cloud::Resources::Archive
-    # expect(disk.source.id).to eq archive.id
-    # expect(disk.size_gib).to eq archive.size_gib
-    # 
-    # # connect the disk to the server
-    # puts 'connecting the disk to the server...'
-    # disk.connect_to(server)
-    # 
-    # # config the disk
-    # puts 'writing configuration to the disk...'
-    # diskconf = disk.create_config
-    # diskconf.host_name = 'saklient-test'
-    # diskconf.password = SecureRandom.uuid[0, 8]
-    # diskconf.ssh_key = ssh_public_key
-    # diskconf.scripts.push(script)
-    # diskconf.write
-    # 
-    # # boot
-    # puts 'booting the server...'
-    # server.boot
-    # sleep 3
-    # server.reload
-    # expect(server.instance.status).to eq Saklient::Cloud::Enums::EServerInstanceStatus::up
-    # 
-    # # boot conflict
-    # puts 'checking the server power conflicts...'
-    # ok = false
-    # begin
-    #   server.boot
-    # rescue Saklient::Errors::HttpConflictException
-    #   ok = true
-    # end
-    # fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
-    # 
-    # # ssh
-    # ip_address = server.ifaces[0].ip_address
-    # expect(ip_address).not_to be_empty
-    # cmd = '| ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i' + ssh_private_key_file +
-    #       ' root@' + ip_address + ' hostname 2>/dev/null'
-    # ssh_success = false
-    # puts 'trying to SSH to the server...'
-    # for i in 0..9 do
-    #   sleep 5
-    #   sh = open cmd
-    #   host_name_got = ''
-    #   while !sh.eof
-    #     host_name_got += sh.gets
-    #   end
-    #   sh.close
-    #   host_name_got.strip!
-    #   next unless host_name == host_name_got
-    #   ssh_success = true
-    #   break
-    # end
-    # fail '作成したサーバへ正常にSSHできません' unless ssh_success
-    # 
-    # # stop
-    # sleep 1
-    # puts 'stopping the server...'
-    # server.stop
-    # fail 'サーバが正常に停止しません' unless server.sleep_until_down
-    # 
-    # # disconnect the disk from the server
-    # puts 'disconnecting the disk from the server...'
-    # disk.disconnect
-    # 
-    # # delete the server
-    # puts 'deleting the server...'
-    # server.destroy
-    # 
-    # # duplicate the disk
-    # puts 'duplicating the disk (expanding to 40GiB)...'
-    # disk2 = @api.disk.create
-    # disk2.name = name + "-copy"
-    # disk2.description = description
-    # disk2.tags = [tag]
-    # disk2.plan = @api.product.disk.hdd
-    # disk2.source = disk
-    # disk2.size_gib = 40
-    # disk2.save
-    # 
-    # # wait disk duplication
-    # puts 'waiting disk duplication...'
-    # fail 'ディスクの複製がタイムアウトしました' unless disk2.sleep_while_copying
-    # disk2.source = nil
-    # disk2.reload
-    # expect(disk2.source).to be_an_instance_of Saklient::Cloud::Resources::Disk
-    # expect(disk2.source.id).to eq disk.id
-    # expect(disk2.size_gib).to eq 40
-    # 
-    # # delete the disks
-    # puts 'deleting the disks...'
-    # disk2.destroy
-    # disk.destroy
+    if ! TESTS_CONFIG_READYMADE_LB_ID then
+      
+      # stop the LB
+      sleep 1
+      puts 'stopping the LB...'
+      fail 'ロードバランサが正常に停止しません' unless lb.stop.sleep_until_down
+      
+      # delete the LB
+      puts 'deleting the LB...'
+      lb.destroy
+      
+    end
     
   end
   
