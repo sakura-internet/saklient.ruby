@@ -1,5 +1,5 @@
 $: << File.dirname(__dir__) + '/lib'
-require 'saklient/cloud/errors/exception_factory'
+require 'saklient/errors/exception_factory'
 
 ExceptionFactory = Saklient::Errors::ExceptionFactory
 HttpException = Saklient::Errors::HttpException

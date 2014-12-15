@@ -78,9 +78,11 @@ describe 'Server' do
     
     # search archives
     puts 'searching archives...'
-    archives = @api.archive.with_name_like('CentOS 6.5 64bit').with_size_gib(20).with_shared_scope.limit(1).find
+    archives = @api.archive.with_name_like('CentOS 64bit').with_size_gib(20).with_shared_scope.limit(1).find
+    expect(archives.length).to be > 0
     # printf "found %d archive(s)\n", archives.length
     archive = archives[0]
+    expect(archive.id.to_i).to be > 0
     # p archive.dump
     
     # search scripts

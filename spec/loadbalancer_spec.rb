@@ -8,7 +8,8 @@ describe 'LoadBalancer' do
   
   
 	
-  TESTS_CONFIG_READYMADE_LB_ID = '112600809060'
+  TESTS_CONFIG_READYMADE_LB_ID = nil #'112600809060'
+  TESTS_CONFIG_READYMADE_SWYTCH_ID = '112500447075' #'112600553094'
   
   before do
     
@@ -55,9 +56,9 @@ describe 'LoadBalancer' do
       
       # search a switch
       puts 'searching a swytch...'
-      swytches = @api.swytch.with_tag('lb-attached').limit(1).find()
-      expect(swytches.length).to be > 0
-      swytch = swytches[0]
+      swytch = @api.swytch.get_by_id(TESTS_CONFIG_READYMADE_SWYTCH_ID)
+      # expect(swytches.length).to be > 0
+      # swytch = swytches[0]
       expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
       expect(swytch.ipv4_nets.length).to be > 0
       net = swytch.ipv4_nets[0]
@@ -66,7 +67,9 @@ describe 'LoadBalancer' do
       # create a loadbalancer
       puts 'creating a LB...'
       vrid = 123
-      lb = @api.appliance.create_load_balancer(swytch, vrid, ['133.242.255.244', '133.242.255.245'], true)
+      real_ip1 = IPAddr.new(IPAddr.new(net.default_route).to_i + 3, Socket::AF_INET).to_s
+      real_ip2 = IPAddr.new(IPAddr.new(net.default_route).to_i + 4, Socket::AF_INET).to_s
+      lb = @api.appliance.create_load_balancer(swytch, vrid, [real_ip1, real_ip2], true)
       
       ok = false
       begin

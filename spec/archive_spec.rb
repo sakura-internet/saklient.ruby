@@ -106,6 +106,7 @@ describe 'Archive' do
     disk.description = description
     disk.tags = [tag]
     disk.size_gib = 20
+    disk.plan = @api.product.disk.ssd
     disk.save
     
     archive = @api.archive.create
