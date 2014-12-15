@@ -57,10 +57,24 @@ describe 'Bridge' do
     bridge.description = description
     bridge.region = regions[0]
     bridge.save
-    
     expect(bridge).to be_an_instance_of Saklient::Cloud::Resources::Bridge
     
-    #
+    puts 'スイッチを作成しています...'
+    swytch = @api.swytch.create
+    swytch.name = name
+    swytch.description = description
+    swytch.save
+    expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
+    
+    puts 'スイッチをブリッジに接続しています...'
+    swytch.connect_to_bridge(bridge)
+    
+    puts 'スイッチをブリッジから切断しています...'
+    swytch.disconnect_from_bridge
+    
+    puts 'スイッチを削除しています...'
+    swytch.destroy
+    
     puts 'ブリッジを削除しています...'
     bridge.destroy
     

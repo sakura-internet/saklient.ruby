@@ -7,6 +7,7 @@ require_relative 'icon'
 require_relative 'router'
 require_relative 'ipv4_net'
 require_relative 'ipv6_net'
+require_relative 'bridge'
 
 module Saklient
   module Cloud
@@ -56,6 +57,11 @@ module Saklient
         #
         # @return [Router]
         attr_accessor :m_router
+
+        # 接続されているブリッジ
+        #
+        # @return [Bridge]
+        attr_accessor :m_bridge
 
         # IPv4ネットワーク（ルータによる自動割当） {Ipv4Net} の配列
         #
@@ -174,6 +180,26 @@ module Saklient
         def change_plan(bandWidthMbps)
           Saklient::Util::validate_type(bandWidthMbps, 'Fixnum')
           get_router.change_plan(bandWidthMbps)
+          reload
+          return self
+        end
+
+        # このルータ＋スイッチをブリッジに接続します.
+        #
+        # @param [Bridge] bridge
+        # @return [Swytch] this
+        def connect_to_bridge(bridge)
+          Saklient::Util::validate_type(bridge, 'Saklient::Cloud::Resources::Bridge')
+          result = @_client.request('PUT', _api_path + '/' + _id + '/to/bridge/' + bridge._id)
+          reload
+          return self
+        end
+
+        # このルータ＋スイッチをブリッジから切断します.
+        #
+        # @return [Swytch] this
+        def disconnect_from_bridge
+          result = @_client.request('DELETE', _api_path + '/' + _id + '/to/bridge')
           reload
           return self
         end
@@ -438,6 +464,30 @@ module Saklient
         protected
 
         # @return [bool]
+        attr_accessor :n_bridge
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [Bridge]
+        def get_bridge
+          return @m_bridge
+        end
+
+        public
+
+        # 接続されているブリッジ
+        #
+        # @return [Bridge]
+        attr_reader :bridge
+
+        def bridge
+          get_bridge
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_ipv4_nets
 
         # (This method is generated in Translator_default#buildImpl)
@@ -557,6 +607,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_router = false
+          if Saklient::Util::exists_path(r, 'Bridge')
+            @m_bridge = (Saklient::Util::get_by_path(r, 'Bridge')).nil? ? nil : Saklient::Cloud::Resources::Bridge.new(@_client, Saklient::Util::get_by_path(r, 'Bridge'))
+          else
+            @m_bridge = nil
+            @is_incomplete = true
+          end
+          @n_bridge = false
           if Saklient::Util::exists_path(r, 'Subnets')
             if (Saklient::Util::get_by_path(r, 'Subnets')).nil?
               @m_ipv4_nets = []
@@ -617,6 +674,7 @@ module Saklient
           Saklient::Util::set_by_path(ret, 'UserSubnet.DefaultRoute', @m_user_default_route) if withClean || @n_user_default_route
           Saklient::Util::set_by_path(ret, 'UserSubnet.NetworkMaskLen', @m_user_mask_len) if withClean || @n_user_mask_len
           Saklient::Util::set_by_path(ret, 'Internet', withClean ? ((@m_router).nil? ? nil : @m_router.api_serialize(withClean)) : ((@m_router).nil? ? { ID: '0' } : @m_router.api_serialize_id)) if withClean || @n_router
+          Saklient::Util::set_by_path(ret, 'Bridge', withClean ? ((@m_bridge).nil? ? nil : @m_bridge.api_serialize(withClean)) : ((@m_bridge).nil? ? { ID: '0' } : @m_bridge.api_serialize_id)) if withClean || @n_bridge
           if withClean || @n_ipv4_nets
             Saklient::Util::set_by_path(ret, 'Subnets', [])
             for r2 in @m_ipv4_nets

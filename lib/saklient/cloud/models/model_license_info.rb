@@ -119,7 +119,7 @@ module Saklient
         #
         # @todo Implement test case
         # @param [bool] reverse
-        # @return [Model_Archive]
+        # @return [Model_LicenseInfo]
         def sort_by_name(reverse = false)
           Saklient::Util::validate_type(reverse, 'bool')
           return _sort_by_name(reverse)

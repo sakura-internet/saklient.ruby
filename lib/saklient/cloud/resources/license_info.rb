@@ -3,7 +3,6 @@
 require_relative '../../errors/saklient_exception'
 require_relative '../client'
 require_relative 'resource'
-require_relative 'license_info'
 
 module Saklient
   module Cloud
