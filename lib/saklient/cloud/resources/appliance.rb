@@ -9,6 +9,7 @@ require_relative 'swytch'
 require_relative '../enums/eappliance_class'
 require_relative '../enums/eavailability'
 require_relative '../enums/eserver_instance_status'
+require_relative '../models/model_swytch'
 
 module Saklient
   module Cloud
@@ -39,7 +40,7 @@ module Saklient
         # @return [String]
         attr_accessor :m_description
 
-        # タグ
+        # タグ文字列の配列
         #
         # @return [Array<String>]
         attr_accessor :m_tags
@@ -54,7 +55,7 @@ module Saklient
         # @return [Fixnum]
         attr_accessor :m_plan_id
 
-        # インタフェース
+        # インタフェース {Iface} の配列
         #
         # @return [Array<Iface>]
         attr_accessor :m_ifaces
@@ -137,19 +138,6 @@ module Saklient
         # @return [Appliance] this
         def reload
           return _reload
-        end
-
-        # @private
-        # @return [String]
-        def true_class_name
-          return nil if (self.clazz).nil?
-          case (self.clazz)
-            when 'loadbalancer'
-              return 'LoadBalancer'
-            when 'vpcrouter'
-              return 'VpcRouter'
-          end
-          return nil
         end
 
         # @private
@@ -453,7 +441,7 @@ module Saklient
 
         public
 
-        # タグ
+        # タグ文字列の配列
         #
         # @return [Array<String>]
         attr_accessor :tags
@@ -562,7 +550,7 @@ module Saklient
 
         public
 
-        # インタフェース
+        # インタフェース {Iface} の配列
         #
         # @return [Array<Iface>]
         attr_reader :ifaces

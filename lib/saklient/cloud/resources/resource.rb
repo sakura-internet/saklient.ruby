@@ -275,12 +275,6 @@ module Saklient
         end
 
         # @private
-        # @return [String]
-        def true_class_name
-          return nil
-        end
-
-        # @private
         # @param [String] className
         # @param [Saklient::Cloud::Client] client
         # @param [any] obj
@@ -295,10 +289,7 @@ module Saklient
             obj,
             wrapped
           ]
-          ret = Saklient::Util::create_class_instance('saklient.cloud.resources.' + className, a)
-          trueClassName = ret.true_class_name
-          ret = Saklient::Util::create_class_instance('saklient.cloud.resources.' + trueClassName, a) if !(trueClassName).nil?
-          return ret
+          return Saklient::Util::create_class_instance('saklient.cloud.resources.' + className, a)
         end
 
         # @param [String] method

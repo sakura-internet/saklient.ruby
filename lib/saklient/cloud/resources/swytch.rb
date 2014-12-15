@@ -47,12 +47,12 @@ module Saklient
         # @return [Router]
         attr_accessor :m_router
 
-        # IPv4ネットワーク（ルータによる自動割当）
+        # IPv4ネットワーク（ルータによる自動割当） {Ipv4Net} の配列
         #
         # @return [Array<Ipv4Net>]
         attr_accessor :m_ipv4_nets
 
-        # IPv6ネットワーク（ルータによる自動割当）
+        # IPv6ネットワーク（ルータによる自動割当） {Ipv6Net} の配列
         #
         # @return [Array<Ipv6Net>]
         attr_accessor :m_ipv6_nets
@@ -359,7 +359,7 @@ module Saklient
 
         public
 
-        # IPv4ネットワーク（ルータによる自動割当）
+        # IPv4ネットワーク（ルータによる自動割当） {Ipv4Net} の配列
         #
         # @return [Array<Ipv4Net>]
         attr_reader :ipv4_nets
@@ -383,7 +383,7 @@ module Saklient
 
         public
 
-        # IPv6ネットワーク（ルータによる自動割当）
+        # IPv6ネットワーク（ルータによる自動割当） {Ipv6Net} の配列
         #
         # @return [Array<Ipv6Net>]
         attr_reader :ipv6_nets

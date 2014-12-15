@@ -29,7 +29,7 @@ module Saklient
           return @_virtual_ips
         end
 
-        # 仮想IPアドレス
+        # 仮想IPアドレス {LbVirtualIp} の配列
         #
         # @return [Array<LbVirtualIp>]
         attr_reader :virtual_ips

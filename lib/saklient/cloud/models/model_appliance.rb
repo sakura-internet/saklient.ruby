@@ -2,6 +2,7 @@
 
 require_relative '../client'
 require_relative 'model'
+require_relative '../resources/resource'
 require_relative '../resources/appliance'
 require_relative '../resources/load_balancer'
 require_relative '../resources/vpc_router'
@@ -38,6 +39,19 @@ module Saklient
         # @return [String]
         def _class_name
           return 'Appliance'
+        end
+
+        # @private
+        # @param [any] obj
+        # @param [bool] wrapped
+        # @return [Saklient::Cloud::Resources::Resource]
+        def _create_resource_impl(obj, wrapped = false)
+          Saklient::Util::validate_type(wrapped, 'bool')
+          ret = Saklient::Cloud::Resources::Appliance.new(@_client, obj, wrapped)
+          clazz = ret.clazz
+          return Saklient::Cloud::Resources::LoadBalancer.new(@_client, obj, wrapped) if clazz == 'loadbalancer'
+          return Saklient::Cloud::Resources::VpcRouter.new(@_client, obj, wrapped) if clazz == 'vpcrouter'
+          return ret
         end
 
         public
@@ -89,13 +103,14 @@ module Saklient
           Saklient::Util::validate_type(vrid, 'Fixnum')
           Saklient::Util::validate_type(realIps, 'Array')
           Saklient::Util::validate_type(isHighSpec, 'bool')
-          ret = _create('LoadBalancer')
+          ret = Saklient::Cloud::Resources::LoadBalancer.new(@_client, nil)
           return ret.set_initial_params(swytch, vrid, realIps, isHighSpec)
         end
 
         # @return [Saklient::Cloud::Resources::VpcRouter]
         def create_vpc_router
-          return _create('VpcRouter')
+          ret = Saklient::Cloud::Resources::VpcRouter.new(@_client, nil)
+          return ret
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.

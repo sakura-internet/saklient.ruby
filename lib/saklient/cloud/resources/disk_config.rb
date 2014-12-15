@@ -285,7 +285,7 @@ module Saklient
 
         public
 
-        # スタートアップスクリプト（pushによりスクリプトを追加できます）
+        # スタートアップスクリプト {Script} の配列（pushによりスクリプトを追加できます）
         #
         # @return [Array<Script>]
         attr_reader :scripts

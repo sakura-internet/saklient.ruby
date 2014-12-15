@@ -2,6 +2,7 @@
 
 require_relative '../client'
 require_relative 'model'
+require_relative '../resources/resource'
 require_relative '../resources/archive'
 require_relative '../resources/load_balancer'
 require_relative '../resources/vpc_router'
@@ -38,6 +39,15 @@ module Saklient
         # @return [String]
         def _class_name
           return 'Archive'
+        end
+
+        # @private
+        # @param [any] obj
+        # @param [bool] wrapped
+        # @return [Saklient::Cloud::Resources::Resource]
+        def _create_resource_impl(obj, wrapped = false)
+          Saklient::Util::validate_type(wrapped, 'bool')
+          return Saklient::Cloud::Resources::Archive.new(@_client, obj, wrapped)
         end
 
         public

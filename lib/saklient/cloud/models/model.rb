@@ -203,15 +203,12 @@ module Saklient
         end
 
         # @private
-        # @param [String] className
         # @param [any] obj
         # @param [bool] wrapped
         # @return [Saklient::Cloud::Resources::Resource]
-        def _create_resource_with(className, obj, wrapped = false)
-          Saklient::Util::validate_type(className, 'String')
+        def _create_resource_impl(obj, wrapped = false)
           Saklient::Util::validate_type(wrapped, 'bool')
-          className = _class_name if (className).nil?
-          return Saklient::Cloud::Resources::Resource::create_with(className, @_client, obj, wrapped)
+          return nil
         end
 
         # 新規リソース作成用のオブジェクトを用意します.
@@ -219,11 +216,9 @@ module Saklient
         # 返り値のオブジェクトにパラメータを設定し, save() を呼ぶことで実際のリソースが作成されます.
         #
         # @private
-        # @param [String] className
         # @return [Saklient::Cloud::Resources::Resource] リソースオブジェクト
-        def _create(className = nil)
-          Saklient::Util::validate_type(className, 'String')
-          return _create_resource_with(className, nil)
+        def _create
+          return _create_resource_impl(nil)
         end
 
         # 指定したIDを持つ唯一のリソースを取得します.
@@ -238,7 +233,7 @@ module Saklient
           result = @_client.request('GET', _api_path + '/' + Saklient::Util::url_encode(id), query)
           @_total = 1
           @_count = 1
-          return _create_resource_with(nil, result, true)
+          return _create_resource_impl(result, true)
         end
 
         # リソースの検索リクエストを実行し, 結果をリストで取得します.
@@ -254,7 +249,7 @@ module Saklient
           data = []
           records = result[_root_key_m.to_sym]
           for record in records
-            data << _create_resource_with(nil, record)
+            data << _create_resource_impl(record)
           end
           return data
         end
@@ -271,7 +266,7 @@ module Saklient
           @_count = result[:Count]
           return nil if @_total == 0
           records = result[_root_key_m.to_sym]
-          return _create_resource_with(nil, records[0])
+          return _create_resource_impl(records[0])
         end
 
         # 指定した文字列を名前に含むリソースに絞り込みます.

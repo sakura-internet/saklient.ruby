@@ -35,7 +35,7 @@ module Saklient
         # @return [String]
         attr_accessor :m_description
 
-        # タグ
+        # タグ文字列の配列
         #
         # @return [Array<String>]
         attr_accessor :m_tags
@@ -442,7 +442,7 @@ module Saklient
 
         public
 
-        # タグ
+        # タグ文字列の配列
         #
         # @return [Array<String>]
         attr_accessor :tags

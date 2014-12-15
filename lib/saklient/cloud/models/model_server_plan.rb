@@ -2,6 +2,7 @@
 
 require_relative '../client'
 require_relative 'model'
+require_relative '../resources/resource'
 require_relative '../resources/server_plan'
 
 module Saklient
@@ -35,6 +36,15 @@ module Saklient
         # @return [String]
         def _class_name
           return 'ServerPlan'
+        end
+
+        # @private
+        # @param [any] obj
+        # @param [bool] wrapped
+        # @return [Saklient::Cloud::Resources::Resource]
+        def _create_resource_impl(obj, wrapped = false)
+          Saklient::Util::validate_type(wrapped, 'bool')
+          return Saklient::Cloud::Resources::ServerPlan.new(@_client, obj, wrapped)
         end
 
         public

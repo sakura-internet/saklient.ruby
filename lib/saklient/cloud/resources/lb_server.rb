@@ -203,7 +203,7 @@ module Saklient
           return @_active_connections
         end
 
-        # レスポンスコード
+        # 現在の接続数
         #
         # @return [Fixnum]
         attr_reader :active_connections
@@ -226,7 +226,7 @@ module Saklient
           return @_status
         end
 
-        # レスポンスコード
+        # 現在の状態
         #
         # @return [String]
         attr_reader :status

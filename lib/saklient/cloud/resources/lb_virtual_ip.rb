@@ -132,7 +132,7 @@ module Saklient
           return @_servers
         end
 
-        # 実サーバ
+        # 実サーバ {LbServer} の配列
         #
         # @return [Array<LbServer>]
         attr_reader :servers
