@@ -3,6 +3,7 @@
 require_relative '../util'
 require_relative 'client'
 require_relative 'product'
+require_relative 'facility'
 require_relative 'models/model_icon'
 require_relative 'models/model_server'
 require_relative 'models/model_disk'
@@ -12,8 +13,10 @@ require_relative 'models/model_iso_image'
 require_relative 'models/model_iface'
 require_relative 'models/model_swytch'
 require_relative 'models/model_router'
+require_relative 'models/model_bridge'
 require_relative 'models/model_ipv6_net'
 require_relative 'models/model_script'
+require_relative 'models/model_license'
 
 module Saklient
   module Cloud
@@ -66,6 +69,29 @@ module Saklient
 
       def product
         get_product
+      end
+
+      protected
+
+      # @private
+      # @return [Facility]
+      attr_accessor :_facility
+
+      # @private
+      # @return [Facility]
+      def get_facility
+        return @_facility
+      end
+
+      public
+
+      # 設備情報にアクセスするためのモデルを集めたオブジェクト.
+      #
+      # @return [Facility]
+      attr_reader :facility
+
+      def facility
+        get_facility
       end
 
       protected
@@ -278,6 +304,29 @@ module Saklient
       protected
 
       # @private
+      # @return [Saklient::Cloud::Models::Model_Bridge]
+      attr_accessor :_bridge
+
+      # @private
+      # @return [Saklient::Cloud::Models::Model_Bridge]
+      def get_bridge
+        return @_bridge
+      end
+
+      public
+
+      # ブリッジにアクセスするためのモデル.
+      #
+      # @return [Saklient::Cloud::Models::Model_Bridge]
+      attr_reader :bridge
+
+      def bridge
+        get_bridge
+      end
+
+      protected
+
+      # @private
       # @return [Saklient::Cloud::Models::Model_Ipv6Net]
       attr_accessor :_ipv6_net
 
@@ -324,11 +373,35 @@ module Saklient
       protected
 
       # @private
+      # @return [Saklient::Cloud::Models::Model_License]
+      attr_accessor :_license
+
+      # @private
+      # @return [Saklient::Cloud::Models::Model_License]
+      def get_license
+        return @_license
+      end
+
+      public
+
+      # ライセンスにアクセスするためのモデル.
+      #
+      # @return [Saklient::Cloud::Models::Model_License]
+      attr_reader :license
+
+      def license
+        get_license
+      end
+
+      protected
+
+      # @private
       # @param [Client] client
       def initialize(client)
         Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
         @_client = client
         @_product = Saklient::Cloud::Product.new(client)
+        @_facility = Saklient::Cloud::Facility.new(client)
         @_icon = Saklient::Cloud::Models::Model_Icon.new(client)
         @_server = Saklient::Cloud::Models::Model_Server.new(client)
         @_disk = Saklient::Cloud::Models::Model_Disk.new(client)
@@ -338,8 +411,10 @@ module Saklient
         @_iface = Saklient::Cloud::Models::Model_Iface.new(client)
         @_swytch = Saklient::Cloud::Models::Model_Swytch.new(client)
         @_router = Saklient::Cloud::Models::Model_Router.new(client)
+        @_bridge = Saklient::Cloud::Models::Model_Bridge.new(client)
         @_ipv6_net = Saklient::Cloud::Models::Model_Ipv6Net.new(client)
         @_script = Saklient::Cloud::Models::Model_Script.new(client)
+        @_license = Saklient::Cloud::Models::Model_License.new(client)
       end
 
       public

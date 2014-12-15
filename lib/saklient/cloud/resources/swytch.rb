@@ -32,6 +32,16 @@ module Saklient
         # @return [String]
         attr_accessor :m_description
 
+        # タグ文字列の配列
+        #
+        # @return [Array<String>]
+        attr_accessor :m_tags
+
+        # アイコン
+        #
+        # @return [Icon]
+        attr_accessor :m_icon
+
         # ユーザ設定IPv4ネットワークのゲートウェイ
         #
         # @return [String]
@@ -275,6 +285,87 @@ module Saklient
         protected
 
         # @return [bool]
+        attr_accessor :n_tags
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [Array<String>]
+        def get_tags
+          @n_tags = true
+          return @m_tags
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [Array<String>] v
+        # @return [Array<String>]
+        def set_tags(v)
+          Saklient::Util::validate_type(v, 'Array')
+          @m_tags = v
+          @n_tags = true
+          return @m_tags
+        end
+
+        public
+
+        # タグ文字列の配列
+        #
+        # @return [Array<String>]
+        attr_accessor :tags
+
+        def tags
+          get_tags
+        end
+
+        def tags=(v)
+          set_tags(v)
+        end
+
+        protected
+
+        # @return [bool]
+        attr_accessor :n_icon
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [Icon]
+        def get_icon
+          return @m_icon
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [Icon] v
+        # @return [Icon]
+        def set_icon(v)
+          Saklient::Util::validate_type(v, 'Saklient::Cloud::Resources::Icon')
+          @m_icon = v
+          @n_icon = true
+          return @m_icon
+        end
+
+        public
+
+        # アイコン
+        #
+        # @return [Icon]
+        attr_accessor :icon
+
+        def icon
+          get_icon
+        end
+
+        def icon=(v)
+          set_icon(v)
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_user_default_route
 
         # (This method is generated in Translator_default#buildImpl)
@@ -422,6 +513,29 @@ module Saklient
             @is_incomplete = true
           end
           @n_description = false
+          if Saklient::Util::exists_path(r, 'Tags')
+            if (Saklient::Util::get_by_path(r, 'Tags')).nil?
+              @m_tags = []
+            else
+              @m_tags = []
+              for t in Saklient::Util::get_by_path(r, 'Tags')
+                v1 = nil
+                v1 = (t).nil? ? nil : t.to_s
+                @m_tags << v1
+              end
+            end
+          else
+            @m_tags = nil
+            @is_incomplete = true
+          end
+          @n_tags = false
+          if Saklient::Util::exists_path(r, 'Icon')
+            @m_icon = (Saklient::Util::get_by_path(r, 'Icon')).nil? ? nil : Saklient::Cloud::Resources::Icon.new(@_client, Saklient::Util::get_by_path(r, 'Icon'))
+          else
+            @m_icon = nil
+            @is_incomplete = true
+          end
+          @n_icon = false
           if Saklient::Util::exists_path(r, 'UserSubnet.DefaultRoute')
             @m_user_default_route = (Saklient::Util::get_by_path(r, 'UserSubnet.DefaultRoute')).nil? ? nil : Saklient::Util::get_by_path(r, 'UserSubnet.DefaultRoute').to_s
           else
@@ -449,9 +563,9 @@ module Saklient
             else
               @m_ipv4_nets = []
               for t in Saklient::Util::get_by_path(r, 'Subnets')
-                v1 = nil
-                v1 = (t).nil? ? nil : Saklient::Cloud::Resources::Ipv4Net.new(@_client, t)
-                @m_ipv4_nets << v1
+                v2 = nil
+                v2 = (t).nil? ? nil : Saklient::Cloud::Resources::Ipv4Net.new(@_client, t)
+                @m_ipv4_nets << v2
               end
             end
           else
@@ -465,9 +579,9 @@ module Saklient
             else
               @m_ipv6_nets = []
               for t in Saklient::Util::get_by_path(r, 'IPv6Nets')
-                v2 = nil
-                v2 = (t).nil? ? nil : Saklient::Cloud::Resources::Ipv6Net.new(@_client, t)
-                @m_ipv6_nets << v2
+                v3 = nil
+                v3 = (t).nil? ? nil : Saklient::Cloud::Resources::Ipv6Net.new(@_client, t)
+                @m_ipv6_nets << v3
               end
             end
           else
@@ -491,22 +605,31 @@ module Saklient
             missing << 'name' if @is_new
           end
           Saklient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
+          if withClean || @n_tags
+            Saklient::Util::set_by_path(ret, 'Tags', [])
+            for r1 in @m_tags
+              v = nil
+              v = r1
+              ret[:Tags] << v
+            end
+          end
+          Saklient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
           Saklient::Util::set_by_path(ret, 'UserSubnet.DefaultRoute', @m_user_default_route) if withClean || @n_user_default_route
           Saklient::Util::set_by_path(ret, 'UserSubnet.NetworkMaskLen', @m_user_mask_len) if withClean || @n_user_mask_len
           Saklient::Util::set_by_path(ret, 'Internet', withClean ? ((@m_router).nil? ? nil : @m_router.api_serialize(withClean)) : ((@m_router).nil? ? { ID: '0' } : @m_router.api_serialize_id)) if withClean || @n_router
           if withClean || @n_ipv4_nets
             Saklient::Util::set_by_path(ret, 'Subnets', [])
-            for r1 in @m_ipv4_nets
+            for r2 in @m_ipv4_nets
               v = nil
-              v = withClean ? ((r1).nil? ? nil : r1.api_serialize(withClean)) : ((r1).nil? ? { ID: '0' } : r1.api_serialize_id)
+              v = withClean ? ((r2).nil? ? nil : r2.api_serialize(withClean)) : ((r2).nil? ? { ID: '0' } : r2.api_serialize_id)
               ret[:Subnets] << v
             end
           end
           if withClean || @n_ipv6_nets
             Saklient::Util::set_by_path(ret, 'IPv6Nets', [])
-            for r2 in @m_ipv6_nets
+            for r3 in @m_ipv6_nets
               v = nil
-              v = withClean ? ((r2).nil? ? nil : r2.api_serialize(withClean)) : ((r2).nil? ? { ID: '0' } : r2.api_serialize_id)
+              v = withClean ? ((r3).nil? ? nil : r3.api_serialize(withClean)) : ((r3).nil? ? { ID: '0' } : r3.api_serialize_id)
               ret[:IPv6Nets] << v
             end
           end
