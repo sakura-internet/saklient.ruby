@@ -175,7 +175,7 @@ module Saklient
 
         # このルータ＋スイッチの帯域プランを変更します.
         #
-        # @param [Fixnum] bandWidthMbps
+        # @param [Fixnum] bandWidthMbps 帯域幅（api.product.router.find() から取得できる {RouterPlan} の bandWidthMbps を指定）.
         # @return [Swytch] this
         def change_plan(bandWidthMbps)
           Saklient::Util::validate_type(bandWidthMbps, 'Fixnum')
@@ -186,6 +186,7 @@ module Saklient
 
         # このルータ＋スイッチをブリッジに接続します.
         #
+        # @param swytch 接続先のブリッジ.
         # @param [Bridge] bridge
         # @return [Swytch] this
         def connect_to_bridge(bridge)

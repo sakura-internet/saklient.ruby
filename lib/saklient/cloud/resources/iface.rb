@@ -3,6 +3,7 @@
 require_relative '../../errors/saklient_exception'
 require_relative '../client'
 require_relative 'resource'
+require_relative 'swytch'
 
 module Saklient
   module Cloud
@@ -95,11 +96,29 @@ module Saklient
           api_deserialize(obj, wrapped)
         end
 
+        # スイッチに接続します.
+        #
+        # @param [Swytch] swytch 接続先のスイッチ.
+        # @return [Iface] this
+        def connect_to_swytch(swytch)
+          Saklient::Util::validate_type(swytch, 'Saklient::Cloud::Resources::Swytch')
+          @_client.request('PUT', _api_path + '/' + Saklient::Util::url_encode(_id) + '/to/switch/' + Saklient::Util::url_encode(swytch._id))
+          return reload
+        end
+
         # 共有セグメントに接続します.
         #
         # @return [Iface] this
         def connect_to_shared_segment
           @_client.request('PUT', _api_path + '/' + Saklient::Util::url_encode(_id) + '/to/switch/shared')
+          return reload
+        end
+
+        # スイッチから切断します.
+        #
+        # @return [Iface] this
+        def disconnect_from_swytch
+          @_client.request('DELETE', _api_path + '/' + Saklient::Util::url_encode(_id) + '/to/switch')
           return reload
         end
 
