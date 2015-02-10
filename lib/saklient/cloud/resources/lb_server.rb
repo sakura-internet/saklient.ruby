@@ -6,7 +6,7 @@ module Saklient
   module Cloud
     module Resources
 
-      # ロードバランサの監視対象サーバ.
+      # ロードバランサの監視対象サーバ設定.
       class LbServer
 
         protected
@@ -286,6 +286,7 @@ module Saklient
           }
         end
 
+        # @private
         # @param [any] obj
         # @return [LbServer]
         def update_status(obj)

@@ -7,7 +7,7 @@ module Saklient
   module Cloud
     module Resources
 
-      # ロードバランサの仮想IPアドレス.
+      # ロードバランサの仮想IPアドレス設定.
       class LbVirtualIp
 
         protected
@@ -175,7 +175,9 @@ module Saklient
           end
         end
 
-        # @param [any] settings
+        # 監視対象サーバ設定を追加します.
+        #
+        # @param [any] settings 設定オブジェクト
         # @return [LbServer]
         def add_server(settings = nil)
           ret = Saklient::Cloud::Resources::LbServer.new(settings)
@@ -197,8 +199,10 @@ module Saklient
           }
         end
 
-        # @param [String] address
-        # @return [LbServer]
+        # 指定したIPアドレスにマッチする監視対象サーバ設定のうち, 最初にマッチしたものを取得します.
+        #
+        # @param [String] address 検索するIPアドレス
+        # @return [LbServer] 監視対象サーバ設定（見つからなかった場合はnull）
         def get_server_by_address(address)
           Saklient::Util::validate_type(address, 'String')
           for srv in @_servers
@@ -207,6 +211,21 @@ module Saklient
           return nil
         end
 
+        # 指定したIPアドレスにマッチする監視対象サーバ設定をすべて削除します.
+        #
+        # @param [String] address
+        # @return [LbVirtualIp]
+        def remove_server_by_address(address)
+          Saklient::Util::validate_type(address, 'String')
+          servers = []
+          for srv in @_servers
+            servers << srv if srv.ip_address != address
+          end
+          @_servers = servers
+          return self
+        end
+
+        # @private
         # @param [Array] srvs
         # @return [LbVirtualIp]
         def update_status(srvs)

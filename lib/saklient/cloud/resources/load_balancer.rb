@@ -212,7 +212,9 @@ module Saklient
           return self
         end
 
-        # @param [any] settings
+        # 仮想IPアドレス設定を追加します.
+        #
+        # @param [any] settings 設定オブジェクト
         # @return [LbVirtualIp]
         def add_virtual_ip(settings = nil)
           ret = Saklient::Cloud::Resources::LbVirtualIp.new(settings)
@@ -220,6 +222,8 @@ module Saklient
           return ret
         end
 
+        # 指定したIPアドレスにマッチする仮想IPアドレス設定を取得します.
+        #
         # @param [String] address
         # @return [LbVirtualIp]
         def get_virtual_ip_by_address(address)
@@ -230,15 +234,19 @@ module Saklient
           return nil
         end
 
+        # 監視対象サーバのステータスを最新の状態に更新します.
+        #
         # @return [LoadBalancer]
         def reload_status
           result = request_retry('GET', _api_path + '/' + Saklient::Util::url_encode(_id) + '/status')
-          vips = result[:LoadBalancer]
-          for vipDyn in vips
-            vipStr = vipDyn[:VirtualIPAddress]
-            vip = get_virtual_ip_by_address(vipStr)
-            next if (vip).nil?
-            vip.update_status(vipDyn[:Servers])
+          if !result.nil? && result.key?(:LoadBalancer)
+            vips = result[:LoadBalancer]
+            for vipDyn in vips
+              vipStr = vipDyn[:VirtualIPAddress]
+              vip = get_virtual_ip_by_address(vipStr)
+              next if (vip).nil?
+              vip.update_status(vipDyn[:Servers])
+            end
           end
           return self
         end
