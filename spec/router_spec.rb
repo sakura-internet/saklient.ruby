@@ -45,6 +45,9 @@ describe 'Router' do
     name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
     description = 'This instance was created by saklient.ruby rspec'
     mask_len = 28
+    mask_len_cnt = 1<<32-mask_len
+    sroute_mask_len = 28
+    sroute_mask_len_cnt = 1<<32-sroute_mask_len
   
     #
     swytch = nil
@@ -77,8 +80,38 @@ describe 'Router' do
     end
     
     expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
-    expect(swytch.ipv4_nets.length).to be > 0
+    expect(swytch.ipv4_nets.length).to eq 1
     expect(swytch.ipv4_nets[0]).to be_an_instance_of Saklient::Cloud::Resources::Ipv4Net
+    expect(swytch.ipv4_nets[0].range.as_array.length).to eq mask_len_cnt-5
+    expect(swytch.collect_used_ipv4_addresses.length).to eq 0
+    expect(swytch.collect_unused_ipv4_addresses.length).to eq mask_len_cnt-5
+    
+    #
+    puts 'サーバを作成しています...'
+    server = @api.server.create
+    expect(server).to be_an_instance_of Saklient::Cloud::Resources::Server
+    server.name = name
+    server.description = description
+    server.plan = @api.product.server.get_by_spec(1, 1)
+    server.save
+    expect(server.id.to_i).to be > 0
+     
+    #
+    puts 'インタフェースを増設しています...'
+    iface = server.add_iface()
+    expect(iface).to be_an_instance_of Saklient::Cloud::Resources::Iface
+    expect(iface.id.to_i).to be > 0
+    
+    #
+    puts 'インタフェースをルータ＋スイッチに接続しています...'
+    iface.connect_to_swytch(swytch)
+    
+    #
+    puts 'インタフェースにIPアドレスを設定しています...'
+    iface.user_ip_address = swytch.ipv4_nets[0].range.as_array[1]
+    iface.save
+    expect(swytch.collect_used_ipv4_addresses.length).to eq 1
+    expect(swytch.collect_unused_ipv4_addresses.length).to eq mask_len_cnt-6
     
     #
     puts 'ルータ＋スイッチの帯域プランを変更しています...'
@@ -87,14 +120,19 @@ describe 'Router' do
     expect(swytch.router.id).not_to eq router_id_before
     
     #
-    if 0 < swytch.ipv6_nets.length then
-      puts 'ルータ＋スイッチからIPv6ネットワークの割当を解除しています...'
-      swytch.remove_ipv6_net
-    end
     puts 'ルータ＋スイッチにIPv6ネットワークを割り当てています...'
     v6net = swytch.add_ipv6_net
     expect(v6net).to be_an_instance_of Saklient::Cloud::Resources::Ipv6Net
     expect(swytch.ipv6_nets.length).to eq 1
+    
+    #
+    puts 'ルータ＋スイッチにスタティックルートを割り当てています...'
+    net0 = swytch.ipv4_nets[0]
+    next_hop = IPAddr.new(IPAddr.new(net0.address).to_i + 4, Socket::AF_INET).to_s
+    sroute = swytch.add_static_route(sroute_mask_len, next_hop)
+    expect(sroute).to be_an_instance_of Saklient::Cloud::Resources::Ipv4Net
+    expect(swytch.ipv4_nets.length).to eq 2
+    expect(swytch.ipv4_nets[1].range.as_array.length).to eq sroute_mask_len_cnt
     
     #
     (swytch.ipv4_nets.length - 1).downto(1) do |i|
@@ -103,12 +141,17 @@ describe 'Router' do
       swytch.remove_static_route(net)
     end
     
-    puts 'ルータ＋スイッチにスタティックルートを割り当てています...'
-    net0 = swytch.ipv4_nets[0]
-    next_hop = IPAddr.new(IPAddr.new(net0.address).to_i + 4, Socket::AF_INET).to_s
-    sroute = swytch.add_static_route(28, next_hop)
-    expect(sroute).to be_an_instance_of Saklient::Cloud::Resources::Ipv4Net
-    expect(swytch.ipv4_nets.length).to eq 2
+    #
+    if 0 < swytch.ipv6_nets.length then
+      puts 'ルータ＋スイッチからIPv6ネットワークの割当を解除しています...'
+      swytch.remove_ipv6_net
+    end
+
+    #
+    puts 'サーバを削除しています...'
+    server.destroy
+    
+    #
     
   end
   

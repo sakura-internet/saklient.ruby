@@ -207,6 +207,57 @@ module Saklient
 
         protected
 
+        # @private
+        # @return [any]
+        def _used_ipv4_address_hash
+          filter = {}
+          filter[('Switch' + '.ID').to_sym] = _id
+          query = {}
+          Saklient::Util::set_by_path(query, 'Count', 0)
+          Saklient::Util::set_by_path(query, 'Filter', filter)
+          Saklient::Util::set_by_path(query, 'Include', ['IPAddress', 'UserIPAddress'])
+          result = @_client.request('GET', '/interface', query)
+          return nil if (result).nil?
+          result = result[:Interfaces]
+          return nil if (result).nil?
+          ifaces = result
+          return nil if (ifaces).nil?
+          found = {}
+          for iface in ifaces
+            ip = iface[:IPAddress]
+            userIp = iface[:UserIPAddress]
+            ip = userIp if (ip).nil?
+            found[ip.to_sym] = true if !(ip).nil?
+          end
+          return found
+        end
+
+        public
+
+        # このルータ＋スイッチに接続中のインタフェースに割り当てられているIPアドレスを収集します.
+        #
+        # @return [Array<String>]
+        def collect_used_ipv4_addresses
+          found = _used_ipv4_address_hash
+          return found.keys.map{|k| k.to_s}.sort()
+        end
+
+        # このルータ＋スイッチで利用できる未使用のIPアドレスを収集します.
+        #
+        # @return [Array<String>]
+        def collect_unused_ipv4_addresses
+          nets = get_ipv4_nets
+          return nil if nets.length < 1
+          used = _used_ipv4_address_hash
+          ret = []
+          for ip in nets[0].range.as_array
+            ret << ip if !(!used.nil? && used.key?(ip.to_sym))
+          end
+          return ret.sort()
+        end
+
+        protected
+
         # @return [bool]
         attr_accessor :n_id
 

@@ -78,7 +78,7 @@ module Saklient
       raise Exception.new('Could not create class instance of ' + classPath) if (ret).nil?
       return ret
     end
-
+    
     # @param [String] s
     # @return [NativeDate]
     def self.str2date(s)
@@ -93,6 +93,35 @@ module Saklient
       return d.to_s
     end
 
+    # @param [String] ip
+    # @return [Integer]
+    def self.ip2long(s)
+      return nil unless s.is_a? String
+      return nil unless /^\d+\.\d+\.\d+\.\d+$/.match(s)
+      ret = 0
+      s.split(/\./).each{|o|
+        v = o.to_i
+        ret = nil unless 0<=v && v<=255
+        ret = ret<<8 | v if !ret.nil?
+      }
+      return ret
+    end
+    
+    # @param [Integer] long
+    # @return [String]
+    def self.long2ip(v)
+      v = v.to_i if v.is_a? String
+      return nil unless v.is_a? Integer
+      ret = []
+      v += (1<<32) if v<0
+      4.times{||
+        ret.unshift(v & 255)
+        v >>= 8
+      }
+      return nil if v != 0
+      return ret.join(".")
+    end
+    
     # @param [String] s
     # @return [String]
     def self.url_encode(s)

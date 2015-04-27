@@ -73,7 +73,7 @@ module Saklient
 
         extra_headers = {
           'Content-Type'     => 'application/x-www-form-urlencoded',
-          'User-Agent'       => 'saklient.ruby ver-0.0.2.6 rev-ea935ca9d640e87509db882d9fd06ec2bf75fe23',
+          'User-Agent'       => 'saklient.ruby ver-0.0.2.7 rev-3f3b3b7ce4b10e7ebcd77c17497763ba558bf424',
           'X-Requested-With' => 'XMLHttpRequest',
           'X-Sakura-HTTP-Method' => method,
           'X-Sakura-Error-Level' => 'warning',

@@ -3,6 +3,7 @@
 require_relative '../client'
 require_relative 'resource'
 require_relative 'swytch'
+require_relative 'ipv4_range'
 
 module Saklient
   module Cloud
@@ -37,6 +38,29 @@ module Saklient
         #
         # @return [String]
         attr_accessor :m_next_hop
+
+        # @private
+        # @return [Ipv4Range]
+        attr_accessor :_range
+
+        public
+
+        # @private
+        # @return [Ipv4Range]
+        def get_range
+          return @_range
+        end
+
+        # 利用可能なIPアドレス範囲
+        #
+        # @return [Ipv4Range]
+        attr_reader :range
+
+        def range
+          get_range
+        end
+
+        protected
 
         # @private
         # @return [String]
@@ -89,6 +113,16 @@ module Saklient
         end
 
         protected
+
+        # @private
+        # @param [any] r
+        # @param [any] root
+        # @return [void]
+        def _on_after_api_deserialize(r, root)
+          @_range = nil
+          addresses = r[:IPAddresses]
+          @_range = Saklient::Cloud::Resources::Ipv4Range.new(addresses) if !(addresses).nil?
+        end
 
         # @return [bool]
         attr_accessor :n_id

@@ -67,6 +67,34 @@ describe 'Util' do
     end
     fail '未定義または読み取り専用フィールドへのset時は NoMethodError がスローされなければなりません' unless ok
     
+    #
+    expect(Util::ip2long('0.0.0.0')).to eq 0
+    expect(Util::ip2long('127.255.255.255')).to eq 0x7FFFFFFF
+    expect(Util::ip2long('128.0.0.0')).to eq 0x80000000
+    expect(Util::ip2long('255.255.255.255')).to eq 0xFFFFFFFF
+    expect(Util::ip2long('222.173.190.239')).to eq 0xDEADBEEF
+    #
+    expect(Util::long2ip(0)).to eq '0.0.0.0'
+    expect(Util::long2ip(0x7FFFFFFF)).to eq '127.255.255.255'
+    expect(Util::long2ip(0x80000000)).to eq '128.0.0.0'
+    expect(Util::long2ip(0xFFFFFFFF)).to eq '255.255.255.255'
+    expect(Util::long2ip(0xDEADBEEF)).to eq '222.173.190.239'
+    expect(Util::long2ip(Util::ip2long('127.255.255.255') + 1)).to eq '128.0.0.0'
+    #
+    expect(Util::ip2long(nil)).to be_nil
+    expect(Util::ip2long(0)).to be_nil
+    expect(Util::ip2long('')).to be_nil
+    expect(Util::ip2long('x')).to be_nil
+    expect(Util::ip2long('0.0.0')).to be_nil
+    expect(Util::ip2long('0.0.0.x')).to be_nil
+    expect(Util::ip2long('0.0.0.0.0')).to be_nil
+    expect(Util::ip2long('255.255.255.256')).to be_nil
+    expect(Util::ip2long('256.255.255.255')).to be_nil
+    expect(Util::long2ip(nil)).to be_nil
+    expect(Util::long2ip('0')).to eq '0.0.0.0'
+    expect(Util::long2ip(Util::ip2long('0.0.0.0') - 1)).to eq '255.255.255.255'
+    expect(Util::long2ip(Util::ip2long('255.255.255.255') + 1)).to be_nil
+    
   end
   
 end

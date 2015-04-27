@@ -46,7 +46,7 @@ describe 'Swytch' do
     description = 'This instance was created by saklient.ruby rspec'
   
     #
-    puts 'ルータ＋スイッチを作成しています...'
+    puts 'スイッチを作成しています...'
     swytch = @api.swytch.create
     swytch.name = name
     swytch.description = description

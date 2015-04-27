@@ -215,7 +215,7 @@ module Saklient
           r = api_serialize
           query = @_query
           @_query = {}
-          keys = query.keys
+          keys = query.keys.map{|k| k.to_s}
           for k in keys
             v = query[k.to_sym]
             r[k.to_sym] = v
