@@ -8,8 +8,7 @@ describe 'LoadBalancer' do
   
   
 	
-  TESTS_CONFIG_READYMADE_LB_ID = nil #'112600809060'
-  TESTS_CONFIG_READYMADE_SWYTCH_ID = '112500447075' #'112600553094'
+  TESTS_CONFIG_READYMADE_LB_ID = nil
   
   before do
     
@@ -56,9 +55,20 @@ describe 'LoadBalancer' do
       
       # search a switch
       puts 'searching a swytch...'
-      swytch = @api.swytch.get_by_id(TESTS_CONFIG_READYMADE_SWYTCH_ID)
-      # expect(swytches.length).to be > 0
-      # swytch = swytches[0]
+      swytches = @api.swytch.with_name_like('saklient-lb-attached').limit(1).find
+      if 0 < swytches.length
+        swytch = swytches[0]
+      else
+        puts 'ルータ＋スイッチを作成しています...'
+        router = @api.router.create
+        router.name = 'saklient-lb-attached'
+        router.band_width_mbps = 100
+        router.network_mask_len = 28
+        router.save
+        puts 'ルータ＋スイッチの作成完了を待機しています...'
+        fail 'ルータが正常に作成されません' if !router.sleep_while_creating
+        swytch = router.get_swytch
+      end
       expect(swytch).to be_an_instance_of Saklient::Cloud::Resources::Swytch
       expect(swytch.ipv4_nets.length).to be > 0
       net = swytch.ipv4_nets[0]
