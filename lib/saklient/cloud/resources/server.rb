@@ -9,6 +9,7 @@ require_relative 'iface'
 require_relative 'server_plan'
 require_relative 'server_instance'
 require_relative 'iso_image'
+require_relative 'server_activity'
 require_relative '../enums/eserver_instance_status'
 require_relative '../enums/eavailability'
 require_relative '../models/model_disk'
@@ -114,6 +115,29 @@ module Saklient
           return _reload
         end
 
+        protected
+
+        # @private
+        # @return [ServerActivity]
+        attr_accessor :_activity
+
+        public
+
+        # @private
+        # @return [ServerActivity]
+        def get_activity
+          return @_activity
+        end
+
+        # アクティビティ
+        #
+        # @return [ServerActivity]
+        attr_reader :activity
+
+        def activity
+          get_activity
+        end
+
         # @private
         # @param [Saklient::Cloud::Client] client
         # @param [any] obj
@@ -122,8 +146,21 @@ module Saklient
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
           Saklient::Util::validate_type(wrapped, 'bool')
+          @_activity = Saklient::Cloud::Resources::ServerActivity.new(client)
           api_deserialize(obj, wrapped)
         end
+
+        protected
+
+        # @private
+        # @param [any] r
+        # @param [any] root
+        # @return [void]
+        def _on_after_api_deserialize(r, root)
+          @_activity.set_source_id(_id) if !(r).nil?
+        end
+
+        public
 
         # サーバが起動しているときtrueを返します.
         #

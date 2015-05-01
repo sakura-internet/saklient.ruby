@@ -250,7 +250,7 @@ module Saklient
           return nil if nets.length < 1
           used = _used_ipv4_address_hash
           ret = []
-          for ip in nets[0].range.as_array
+          for ip in nets[0].get_range.get_as_array
             ret << ip if !(!used.nil? && used.key?(ip.to_sym))
           end
           return ret.sort()

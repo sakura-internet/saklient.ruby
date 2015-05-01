@@ -7,6 +7,7 @@ require_relative 'icon'
 require_relative 'disk_plan'
 require_relative 'server'
 require_relative 'disk_config'
+require_relative 'disk_activity'
 require_relative '../enums/eavailability'
 require_relative '../enums/edisk_connection'
 require_relative '../enums/estorage_class'
@@ -116,6 +117,29 @@ module Saklient
           return _reload
         end
 
+        protected
+
+        # @private
+        # @return [DiskActivity]
+        attr_accessor :_activity
+
+        public
+
+        # @private
+        # @return [DiskActivity]
+        def get_activity
+          return @_activity
+        end
+
+        # アクティビティ
+        #
+        # @return [DiskActivity]
+        attr_reader :activity
+
+        def activity
+          get_activity
+        end
+
         # @private
         # @param [Saklient::Cloud::Client] client
         # @param [any] obj
@@ -124,6 +148,7 @@ module Saklient
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
           Saklient::Util::validate_type(wrapped, 'bool')
+          @_activity = Saklient::Cloud::Resources::DiskActivity.new(client)
           api_deserialize(obj, wrapped)
         end
 
@@ -223,6 +248,7 @@ module Saklient
         # @return [void]
         def _on_after_api_deserialize(r, root)
           if !(r).nil?
+            @_activity.set_source_id(_id)
             if !r.nil? && r.key?(:SourceDisk)
               s = r[:SourceDisk]
               if !(s).nil?

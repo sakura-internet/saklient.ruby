@@ -7,6 +7,7 @@ require_relative 'icon'
 require_relative 'swytch'
 require_relative 'ipv4_net'
 require_relative 'ipv6_net'
+require_relative 'router_activity'
 require_relative '../models/model_swytch'
 
 module Saklient
@@ -94,6 +95,29 @@ module Saklient
           return _reload
         end
 
+        protected
+
+        # @private
+        # @return [RouterActivity]
+        attr_accessor :_activity
+
+        public
+
+        # @private
+        # @return [RouterActivity]
+        def get_activity
+          return @_activity
+        end
+
+        # アクティビティ
+        #
+        # @return [RouterActivity]
+        attr_reader :activity
+
+        def activity
+          get_activity
+        end
+
         # @private
         # @param [Saklient::Cloud::Client] client
         # @param [any] obj
@@ -102,8 +126,21 @@ module Saklient
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
           Saklient::Util::validate_type(wrapped, 'bool')
+          @_activity = Saklient::Cloud::Resources::RouterActivity.new(client)
           api_deserialize(obj, wrapped)
         end
+
+        protected
+
+        # @private
+        # @param [any] r
+        # @param [any] root
+        # @return [void]
+        def _on_after_api_deserialize(r, root)
+          @_activity.set_source_id(_id) if !(r).nil?
+        end
+
+        public
 
         # 作成中のルータが利用可能になるまで待機します.
         #

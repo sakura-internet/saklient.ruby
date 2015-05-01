@@ -271,6 +271,8 @@ module Saklient
           @_response_expected = nil
           @_response_expected = (responseExpected).to_s().to_i(10) if !(responseExpected).nil?
           @_response_expected = nil if @_response_expected == 0
+          @_active_connections = 0
+          @_status = nil
         end
 
         # @return [any]

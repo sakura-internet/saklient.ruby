@@ -239,7 +239,7 @@ module Saklient
         # @return [LoadBalancer]
         def reload_status
           result = request_retry('GET', _api_path + '/' + Saklient::Util::url_encode(_id) + '/status')
-          if !result.nil? && result.key?(:LoadBalancer)
+          if !(result).nil? && (!result.nil? && result.key?(:LoadBalancer))
             vips = result[:LoadBalancer]
             for vipDyn in vips
               vipStr = vipDyn[:VirtualIPAddress]

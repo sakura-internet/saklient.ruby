@@ -4,6 +4,7 @@ require_relative '../../errors/saklient_exception'
 require_relative '../client'
 require_relative 'resource'
 require_relative 'swytch'
+require_relative 'iface_activity'
 
 module Saklient
   module Cloud
@@ -85,6 +86,29 @@ module Saklient
           return _reload
         end
 
+        protected
+
+        # @private
+        # @return [IfaceActivity]
+        attr_accessor :_activity
+
+        public
+
+        # @private
+        # @return [IfaceActivity]
+        def get_activity
+          return @_activity
+        end
+
+        # アクティビティ
+        #
+        # @return [IfaceActivity]
+        attr_reader :activity
+
+        def activity
+          get_activity
+        end
+
         # @private
         # @param [Saklient::Cloud::Client] client
         # @param [any] obj
@@ -93,8 +117,21 @@ module Saklient
           super(client)
           Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
           Saklient::Util::validate_type(wrapped, 'bool')
+          @_activity = Saklient::Cloud::Resources::IfaceActivity.new(client)
           api_deserialize(obj, wrapped)
         end
+
+        protected
+
+        # @private
+        # @param [any] r
+        # @param [any] root
+        # @return [void]
+        def _on_after_api_deserialize(r, root)
+          @_activity.set_source_id(_id) if !(r).nil?
+        end
+
+        public
 
         # スイッチに接続します.
         #

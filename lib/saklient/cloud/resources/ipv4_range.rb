@@ -71,7 +71,7 @@ module Saklient
           i1 = Saklient::Util::ip2long(@_last)
           while i <= i1 do
             ret << Saklient::Util::long2ip(i)
-            i += 1
+            i+=1
           end
           return ret
         end
@@ -92,11 +92,11 @@ module Saklient
           first = Saklient::Util::get_by_path_any([obj], ['Min', 'min'])
           @_first = nil
           @_first = first if !(first).nil?
-          @_first = nil if @_first == ''
+          @_first = nil if !(@_first).nil? && @_first == ''
           last = Saklient::Util::get_by_path_any([obj], ['Max', 'max'])
           @_last = nil
           @_last = last if !(last).nil?
-          @_last = nil if @_last == ''
+          @_last = nil if !(@_last).nil? && @_last == ''
         end
 
       end
