@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+# This code is automatically transpiled by Saklient Translator
+
 require_relative 'models/model_region'
 require_relative 'client'
 

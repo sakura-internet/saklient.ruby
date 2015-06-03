@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+# This code is automatically transpiled by Saklient Translator
+
 require_relative '../../util'
 require_relative '../client'
 require_relative 'script'
@@ -130,13 +132,20 @@ module Saklient
         protected
 
         # @private
-        # @return [String]
-        attr_accessor :_ssh_key
+        # @return [Array<String>]
+        attr_accessor :_ssh_keys
+
+        # @private
+        # @return [Array<String>]
+        def get_ssh_keys
+          return @_ssh_keys
+        end
 
         # @private
         # @return [String]
         def get_ssh_key
-          return @_ssh_key
+          return nil if @_ssh_keys.length < 1
+          return @_ssh_keys[0]
         end
 
         # @private
@@ -144,7 +153,11 @@ module Saklient
         # @return [String]
         def set_ssh_key(v)
           Saklient::Util::validate_type(v, 'String')
-          @_ssh_key = v
+          if @_ssh_keys.length < 1
+            @_ssh_keys << v
+          else
+            @_ssh_keys[0] = v
+          end
           return v
         end
 
@@ -161,6 +174,15 @@ module Saklient
 
         def ssh_key=(v)
           set_ssh_key(v)
+        end
+
+        # SSHキー
+        #
+        # @return [Array<String>]
+        attr_reader :ssh_keys
+
+        def ssh_keys
+          get_ssh_keys
         end
 
         protected
@@ -304,7 +326,7 @@ module Saklient
           @_disk_id = diskId
           @_host_name = nil
           @_password = nil
-          @_ssh_key = nil
+          @_ssh_keys = []
           @_ip_address = nil
           @_default_route = nil
           @_network_mask_len = nil
@@ -330,7 +352,7 @@ module Saklient
           q = {}
           Saklient::Util::set_by_path(q, 'HostName', @_host_name) if !(@_host_name).nil?
           Saklient::Util::set_by_path(q, 'Password', @_password) if !(@_password).nil?
-          Saklient::Util::set_by_path(q, 'SSHKey.PublicKey', @_ssh_key) if !(@_ssh_key).nil?
+          Saklient::Util::set_by_path(q, 'SSHKey.PublicKey', @_ssh_keys.join("\n")) if @_ssh_keys.length > 0
           Saklient::Util::set_by_path(q, 'UserIPAddress', @_ip_address) if !(@_ip_address).nil?
           Saklient::Util::set_by_path(q, 'UserSubnet.DefaultRoute', @_default_route) if !(@_default_route).nil?
           Saklient::Util::set_by_path(q, 'UserSubnet.NetworkMaskLen', @_network_mask_len) if !(@_network_mask_len).nil?

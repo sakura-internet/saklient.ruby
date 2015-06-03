@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+# This code is automatically transpiled by Saklient Translator
+
 require_relative 'http_exception'
 require_relative 'http_bad_gateway_exception'
 require_relative 'http_bad_request_exception'

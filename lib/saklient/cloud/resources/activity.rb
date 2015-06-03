@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+# This code is automatically transpiled by Saklient Translator
+
 require_relative '../../util'
 require_relative '../client'
 
@@ -56,9 +58,9 @@ module Saklient
           @_source_id = id
         end
 
-        # アクティビティを取得します.
+        # 現在の最新のアクティビティ情報を取得し, samplesに格納します.
         #
-        #  	 * @return アクティビティ
+        #  	 * @return this
         #
         # @private
         # @param [NativeDate] startDate

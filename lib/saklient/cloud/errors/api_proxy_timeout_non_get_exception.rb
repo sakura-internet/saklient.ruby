@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+# This code is automatically transpiled by Saklient Translator
+
 require_relative '../../errors/http_gateway_timeout_exception'
 
 module Saklient

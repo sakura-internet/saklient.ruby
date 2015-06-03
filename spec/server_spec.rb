@@ -75,6 +75,12 @@ describe 'Server' do
     host_name = 'saklient-test'
     ssh_public_key = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3sSg8Vfxrs3eFTx3G//wMRlgqmFGxh5Ia8DZSSf2YrkZGqKbL1t2AsiUtIMwxGiEVVBc0K89lORzra7qoHQj5v5Xlcdqodgcs9nwuSeS38XWO6tXNF4a8LvKnfGS55+uzmBmVUwAztr3TIJR5TTWxZXpcxSsSEHx7nIcr31zcvosjgdxqvSokAsIgJyPQyxCxsPK8SFIsUV+aATqBCWNyp+R1jECPkd74ipEBoccnA0pYZnRhIsKNWR9phBRXIVd5jx/gK5jHqouhFWvCucUs0gwilEGwpng3b/YxrinNskpfOpMhOD9zjNU58OCoMS8MA17yqoZv59l3u16CrnrD saklient-test@local'
     ssh_private_key_file = File.dirname(__dir__) + '/test-sshkey.txt'
+    password = SecureRandom.uuid[0, 8]
+    
+    # options
+    additional_ssh_public_key = File.open(ENV['HOME'] + '/.ssh/id_rsa.pub').read.strip
+    tests_disk_expansion = false
+    breaks_after_server_up = true
     
     # search archives
     puts 'searching archives...'
@@ -161,13 +167,19 @@ describe 'Server' do
     # connect the disk to the server
     puts 'connecting the disk to the server...'
     disk.connect_to(server)
+    server.reload
+    ip_address = server.ifaces[0].ip_address
+    puts 'server IP address: ' + ip_address
+    puts 'server password: ' + password
+    expect(ip_address).not_to be_empty
     
     # config the disk
     puts 'writing configuration to the disk...'
     diskconf = disk.create_config
     diskconf.host_name = 'saklient-test'
-    diskconf.password = SecureRandom.uuid[0, 8]
+    diskconf.password = password
     diskconf.ssh_key = ssh_public_key
+    diskconf.ssh_keys.unshift(additional_ssh_public_key) if !additional_ssh_public_key.empty?
     diskconf.scripts.push(script)
     diskconf.write
     
@@ -189,8 +201,6 @@ describe 'Server' do
     fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
     
     # ssh
-    ip_address = server.ifaces[0].ip_address
-    expect(ip_address).not_to be_empty
     cmd = '| ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i' + ssh_private_key_file +
           ' root@' + ip_address + ' hostname 2>/dev/null'
     ssh_success = false
@@ -210,6 +220,8 @@ describe 'Server' do
     end
     fail '作成したサーバへ正常にSSHできません' unless ssh_success
     
+    fail 'SSHに成功後、処理を中断しました' if breaks_after_server_up
+    
     # stop
     sleep 1
     puts 'stopping the server...'
@@ -224,29 +236,35 @@ describe 'Server' do
     puts 'deleting the server...'
     server.destroy
     
-    # duplicate the disk
-    puts 'duplicating the disk (expanding to 40GiB)...'
-    disk2 = @api.disk.create
-    disk2.name = name + "-copy"
-    disk2.description = description
-    disk2.tags = [tag]
-    disk2.plan = @api.product.disk.hdd
-    disk2.source = disk
-    disk2.size_gib = 40
-    disk2.save
-    
-    # wait disk duplication
-    puts 'waiting disk duplication...'
-    fail 'ディスクの複製がタイムアウトしました' unless disk2.sleep_while_copying
-    disk2.source = nil
-    disk2.reload
-    expect(disk2.source).to be_an_instance_of Saklient::Cloud::Resources::Disk
-    expect(disk2.source.id).to eq disk.id
-    expect(disk2.size_gib).to eq 40
+    if tests_disk_expansion
+      
+      # duplicate the disk
+      puts 'duplicating the disk (expanding to 40GiB)...'
+      disk2 = @api.disk.create
+      disk2.name = name + "-copy"
+      disk2.description = description
+      disk2.tags = [tag]
+      disk2.plan = @api.product.disk.hdd
+      disk2.source = disk
+      disk2.size_gib = 40
+      disk2.save
+      
+      # wait disk duplication
+      puts 'waiting disk duplication...'
+      fail 'ディスクの複製がタイムアウトしました' unless disk2.sleep_while_copying
+      disk2.source = nil
+      disk2.reload
+      expect(disk2.source).to be_an_instance_of Saklient::Cloud::Resources::Disk
+      expect(disk2.source.id).to eq disk.id
+      expect(disk2.size_gib).to eq 40
+      
+      puts 'deleting the disk...'
+      disk2.destroy
+      
+    end
     
     # delete the disks
-    puts 'deleting the disks...'
-    disk2.destroy
+    puts 'deleting the disk...'
     disk.destroy
     
   end

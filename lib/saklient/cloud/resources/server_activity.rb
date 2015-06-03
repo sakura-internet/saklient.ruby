@@ -1,5 +1,7 @@
 # -*- encoding: UTF-8 -*-
 
+# This code is automatically transpiled by Saklient Translator
+
 require_relative 'activity'
 require_relative 'server_activity_sample'
 
@@ -51,9 +53,9 @@ module Saklient
 
         public
 
-        # アクティビティを取得します.
+        # 現在の最新のアクティビティ情報を取得し, samplesに格納します.
         #
-        #  	 * @return アクティビティ
+        #  	 * @return this
         #
         # @param [NativeDate] startDate
         # @param [NativeDate] endDate
