@@ -2,6 +2,7 @@
 
 # This code is automatically transpiled by Saklient Translator
 
+require_relative '../../errors/http_exception'
 require_relative '../../errors/saklient_exception'
 require_relative '../client'
 require_relative 'resource'
@@ -221,7 +222,11 @@ module Saklient
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 10
           while 0 < timeoutSec do
-            reload
+            begin
+              reload
+            rescue Saklient::Errors::HttpException
+              {}
+            end
             a = get_availability
             return true if a == Saklient::Cloud::Enums::EAvailability::available
             timeoutSec = 0 if a != Saklient::Cloud::Enums::EAvailability::migrating
@@ -262,7 +267,11 @@ module Saklient
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 10
           while 0 < timeoutSec do
-            reload
+            begin
+              reload
+            rescue Saklient::Errors::HttpException
+              {}
+            end
             s = get_status
             s = Saklient::Cloud::Enums::EServerInstanceStatus::down if (s).nil?
             return true if s == status

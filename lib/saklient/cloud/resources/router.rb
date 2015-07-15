@@ -2,6 +2,7 @@
 
 # This code is automatically transpiled by Saklient Translator
 
+require_relative '../../errors/http_exception'
 require_relative '../../errors/saklient_exception'
 require_relative '../client'
 require_relative 'resource'
@@ -166,9 +167,13 @@ module Saklient
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 3
           while 0 < timeoutSec do
-            if exists
-              reload
-              return true
+            begin
+              if exists
+                reload
+                return true
+              end
+            rescue Saklient::Errors::HttpException
+              {}
             end
             timeoutSec -= step
             sleep(step) if 0 < timeoutSec

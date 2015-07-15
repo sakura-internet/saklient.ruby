@@ -78,6 +78,7 @@ describe 'IsoImage' do
     cmd += "set ftp:ssl-force true;"
     cmd += "set ftp:ssl-protect-data true;"
     cmd += "set ftp:ssl-protect-list true;"
+    cmd += "set ssl:verify-certificate no;"
     cmd += "put #{path};"
     cmd += "exit"
     cmd = "lftp -u #{ftp2.user},#{ftp2.password} -p 21 -e '#{cmd}' #{ftp2.host_name}"

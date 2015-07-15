@@ -10,6 +10,7 @@ require_relative 'disk_plan'
 require_relative 'server'
 require_relative '../enums/escope'
 require_relative '../enums/eavailability'
+require_relative '../../errors/http_exception'
 require_relative '../../errors/saklient_exception'
 
 module Saklient
@@ -334,7 +335,11 @@ module Saklient
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 3
           while 0 < timeoutSec do
-            reload
+            begin
+              reload
+            rescue Saklient::Errors::HttpException
+              {}
+            end
             a = get_availability
             return true if a == Saklient::Cloud::Enums::EAvailability::available
             timeoutSec = 0 if a != Saklient::Cloud::Enums::EAvailability::migrating

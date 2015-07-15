@@ -14,6 +14,42 @@ module Saklient
         protected
 
         # @private
+        # @return [bool]
+        attr_accessor :_enabled
+
+        public
+
+        # @private
+        # @return [bool]
+        def get_enabled
+          return @_enabled
+        end
+
+        # @private
+        # @param [bool] v
+        # @return [bool]
+        def set_enabled(v)
+          Saklient::Util::validate_type(v, 'bool')
+          @_enabled = v
+          return @_enabled
+        end
+
+        # 有効状態
+        #
+        # @return [bool]
+        attr_accessor :enabled
+
+        def enabled
+          get_enabled
+        end
+
+        def enabled=(v)
+          set_enabled(v)
+        end
+
+        protected
+
+        # @private
         # @return [String]
         attr_accessor :_ip_address
 
@@ -247,6 +283,9 @@ module Saklient
             'health_check',
             'health'
           ])
+          enabled = Saklient::Util::get_by_path_any([obj], ['Enabled', 'enabled'])
+          @_enabled = nil
+          @_enabled = enabled if !(enabled).nil?
           @_ip_address = Saklient::Util::get_by_path_any([obj], [
             'IPAddress',
             'ipAddress',
@@ -280,6 +319,7 @@ module Saklient
         # @return [any]
         def to_raw_settings
           return {
+            Enabled: @_enabled,
             IPAddress: @_ip_address,
             Port: @_port,
             HealthCheck: {

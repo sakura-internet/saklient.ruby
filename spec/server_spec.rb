@@ -80,7 +80,7 @@ describe 'Server' do
     # options
     additional_ssh_public_key = File.open(ENV['HOME'] + '/.ssh/id_rsa.pub').read.strip
     tests_disk_expansion = false
-    breaks_after_server_up = true
+    breaks_after_server_up = false
     
     # search archives
     puts 'searching archives...'
