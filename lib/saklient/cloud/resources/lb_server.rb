@@ -285,7 +285,10 @@ module Saklient
           ])
           enabled = Saklient::Util::get_by_path_any([obj], ['Enabled', 'enabled'])
           @_enabled = nil
-          @_enabled = enabled if !(enabled).nil?
+          if !(enabled).nil?
+            enabledStr = enabled
+            @_enabled = enabledStr.downcase() == 'true'
+          end
           @_ip_address = Saklient::Util::get_by_path_any([obj], [
             'IPAddress',
             'ipAddress',
@@ -319,7 +322,7 @@ module Saklient
         # @return [any]
         def to_raw_settings
           return {
-            Enabled: @_enabled,
+            Enabled: (@_enabled).nil? ? nil : (@_enabled ? 'True' : 'False'),
             IPAddress: @_ip_address,
             Port: @_port,
             HealthCheck: {
