@@ -166,19 +166,21 @@ module Saklient
         def sleep_while_creating(timeoutSec = 120)
           Saklient::Util::validate_type(timeoutSec, 'Fixnum')
           step = 3
+          isOk = false
           while 0 < timeoutSec do
             begin
               if exists
                 reload
-                return true
+                isOk = true
               end
             rescue Saklient::Errors::HttpException
               {}
             end
             timeoutSec -= step
+            timeoutSec = 0 if isOk
             sleep(step) if 0 < timeoutSec
           end
-          return false
+          return isOk
         end
 
         # このルータが接続されているスイッチを取得します.

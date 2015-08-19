@@ -228,6 +228,11 @@ describe 'Server' do
     server.stop
     fail 'サーバが正常に停止しません' unless server.sleep_until_down
     
+    # activity
+    for sample in server.activity.fetch.samples do
+      expect(sample.at).to be_an_instance_of DateTime
+    end
+    
     # disconnect the disk from the server
     puts 'disconnecting the disk from the server...'
     disk.disconnect

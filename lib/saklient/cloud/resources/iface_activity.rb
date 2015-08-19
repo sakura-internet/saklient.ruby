@@ -2,6 +2,7 @@
 
 # This code is automatically transpiled by Saklient Translator
 
+require_relative '../client'
 require_relative 'activity'
 require_relative 'iface_activity_sample'
 
@@ -47,6 +48,17 @@ module Saklient
         def _api_path_suffix
           return '/monitor'
         end
+
+        public
+
+        # @private
+        # @param [Saklient::Cloud::Client] client
+        def initialize(client)
+          super(client)
+          Saklient::Util::validate_type(client, 'Saklient::Cloud::Client')
+        end
+
+        protected
 
         # @private
         # @param [String] atStr
