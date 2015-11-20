@@ -125,7 +125,7 @@ module Saklient
     # @param [String] s
     # @return [String]
     def self.url_encode(s)
-      return URI.encode(s)
+      return URI.encode(s.to_s)
     end
 
     # @param [Integer] sec

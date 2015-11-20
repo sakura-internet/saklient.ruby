@@ -114,6 +114,13 @@ module Saklient
         # @param [any] r
         # @param [any] root
         # @return [void]
+        def _on_before_api_deserialize(r, root)
+        end
+
+        # @private
+        # @param [any] r
+        # @param [any] root
+        # @return [void]
         def _on_after_api_deserialize(r, root)
         end
 
@@ -161,6 +168,7 @@ module Saklient
               record = obj[rkey.to_sym]
             end
           end
+          _on_before_api_deserialize(record, root)
           api_deserialize_impl(record)
           _on_after_api_deserialize(record, root)
         end
@@ -251,8 +259,11 @@ module Saklient
         # @private
         # @return [Resource] this
         def _reload
-          result = request_retry('GET', _api_path + '/' + Saklient::Util::url_encode(_id))
-          api_deserialize(result, true)
+          id = _id
+          if !(id).nil?
+            result = request_retry('GET', _api_path + '/' + Saklient::Util::url_encode(id))
+            api_deserialize(result, true)
+          end
           return self
         end
 

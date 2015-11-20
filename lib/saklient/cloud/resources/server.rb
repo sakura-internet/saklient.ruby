@@ -159,6 +159,26 @@ module Saklient
         # @param [any] r
         # @param [any] root
         # @return [void]
+        def _on_before_api_deserialize(r, root)
+          return nil if (r).nil?
+          id = r[:ID]
+          ifaces = r[:Interfaces]
+          if !(ifaces).nil?
+            for iface in ifaces
+              server = iface[:Server]
+              if (server).nil?
+                server = {}
+                iface[:Server] = server
+              end
+              server[:ID] = id
+            end
+          end
+        end
+
+        # @private
+        # @param [any] r
+        # @param [any] root
+        # @return [void]
         def _on_after_api_deserialize(r, root)
           @_activity.set_source_id(_id) if !(r).nil?
         end

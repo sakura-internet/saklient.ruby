@@ -68,10 +68,18 @@ describe 'Swytch' do
     iface = server.add_iface()
     expect(iface).to be_an_instance_of Saklient::Cloud::Resources::Iface
     expect(iface.id.to_i).to be > 0
+    expect(iface.server_id).to eq server.id
+    server.reload
+    expect(server.ifaces[0].id).to eq iface.id
+    expect(server.ifaces[0].server_id).to eq server.id
+    iface.reload
+    expect(iface.swytch_id).to be_nil
     
     #
     puts 'インタフェースをスイッチに接続しています...'
     iface.connect_to_swytch(swytch)
+    expect(iface.swytch_id).to eq swytch.id
+    expect(@api.swytch.get_by_id(iface.swytch_id).id).to eq swytch.id
     
     #
     puts 'インタフェースをスイッチから切断しています...'

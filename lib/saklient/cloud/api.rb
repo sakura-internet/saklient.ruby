@@ -11,6 +11,7 @@ require_relative 'models/model_server'
 require_relative 'models/model_disk'
 require_relative 'models/model_appliance'
 require_relative 'models/model_archive'
+require_relative 'models/model_common_service_item'
 require_relative 'models/model_iso_image'
 require_relative 'models/model_iface'
 require_relative 'models/model_swytch'
@@ -375,6 +376,29 @@ module Saklient
       protected
 
       # @private
+      # @return [Saklient::Cloud::Models::Model_CommonServiceItem]
+      attr_accessor :_common_service_item
+
+      # @private
+      # @return [Saklient::Cloud::Models::Model_CommonServiceItem]
+      def get_common_service_item
+        return @_common_service_item
+      end
+
+      public
+
+      # 共通サービス契約にアクセスするためのモデル.
+      #
+      # @return [Saklient::Cloud::Models::Model_CommonServiceItem]
+      attr_reader :common_service_item
+
+      def common_service_item
+        get_common_service_item
+      end
+
+      protected
+
+      # @private
       # @return [Saklient::Cloud::Models::Model_License]
       attr_accessor :_license
 
@@ -416,6 +440,7 @@ module Saklient
         @_bridge = Saklient::Cloud::Models::Model_Bridge.new(client)
         @_ipv6_net = Saklient::Cloud::Models::Model_Ipv6Net.new(client)
         @_script = Saklient::Cloud::Models::Model_Script.new(client)
+        @_common_service_item = Saklient::Cloud::Models::Model_CommonServiceItem.new(client)
         @_license = Saklient::Cloud::Models::Model_License.new(client)
       end
 

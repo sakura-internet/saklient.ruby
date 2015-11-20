@@ -105,7 +105,7 @@ describe 'IsoImage' do
     # search iso images
     puts 'searching iso images...'
     isos = @api.iso_image.
-      with_name_like('CentOS 64bit').
+      with_name_like('VyOS').
       with_shared_scope.
       limit(1).
       find

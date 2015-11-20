@@ -42,6 +42,11 @@ module Saklient
         # @return [String]
         attr_accessor :m_server_id
 
+        # このインタフェースの接続先スイッチのID
+        #
+        # @return [String]
+        attr_accessor :m_swytch_id
+
         # @private
         # @return [String]
         def _api_path
@@ -316,6 +321,47 @@ module Saklient
 
         protected
 
+        # @return [bool]
+        attr_accessor :n_swytch_id
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [String]
+        def get_swytch_id
+          return @m_swytch_id
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [String] v
+        # @return [String]
+        def set_swytch_id(v)
+          Saklient::Util::validate_type(v, 'String')
+          raise Saklient::Errors::SaklientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saklient::Cloud::Resources::Iface#swytch_id') if !@is_new
+          @m_swytch_id = v
+          @n_swytch_id = true
+          return @m_swytch_id
+        end
+
+        public
+
+        # このインタフェースの接続先スイッチのID
+        #
+        # @return [String]
+        attr_accessor :swytch_id
+
+        def swytch_id
+          get_swytch_id
+        end
+
+        def swytch_id=(v)
+          set_swytch_id(v)
+        end
+
+        protected
+
         # (This method is generated in Translator_default#buildImpl)
         #
         # @param [any] r
@@ -358,6 +404,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_server_id = false
+          if Saklient::Util::exists_path(r, 'Switch.ID')
+            @m_swytch_id = (Saklient::Util::get_by_path(r, 'Switch.ID')).nil? ? nil : Saklient::Util::get_by_path(r, 'Switch.ID').to_s
+          else
+            @m_swytch_id = nil
+            @is_incomplete = true
+          end
+          @n_swytch_id = false
         end
 
         # @private
@@ -376,6 +429,7 @@ module Saklient
           else
             missing << 'server_id' if @is_new
           end
+          Saklient::Util::set_by_path(ret, 'Switch.ID', @m_swytch_id) if withClean || @n_swytch_id
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Iface creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end
