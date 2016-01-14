@@ -299,7 +299,7 @@ module Saklient
         # @return [Array<Disk>]
         def find_disks
           model = Saklient::Util::create_class_instance('saklient.cloud.models.Model_Disk', [@_client])
-          return model.with_server_id(_id).find
+          return model.with_server_id(_id).sort_by_connection_order.find
         end
 
         # サーバにインタフェースを1つ増設し, それを取得します.

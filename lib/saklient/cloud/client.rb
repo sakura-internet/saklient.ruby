@@ -13,7 +13,8 @@ module Saklient
       def initialize(token, secret)
         @config = {
           api_root: 'https://secure.sakura.ad.jp/cloud/',
-          api_root_suffix: nil
+          api_root_suffix: nil,
+          timeout_sec: 180
         }
         set_access_key token, secret
         self
@@ -42,6 +43,10 @@ module Saklient
       def set_access_key(token, secret)
         @config[:token]  = token
         @config[:secret] = secret
+      end
+
+      def set_timeout(sec)
+        @config[:timeout_sec]  = sec
       end
 
       def request(method, path, params={})
@@ -73,7 +78,7 @@ module Saklient
 
         extra_headers = {
           'Content-Type'     => 'application/x-www-form-urlencoded',
-          'User-Agent'       => 'saklient.ruby ver-0.0.5 rev-705e6fc541c30cec41e72e5e531418d64f196863',
+          'User-Agent'       => 'saklient.ruby ver-0.0.6 rev-705e6fc541c30cec41e72e5e531418d64f196863',
           'X-Requested-With' => 'XMLHttpRequest',
           'X-Sakura-HTTP-Method' => method,
           'X-Sakura-Error-Level' => 'warning',
@@ -94,7 +99,10 @@ module Saklient
           http.use_ssl = true
           # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
-        res = http.start {|conn| conn.request req }
+        res = http.start {|conn|
+          conn.read_timeout = @config[:timeout_sec]
+          conn.request req
+        }
 
         ret = JSON.parse(res.body, {:symbolize_names => true})
         status = res.code.to_i

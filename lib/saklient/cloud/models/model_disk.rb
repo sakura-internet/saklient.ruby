@@ -168,6 +168,13 @@ module Saklient
           return _sort_by_name(reverse)
         end
 
+        # @param [bool] reverse
+        # @return [Model_Disk]
+        def sort_by_connection_order(reverse = false)
+          Saklient::Util::validate_type(reverse, 'bool')
+          return _sort('ConnectionOrder', reverse)
+        end
+
         # @private
         # @param [Saklient::Cloud::Client] client
         def initialize(client)

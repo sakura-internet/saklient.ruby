@@ -150,6 +150,16 @@ module Saklient
           return reload
         end
 
+        # 指定したIDのスイッチに接続します.
+        #
+        # @param [String] swytchId 接続先のスイッチID.
+        # @return [Iface] this
+        def connect_to_swytch_by_id(swytchId)
+          Saklient::Util::validate_type(swytchId, 'String')
+          @_client.request('PUT', _api_path + '/' + Saklient::Util::url_encode(_id) + '/to/switch/' + swytchId)
+          return reload
+        end
+
         # 共有セグメントに接続します.
         #
         # @return [Iface] this
