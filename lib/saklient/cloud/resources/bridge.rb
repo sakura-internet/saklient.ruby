@@ -291,11 +291,7 @@ module Saklient
             missing << 'name' if @is_new
           end
           Saklient::Util::set_by_path(ret, 'Description', @m_description) if withClean || @n_description
-          if withClean || @n_region
-            Saklient::Util::set_by_path(ret, 'Region', withClean ? ((@m_region).nil? ? nil : @m_region.api_serialize(withClean)) : ((@m_region).nil? ? { ID: '0' } : @m_region.api_serialize_id))
-          else
-            missing << 'region' if @is_new
-          end
+          Saklient::Util::set_by_path(ret, 'Region', withClean ? ((@m_region).nil? ? nil : @m_region.api_serialize(withClean)) : ((@m_region).nil? ? { ID: '0' } : @m_region.api_serialize_id)) if withClean || @n_region
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Bridge creation: ' + missing.join(', ')) if missing.length > 0
           return ret
         end

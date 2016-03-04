@@ -2,19 +2,24 @@
 
 # This code is automatically transpiled by Saklient Translator
 
+require_relative '../../errors/http_not_found_exception'
 require_relative '../../errors/http_exception'
 require_relative '../../errors/saklient_exception'
 require_relative '../client'
 require_relative 'resource'
 require_relative 'icon'
+require_relative 'archive'
 require_relative 'disk'
+require_relative 'disk_config'
 require_relative 'iface'
 require_relative 'server_plan'
 require_relative 'server_instance'
 require_relative 'iso_image'
+require_relative 'ipv4_net'
 require_relative 'server_activity'
 require_relative '../enums/eserver_instance_status'
 require_relative '../enums/eavailability'
+require_relative '../models/model_server'
 require_relative '../models/model_disk'
 require_relative '../models/model_iface'
 
@@ -66,6 +71,11 @@ module Saklient
         #
         # @return [ServerInstance]
         attr_accessor :m_instance
+
+        # ホスト名
+        #
+        # @return [String]
+        attr_accessor :m_host_name
 
         # 有効状態 {Saklient::Cloud::Enums::EAvailability}
         #
@@ -153,6 +163,144 @@ module Saklient
           api_deserialize(obj, wrapped)
         end
 
+        # サーバ および そのサーバに接続されている1台目のディスクを複製し, 同一ネットワークに接続します.
+        # ディスクのコピー中は待機し, 完了してからreturnします.
+        #
+        #                      共有セグメントに接続されている場合はAPIによって自動的に割り当てられるため, 省略またはnullを指定してください.
+        #                   trueを指定した場合は, 複製元の現在のディスク#1から直接クローンします.
+        #                   省略またはnullを指定した場合は, 複製元のディスク#1が作成された時のコピー元リソースから再度クローンを試みます.
+        #                   既に削除されている場合は, 複製元の現在のディスク#1からの直接クローンにフォールバックします.
+        #                   いずれの場合も, 作成されるディスクのプランとサイズは複製元のサーバの1台目のディスクと同一のものが選択されます.
+        #                   作成されるディスクは1台目だけで, 2台目以降は無視されます.
+        #
+        # @param [String] userIpAddress 最初のインタフェースに割り当てるIPアドレスを指定します.
+        # @param [any] diskSource ディスク#1のクローン元リソース（DiskまたはArchive）を指定します. 見つからないときは例外が発生します.
+        # @param hostname 新しいサーバのホスト名（自動的にホスト名をつける場合は省略またはnullを指定）
+        # @param [String] name 新しいサーバの名前（自動的に名前をつける場合は省略またはnullを指定）
+        # @param [String] sshKey
+        # @param [String] hostName
+        # @return [Server]
+        def easy_duplicate(userIpAddress = nil, diskSource = nil, sshKey = nil, hostName = nil, name = nil)
+          Saklient::Util::validate_type(userIpAddress, 'String')
+          Saklient::Util::validate_type(sshKey, 'String')
+          Saklient::Util::validate_type(hostName, 'String')
+          Saklient::Util::validate_type(name, 'String')
+          server = Saklient::Cloud::Resources::Server.new(@_client, nil)
+          names = []
+          hostNames = []
+          if (name).nil? || (hostName).nil?
+            model = Saklient::Util::create_class_instance('saklient.cloud.models.Model_Server', [@_client])
+            servers = model.limit(0).find
+            s = nil
+            for s in servers
+              names << s.get_name
+              hostNames << s.get_host_name
+            end
+          end
+          name = Saklient::Util::auto_rename(self.name, names) if (name).nil?
+          hostName = Saklient::Util::auto_rename(self.host_name, hostNames) if (hostName).nil?
+          server.set_name(name)
+          server.set_host_name(hostName)
+          server.set_description(self.description)
+          server.set_tags(self.tags)
+          server.set_icon(self.icon)
+          server.set_plan(self.plan)
+          iface = nil
+          if 0 < self.ifaces.length
+            iface = self.ifaces[0]
+            iface.reload
+            if (iface.ip_address).nil?
+              raise Saklient::Errors::SaklientException.new('invalid_data', 'Setting an IP address to the disconnected interface is not allowed') if (userIpAddress).nil? && (iface.swytch_id).nil?
+            else
+              raise Saklient::Errors::SaklientException.new('invalid_data', 'Setting an IP address to the interface connected to a shared segment is not allowed') if !(userIpAddress).nil?
+            end
+          end
+          srcDisks = find_disks
+          if 0 < srcDisks.length
+            direct = Saklient::Util::are_same(diskSource, true)
+            if (diskSource).nil? || direct
+              diskSource = srcDisks[0].source
+              if !direct
+                if diskSource.is_a?(Saklient::Cloud::Resources::Archive)
+                  begin
+                    diskSource.reload
+                  rescue Saklient::Errors::HttpNotFoundException
+                    diskSource = srcDisks[0]
+                  end
+                else
+                  if diskSource.is_a?(Saklient::Cloud::Resources::Disk)
+                    begin
+                      diskSource.reload
+                    rescue Saklient::Errors::HttpNotFoundException
+                      diskSource = srcDisks[0]
+                    end
+                  end
+                end
+              end
+            end
+            if diskSource.is_a?(Saklient::Cloud::Resources::Archive)
+              diskSource.reload
+            else
+              diskSource.reload if diskSource.is_a?(Saklient::Cloud::Resources::Disk)
+            end
+          end
+          server.save
+          disk = nil
+          if !(diskSource).nil? && diskSource.is_a?(Saklient::Cloud::Resources::Resource)
+            disk = Saklient::Cloud::Resources::Disk.new(@_client, nil)
+            disk.source = diskSource
+            disk.name = (name).nil? ? srcDisks[0].name : name
+            disk.description = srcDisks[0].description
+            disk.tags = srcDisks[0].tags
+            disk.icon = srcDisks[0].icon
+            disk.plan = srcDisks[0].plan
+            disk.size_mib = srcDisks[0].size_mib
+            disk.server = server
+            disk.save
+          end
+          iface1st = nil
+          userSwytch = nil
+          for iface in self.ifaces
+            iface.reload
+            newIface = server.add_iface
+            if (iface1st).nil?
+              if !(iface.ip_address).nil?
+                newIface.connect_to_shared_segment
+              else
+                newIface.connect_to_swytch_by_id(iface.swytch_id) if !(iface.swytch_id).nil?
+                if !(userIpAddress).nil?
+                  newIface.user_ip_address = userIpAddress
+                  newIface.save
+                end
+                userSwytch = iface.find_swytch
+                iface1st = iface
+              end
+            else
+              newIface.connect_to_swytch_by_id(iface.swytch_id) if !(iface.swytch_id).nil?
+            end
+          end
+          if !(disk).nil?
+            disk.sleep_while_copying
+            diskconf = disk.create_config
+            diskconf.host_name = hostName
+            diskconf.ssh_key = sshKey
+            diskconf.ip_address = userIpAddress
+            if !(userSwytch).nil?
+              if 0 < userSwytch.ipv4_nets.length
+                net = userSwytch.ipv4_nets[0]
+                diskconf.default_route = net.default_route
+                diskconf.network_mask_len = net.mask_len
+              else
+                diskconf.default_route = userSwytch.user_default_route
+                diskconf.network_mask_len = userSwytch.user_mask_len
+              end
+            end
+            diskconf.write
+          end
+          server.reload
+          return server
+        end
+
         protected
 
         # @private
@@ -162,11 +310,13 @@ module Saklient
         def _on_before_api_deserialize(r, root)
           return nil if (r).nil?
           id = r[:ID]
-          ifaces = r[:Interfaces]
+          ifaces = Saklient::Util::get_by_path(r, 'Interfaces')
           if !(ifaces).nil?
             for iface in ifaces
-              server = iface[:Server]
-              if (server).nil?
+              server = nil
+              if !iface.nil? && iface.key?(:Server)
+                server = iface[:Server]
+              else
                 server = {}
                 iface[:Server] = server
               end
@@ -309,7 +459,9 @@ module Saklient
           model = Saklient::Util::create_class_instance('saklient.cloud.models.Model_Iface', [@_client])
           res = model.create
           res.server_id = _id
-          return res.save
+          res.save
+          reload
+          return res
         end
 
         # サーバにISOイメージを挿入します.
@@ -333,6 +485,35 @@ module Saklient
           @_client.request('DELETE', path)
           reload
           return self
+        end
+
+        # サーバに接続されているコピー中のディスクが利用可能になるまで待機します.
+        #
+        # @param [Fixnum] timeoutSec
+        # @return [bool] 成功時はtrue, タイムアウトやエラーによる失敗時はfalseを返します.
+        def sleep_while_copying(timeoutSec = 3600)
+          Saklient::Util::validate_type(timeoutSec, 'Fixnum')
+          step = 10
+          disks = find_disks
+          while 0 < timeoutSec do
+            disk = nil
+            begin
+              reload
+              for disk in disks
+                disk.reload
+              end
+            rescue Saklient::Errors::HttpException
+              {}
+            end
+            result = get_availability == Saklient::Cloud::Enums::EAvailability::available
+            for disk in disks
+              result = false if disk.availability != Saklient::Cloud::Enums::EAvailability::available
+            end
+            return true if result
+            timeoutSec -= step
+            sleep(step) if 0 < timeoutSec
+          end
+          return false
         end
 
         protected
@@ -612,6 +793,46 @@ module Saklient
         protected
 
         # @return [bool]
+        attr_accessor :n_host_name
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [String]
+        def get_host_name
+          return @m_host_name
+        end
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [String] v
+        # @return [String]
+        def set_host_name(v)
+          Saklient::Util::validate_type(v, 'String')
+          @m_host_name = v
+          @n_host_name = true
+          return @m_host_name
+        end
+
+        public
+
+        # ホスト名
+        #
+        # @return [String]
+        attr_accessor :host_name
+
+        def host_name
+          get_host_name
+        end
+
+        def host_name=(v)
+          set_host_name(v)
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_availability
 
         # (This method is generated in Translator_default#buildImpl)
@@ -716,6 +937,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_instance = false
+          if Saklient::Util::exists_path(r, 'HostName')
+            @m_host_name = (Saklient::Util::get_by_path(r, 'HostName')).nil? ? nil : Saklient::Util::get_by_path(r, 'HostName').to_s
+          else
+            @m_host_name = nil
+            @is_incomplete = true
+          end
+          @n_host_name = false
           if Saklient::Util::exists_path(r, 'Availability')
             @m_availability = (Saklient::Util::get_by_path(r, 'Availability')).nil? ? nil : Saklient::Util::get_by_path(r, 'Availability').to_s
           else
@@ -762,6 +990,7 @@ module Saklient
             end
           end
           Saklient::Util::set_by_path(ret, 'Instance', withClean ? ((@m_instance).nil? ? nil : @m_instance.api_serialize(withClean)) : ((@m_instance).nil? ? { ID: '0' } : @m_instance.api_serialize_id)) if withClean || @n_instance
+          Saklient::Util::set_by_path(ret, 'HostName', @m_host_name) if withClean || @n_host_name
           Saklient::Util::set_by_path(ret, 'Availability', @m_availability) if withClean || @n_availability
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the Server creation: ' + missing.join(', ')) if missing.length > 0
           return ret

@@ -97,4 +97,24 @@ describe 'Util' do
     
   end
   
+  it 'should access objects by path' do
+    candidates = [
+      "server-00001",
+      "server-00005",
+      "server-00030",
+      "swytch-00040",
+      "名称未設定 (1234)",
+      "名称未設定 (567)",
+      "0000099999",
+      "xxx99999",
+    ]
+    expect(Util::auto_rename("server-00001", candidates)).to eq "server-00031"
+    expect(Util::auto_rename("server-00005", candidates)).to eq "server-00031"
+    expect(Util::auto_rename("swytch-00005", candidates)).to eq "swytch-00041"
+    expect(Util::auto_rename("名称未設定 (1234)", candidates)).to eq "名称未設定 (1235)"
+    expect(Util::auto_rename("名称未設定 (567)", candidates)).to eq "名称未設定 (1235)"
+    expect(Util::auto_rename("0000099999", candidates)).to eq "0000100000"
+    expect(Util::auto_rename("xxx99999", candidates)).to eq "xxx100000"
+  end
+  
 end

@@ -647,15 +647,32 @@ module Saklient
           return @m_server
         end
 
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @param [Server] v
+        # @return [Server]
+        def set_server(v)
+          Saklient::Util::validate_type(v, 'Saklient::Cloud::Resources::Server')
+          raise Saklient::Errors::SaklientException.new('immutable_field', 'Immutable fields cannot be modified after the resource creation: ' + 'Saklient::Cloud::Resources::Disk#server') if !@is_new
+          @m_server = v
+          @n_server = true
+          return @m_server
+        end
+
         public
 
         # 接続先のサーバ
         #
         # @return [Server]
-        attr_reader :server
+        attr_accessor :server
 
         def server
           get_server
+        end
+
+        def server=(v)
+          set_server(v)
         end
 
         protected

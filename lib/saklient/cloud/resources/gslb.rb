@@ -226,10 +226,11 @@ module Saklient
           settings = self.raw_settings
           if !(settings).nil?
             raw = Saklient::Util::get_by_path(settings, 'GSLB.Servers')
-            raw = [] if (raw).nil?
-            servers = raw
-            for server in servers
-              @_servers << Saklient::Cloud::Resources::GslbServer.new(server)
+            if !(raw).nil?
+              servers = raw
+              for server in servers
+                @_servers << Saklient::Cloud::Resources::GslbServer.new(server)
+              end
             end
           end
         end

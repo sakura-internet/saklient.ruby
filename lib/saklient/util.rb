@@ -154,6 +154,29 @@ module Saklient
       end
       raise Saklient::Errors::SaklientException.new('argument_type_mismatch', 'Argument type mismatch (expected '+typeName+' but got '+clazz+')') unless isOk
     end
+    
+    def self.are_same(a, b)
+      return a.equal?(b)
+    end
+    
+    def self.auto_rename(name, candidates)
+      m = /^(.*?)(\d+)(\W*)$/.match(name)
+      if m then
+        max = 0
+        len = 0
+        for c in candidates
+          n = /^(.*?)(\d+)(\W*)$/.match(c)
+          next unless n
+          next unless m[1]==n[1] and m[3]==n[3]
+          max = [max, n[2].to_i].max
+          len = [len, n[2].length].max
+        end
+        if 0 < len
+          return sprintf("%s%0" + len.to_s + "d%s", m[1], max+1, m[3])
+        end
+      end
+      return name + "-2"
+    end
 
   end
 

@@ -7,6 +7,7 @@ require_relative '../client'
 require_relative 'resource'
 require_relative 'swytch'
 require_relative 'iface_activity'
+require_relative '../models/model_swytch'
 
 module Saklient
   module Cloud
@@ -174,6 +175,14 @@ module Saklient
         def disconnect_from_swytch
           @_client.request('DELETE', _api_path + '/' + Saklient::Util::url_encode(_id) + '/to/switch')
           return reload
+        end
+
+        # 接続先のスイッチを取得します.
+        #
+        # @return [Swytch]
+        def find_swytch
+          model = Saklient::Util::create_class_instance('saklient.cloud.models.Model_Swytch', [@_client])
+          return model.get_by_id(self.swytch_id)
         end
 
         protected
