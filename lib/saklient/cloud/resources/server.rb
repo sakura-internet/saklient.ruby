@@ -167,6 +167,7 @@ module Saklient
         # ディスクのコピー中は待機し, 完了してからreturnします.
         #
         #                      共有セグメントに接続されている場合はAPIによって自動的に割り当てられるため, 省略またはnullを指定してください.
+        #                      文字列 "skip" を指定すると, ディスク修正処理をスキップします.
         #                   trueを指定した場合は, 複製元の現在のディスク#1から直接クローンします.
         #                   省略またはnullを指定した場合は, 複製元のディスク#1が作成された時のコピー元リソースから再度クローンを試みます.
         #                   既に削除されている場合は, 複製元の現在のディスク#1からの直接クローンにフォールバックします.
@@ -188,6 +189,8 @@ module Saklient
           server = Saklient::Cloud::Resources::Server.new(@_client, nil)
           names = []
           hostNames = []
+          skipConfig = userIpAddress == 'skip'
+          userIpAddress = nil if skipConfig
           if (name).nil? || (hostName).nil?
             model = Saklient::Util::create_class_instance('saklient.cloud.models.Model_Server', [@_client])
             servers = model.limit(0).find
@@ -209,30 +212,37 @@ module Saklient
           if 0 < self.ifaces.length
             iface = self.ifaces[0]
             iface.reload
-            if (iface.ip_address).nil?
-              raise Saklient::Errors::SaklientException.new('invalid_data', 'Setting an IP address to the disconnected interface is not allowed') if (userIpAddress).nil? && (iface.swytch_id).nil?
-            else
-              raise Saklient::Errors::SaklientException.new('invalid_data', 'Setting an IP address to the interface connected to a shared segment is not allowed') if !(userIpAddress).nil?
+            if !(userIpAddress).nil?
+              if (iface.ip_address).nil?
+                raise Saklient::Errors::SaklientException.new('invalid_data', 'Setting an IP address to the disconnected interface is not allowed') if (iface.swytch_id).nil?
+              else
+                raise Saklient::Errors::SaklientException.new('invalid_data', 'Setting an IP address to the interface connected to a shared segment is not allowed')
+              end
             end
           end
           srcDisks = find_disks
           if 0 < srcDisks.length
-            direct = Saklient::Util::are_same(diskSource, true)
-            if (diskSource).nil? || direct
-              diskSource = srcDisks[0].source
-              if !direct
-                if diskSource.is_a?(Saklient::Cloud::Resources::Archive)
-                  begin
-                    diskSource.reload
-                  rescue Saklient::Errors::HttpNotFoundException
-                    diskSource = srcDisks[0]
-                  end
+            if Saklient::Util::are_same(diskSource, true)
+              diskSource = srcDisks[0]
+            else
+              if (diskSource).nil?
+                diskSource = srcDisks[0].source
+                if (diskSource).nil?
+                  diskSource = srcDisks[0]
                 else
-                  if diskSource.is_a?(Saklient::Cloud::Resources::Disk)
+                  if diskSource.is_a?(Saklient::Cloud::Resources::Archive)
                     begin
                       diskSource.reload
                     rescue Saklient::Errors::HttpNotFoundException
                       diskSource = srcDisks[0]
+                    end
+                  else
+                    if diskSource.is_a?(Saklient::Cloud::Resources::Disk)
+                      begin
+                        diskSource.reload
+                      rescue Saklient::Errors::HttpNotFoundException
+                        diskSource = srcDisks[0]
+                      end
                     end
                   end
                 end
@@ -281,21 +291,23 @@ module Saklient
           end
           if !(disk).nil?
             disk.sleep_while_copying
-            diskconf = disk.create_config
-            diskconf.host_name = hostName
-            diskconf.ssh_key = sshKey
-            diskconf.ip_address = userIpAddress
-            if !(userSwytch).nil?
-              if 0 < userSwytch.ipv4_nets.length
-                net = userSwytch.ipv4_nets[0]
-                diskconf.default_route = net.default_route
-                diskconf.network_mask_len = net.mask_len
-              else
-                diskconf.default_route = userSwytch.user_default_route
-                diskconf.network_mask_len = userSwytch.user_mask_len
+            if !skipConfig
+              diskconf = disk.create_config
+              diskconf.host_name = hostName
+              diskconf.ssh_key = sshKey
+              diskconf.ip_address = userIpAddress
+              if !(userSwytch).nil?
+                if 0 < userSwytch.ipv4_nets.length
+                  net = userSwytch.ipv4_nets[0]
+                  diskconf.default_route = net.default_route
+                  diskconf.network_mask_len = net.mask_len
+                else
+                  diskconf.default_route = userSwytch.user_default_route
+                  diskconf.network_mask_len = userSwytch.user_mask_len
+                end
               end
+              diskconf.write
             end
-            diskconf.write
           end
           server.reload
           return server

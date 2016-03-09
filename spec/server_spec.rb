@@ -3,13 +3,15 @@ require 'saklient/cloud/api'
 require 'date'
 require 'SecureRandom'
 
+SKIPS_SERVER_BOOT = true
 TESTS_EASY_DUPLICATE = true
 TESTS_DISK_EXPANSION = false
 
 BREAKS_AFTER_SERVER_UP = false
 BREAKS_AFTER_EASY_DUPLICATE = true
 
-USE_READYMADE_SERVER_ID = 112800244655 # For TESTS_EASY_DUPLICATE
+USE_READYMADE_SERVER_ID = nil # 112800244655 # For TESTS_EASY_DUPLICATE
+CREATES_EMPTY_DISK = true
 
 
 
@@ -77,7 +79,7 @@ describe 'Server' do
   
   
   it 'should be CRUDed' do
-    name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8]
+    name = '!ruby_rspec-' + DateTime.now.strftime('%Y%m%d_%H%M%S') + '-' + SecureRandom.uuid[0, 8] + "-001"
     description = 'This instance was created by saklient.ruby rspec'
     tag = 'saklient-test'
     cpu = 1
@@ -134,7 +136,11 @@ describe 'Server' do
       disk.description = 'This instance was created by saklient.ruby rspec'
       disk.tags = ['saklient-test']
       disk.plan = @api.product.disk.ssd
-      disk.source = archive
+      if CREATES_EMPTY_DISK
+        disk.size_gib = archive.size_gib
+      else
+        disk.source = archive
+      end
       disk.save
       # p disk.dump
       
@@ -182,8 +188,10 @@ describe 'Server' do
       # p disk.dump
       disk.source = nil
       disk.reload
-      expect(disk.source).to be_an_instance_of Saklient::Cloud::Resources::Archive
-      expect(disk.source.id).to eq archive.id
+      unless CREATES_EMPTY_DISK
+        expect(disk.source).to be_an_instance_of Saklient::Cloud::Resources::Archive
+        expect(disk.source.id).to eq archive.id
+      end
       expect(disk.size_gib).to eq archive.size_gib
       
       # connect the disk to the server
@@ -196,91 +204,106 @@ describe 'Server' do
       expect(ip_address).not_to be_empty
       
       # config the disk
-      puts 'writing configuration to the disk...'
-      diskconf = disk.create_config
-      diskconf.host_name = 'saklient-test'
-      diskconf.password = password
-      diskconf.ssh_key = ssh_public_key
-      diskconf.ssh_keys.unshift(additional_ssh_public_key) if !additional_ssh_public_key.empty?
-      diskconf.scripts.push(script)
-      diskconf.write
+      unless CREATES_EMPTY_DISK
+        puts 'writing configuration to the disk...'
+        diskconf = disk.create_config
+        diskconf.host_name = 'saklient-test'
+        diskconf.password = password
+        diskconf.ssh_key = ssh_public_key
+        diskconf.ssh_keys.unshift(additional_ssh_public_key) if !additional_ssh_public_key.empty?
+        diskconf.scripts.push(script)
+        diskconf.write
+      end
       
-      # boot
-      puts 'booting the server...'
-      server.boot
-      sleep 3
-      server.reload
-      expect(server.instance.status).to eq Saklient::Cloud::Enums::EServerInstanceStatus::up
-      
-      # boot conflict
-      puts 'checking the server power conflicts...'
-      ok = false
-      begin
+      unless SKIPS_SERVER_BOOT
+        
+        # boot
+        puts 'booting the server...'
         server.boot
-      rescue Saklient::Errors::HttpConflictException
-        ok = true
-      end
-      fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
-      
-      # ssh
-      cmd = '| ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i' + ssh_private_key_file +
-            ' root@' + ip_address + ' hostname 2>/dev/null'
-      ssh_success = false
-      puts 'trying to SSH to the server...'
-      for i in 0..9 do
-        sleep 5
-        sh = open cmd
-        host_name_got = ''
-        while !sh.eof
-          host_name_got += sh.gets
+        sleep 3
+        server.reload
+        expect(server.instance.status).to eq Saklient::Cloud::Enums::EServerInstanceStatus::up
+        
+        # boot conflict
+        puts 'checking the server power conflicts...'
+        ok = false
+        begin
+          server.boot
+        rescue Saklient::Errors::HttpConflictException
+          ok = true
         end
-        sh.close
-        host_name_got.strip!
-        next unless host_name == host_name_got
-        ssh_success = true
-        break
-      end
-      fail '作成したサーバへ正常にSSHできません' unless ssh_success
-      
-      fail 'SSHに成功後、処理を中断しました' if BREAKS_AFTER_SERVER_UP
-      
-      # stop
-      sleep 1
-      puts 'stopping the server...'
-      server.stop
-      fail 'サーバが正常に停止しません' unless server.sleep_until_down
-      
-      # activity
-      for sample in server.activity.fetch.samples do
-        expect(sample.at).to be_an_instance_of DateTime
+        fail 'サーバ起動中の起動試行時は HttpConflictException がスローされなければなりません' unless ok
+        
+        # ssh
+        unless CREATES_EMPTY_DISK
+          cmd = '| ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i' + ssh_private_key_file +
+                ' root@' + ip_address + ' hostname 2>/dev/null'
+          ssh_success = false
+          puts 'trying to SSH to the server...'
+          for i in 0..9 do
+            sleep 5
+            sh = open cmd
+            host_name_got = ''
+            while !sh.eof
+              host_name_got += sh.gets
+            end
+            sh.close
+            host_name_got.strip!
+            next unless host_name == host_name_got
+            ssh_success = true
+            break
+          end
+          fail '作成したサーバへ正常にSSHできません' unless ssh_success
+        end
+          
+        fail 'サーバを起動後、処理を中断しました' if BREAKS_AFTER_SERVER_UP
+        
+        # stop
+        sleep 1
+        puts 'stopping the server...'
+        server.stop
+        fail 'サーバが正常に停止しません' unless server.sleep_until_down
+        
+        # activity
+        for sample in server.activity.fetch.samples do
+          expect(sample.at).to be_an_instance_of DateTime
+        end
+        
       end
       
     end
       
     if TESTS_EASY_DUPLICATE
       puts 'running easy duplicate...'
-      server2 = server.easy_duplicate()
+      server1 = server
+      server2 = server1.easy_duplicate(CREATES_EMPTY_DISK ? 'skip' : nil)
       
       # check the server properties
       expect(server2.id.to_i).to be > 0
-      expect(server2.name.gsub(/-\d+/, '')).to eq name.gsub(/-\d+/, '')
-      expect(server2.host_name.gsub(/-\d+/, '')).to eq host_name.gsub(/-\d+/, '')
-      expect(server2.description).to eq description
+      expect(server2.name.gsub(/-\d+/, '')).to eq server1.name.gsub(/-\d+/, '')
+      expect(server2.host_name.gsub(/-\d+/, '')).to eq server1.host_name.gsub(/-\d+/, '')
+      expect(server2.description).to eq server1.description
       expect(server2.tags).to be_an_instance_of Array
-      expect(server2.tags.length).to eq 1
-      expect(server2.tags[0]).to eq tag
-      expect(server2.plan.cpu).to eq cpu
-      expect(server2.plan.memory_gib).to eq mem
+      expect(server2.tags.length).to eq server1.tags.length
+      expect(server2.tags[0]).to eq server1.tags[0]
+      expect(server2.plan.cpu).to eq server1.plan.cpu
+      expect(server2.plan.memory_gib).to eq server1.plan.memory_gib
       
-      expect(server2.ifaces.length).to eq 1
+      expect(server2.ifaces.length).to eq server1.ifaces.length
       expect(server2.ifaces[0]).to be_an_instance_of Saklient::Cloud::Resources::Iface
       expect(server2.ifaces[0].id.to_i).to be > 0
-      expect(server2.ifaces[0].ip_address).not_to eq server.ifaces[0].ip_address 
+      expect(server2.ifaces[0].ip_address).not_to eq server1.ifaces[0].ip_address 
       
+      disks1 = server1.find_disks()
       disks2 = server2.find_disks()
-      expect(disks2.length).to eq 1
-      expect(disks2[0].size_gib).to eq disk.size_gib
-      expect(disks2[0].source.id).to eq disk.source.id
+      expect(disks2.length).to eq disks1.length
+      expect(disks2[0].size_gib).to eq disks1[0].size_gib
+      expect(disks2[0].source).not_to be_nil
+      if CREATES_EMPTY_DISK
+        expect(disks2[0].source.id).to eq disks1[0].id
+      else
+        expect(disks2[0].source.id).to eq disks1[0].source.id
+      end
       
       next if BREAKS_AFTER_EASY_DUPLICATE
       
@@ -288,14 +311,18 @@ describe 'Server' do
       server2.destroy()
     end
     
-    # disconnect the disk from the server
-    puts 'disconnecting the disk from the server...'
-    disk.disconnect
+    if USE_READYMADE_SERVER_ID.nil? then
     
-    # delete the server
-    puts 'deleting the server...'
-    server.destroy
-    
+      # disconnect the disk from the server
+      puts 'disconnecting the disk from the server...'
+      disk.disconnect
+      
+      # delete the server
+      puts 'deleting the server...'
+      server.destroy
+      
+    end
+      
     if TESTS_DISK_EXPANSION
       
       # duplicate the disk
@@ -323,9 +350,11 @@ describe 'Server' do
       
     end
     
-    # delete the disks
-    puts 'deleting the disk...'
-    disk.destroy
+    if USE_READYMADE_SERVER_ID.nil? then
+      # delete the disks
+      puts 'deleting the disk...'
+      disk.destroy
+    end
     
   end
   
