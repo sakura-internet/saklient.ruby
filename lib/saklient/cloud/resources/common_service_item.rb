@@ -51,6 +51,10 @@ module Saklient
         # @return [any]
         attr_accessor :m_raw_settings
 
+        # @private
+        # @return [String]
+        attr_accessor :m_raw_settings_hash
+
         # ステータスの生データ
         #
         # @return [any]
@@ -114,6 +118,13 @@ module Saklient
         end
 
         protected
+
+        # @private
+        # @param [any] query
+        # @return [void]
+        def _on_before_save(query)
+          Saklient::Util::set_by_path(query, 'OriginalSettingsHash', get_raw_settings_hash)
+        end
 
         # @return [bool]
         attr_accessor :n_id
@@ -365,6 +376,29 @@ module Saklient
         protected
 
         # @return [bool]
+        attr_accessor :n_raw_settings_hash
+
+        # (This method is generated in Translator_default#buildImpl)
+        #
+        # @private
+        # @return [String]
+        def get_raw_settings_hash
+          return @m_raw_settings_hash
+        end
+
+        public
+
+        # @private
+        # @return [String]
+        attr_reader :raw_settings_hash
+
+        def raw_settings_hash
+          get_raw_settings_hash
+        end
+
+        protected
+
+        # @return [bool]
         attr_accessor :n_raw_status
 
         # (This method is generated in Translator_default#buildImpl)
@@ -453,6 +487,13 @@ module Saklient
             @is_incomplete = true
           end
           @n_raw_settings = false
+          if Saklient::Util::exists_path(r, 'SettingsHash')
+            @m_raw_settings_hash = (Saklient::Util::get_by_path(r, 'SettingsHash')).nil? ? nil : Saklient::Util::get_by_path(r, 'SettingsHash').to_s
+          else
+            @m_raw_settings_hash = nil
+            @is_incomplete = true
+          end
+          @n_raw_settings_hash = false
           if Saklient::Util::exists_path(r, 'Status')
             @m_raw_status = Saklient::Util::get_by_path(r, 'Status')
           else
@@ -487,6 +528,7 @@ module Saklient
           Saklient::Util::set_by_path(ret, 'Icon', withClean ? ((@m_icon).nil? ? nil : @m_icon.api_serialize(withClean)) : ((@m_icon).nil? ? { ID: '0' } : @m_icon.api_serialize_id)) if withClean || @n_icon
           Saklient::Util::set_by_path(ret, 'CommonServiceProvider', withClean ? ((@m_provider).nil? ? nil : @m_provider.api_serialize(withClean)) : ((@m_provider).nil? ? { ID: '0' } : @m_provider.api_serialize_id)) if withClean || @n_provider
           Saklient::Util::set_by_path(ret, 'Settings', @m_raw_settings) if withClean || @n_raw_settings
+          Saklient::Util::set_by_path(ret, 'SettingsHash', @m_raw_settings_hash) if withClean || @n_raw_settings_hash
           Saklient::Util::set_by_path(ret, 'Status', @m_raw_status) if withClean || @n_raw_status
           raise Saklient::Errors::SaklientException.new('required_field', 'Required fields must be set before the CommonServiceItem creation: ' + missing.join(', ')) if missing.length > 0
           return ret

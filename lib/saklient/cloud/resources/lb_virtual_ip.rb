@@ -123,6 +123,42 @@ module Saklient
         protected
 
         # @private
+        # @return [String]
+        attr_accessor :_sorry_server
+
+        public
+
+        # @private
+        # @return [String]
+        def get_sorry_server
+          return @_sorry_server
+        end
+
+        # @private
+        # @param [String] v
+        # @return [String]
+        def set_sorry_server(v)
+          Saklient::Util::validate_type(v, 'String')
+          @_sorry_server = v
+          return @_sorry_server
+        end
+
+        # ソーリーサーバ
+        #
+        # @return [String]
+        attr_accessor :sorry_server
+
+        def sorry_server
+          get_sorry_server
+        end
+
+        def sorry_server=(v)
+          set_sorry_server(v)
+        end
+
+        protected
+
+        # @private
         # @return [Array<LbServer>]
         attr_accessor :_servers
 
@@ -167,6 +203,14 @@ module Saklient
           @_delay_loop = nil
           @_delay_loop = (delayLoop).to_s().to_i(10) if !(delayLoop).nil?
           @_delay_loop = nil if @_delay_loop == 0
+          sorryServer = Saklient::Util::get_by_path_any([obj], [
+            'SorryServer',
+            'sorryServer',
+            'sorry_server',
+            'sorryserver'
+          ])
+          @_sorry_server = nil
+          @_sorry_server = sorryServer if !(sorryServer).nil?
           @_servers = []
           serversDyn = Saklient::Util::get_by_path_any([obj], ['Servers', 'servers'])
           if !(serversDyn).nil?
@@ -197,6 +241,7 @@ module Saklient
             VirtualIPAddress: @_virtual_ip_address,
             Port: @_port,
             DelayLoop: @_delay_loop,
+            SorryServer: @_sorry_server,
             Servers: servers
           }
         end

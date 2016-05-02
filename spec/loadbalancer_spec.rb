@@ -151,11 +151,13 @@ describe 'LoadBalancer' do
     vip2Ip     = IPAddr.new(IPAddr.new(net.default_route).to_i + 10, Socket::AF_INET).to_s
     vip2SrvIp1 = IPAddr.new(IPAddr.new(net.default_route).to_i + 11, Socket::AF_INET).to_s
     vip2SrvIp2 = IPAddr.new(IPAddr.new(net.default_route).to_i + 12, Socket::AF_INET).to_s
+    vip2SrvIp3 = IPAddr.new(IPAddr.new(net.default_route).to_i + 13, Socket::AF_INET).to_s
     
     vip2 = lb.add_virtual_ip
     vip2.virtual_ip_address = vip2Ip
     vip2.port = 80
     vip2.delay_loop = 15
+    vip2.sorry_server = vip2SrvIp3
     vip2Srv1 = vip2.add_server
     vip2Srv1.enabled = true
     vip2Srv1.ip_address = vip2SrvIp1
@@ -173,6 +175,7 @@ describe 'LoadBalancer' do
     
     expect(lb.virtual_ips.length).to eq 2
     expect(lb.virtual_ips[0].virtual_ip_address).to eq vip1Ip
+    expect(lb.virtual_ips[0].sorry_server).to be_nil
     expect(lb.virtual_ips[0].servers.length).to eq 3
     expect(lb.virtual_ips[0].servers[0].enabled).to be_nil
     expect(lb.virtual_ips[0].servers[0].ip_address).to eq vip1SrvIp1
@@ -189,6 +192,7 @@ describe 'LoadBalancer' do
     expect(lb.virtual_ips[0].servers[2].port).to eq 80
     expect(lb.virtual_ips[0].servers[2].protocol).to eq 'tcp'
     expect(lb.virtual_ips[1].virtual_ip_address).to eq vip2Ip
+    expect(lb.virtual_ips[1].sorry_server).to eq vip2SrvIp3
     expect(lb.virtual_ips[1].servers.length).to eq 2
     expect(lb.virtual_ips[1].servers[0].enabled).to be_truthy
     expect(lb.virtual_ips[1].servers[0].ip_address).to eq vip2SrvIp1
@@ -214,10 +218,12 @@ describe 'LoadBalancer' do
     lb.reload
     
     expect(lb.virtual_ips.length).to eq 2
+    expect(lb.virtual_ips[0].sorry_server).to be_nil
     expect(lb.virtual_ips[0].servers.length).to eq 4
     expect(lb.virtual_ips[0].servers[3].ip_address).to eq vip1SrvIp4
     expect(lb.virtual_ips[0].servers[3].port).to eq 80
     expect(lb.virtual_ips[0].servers[3].protocol).to eq 'ping'
+    expect(lb.virtual_ips[1].sorry_server).to eq vip2SrvIp3
     expect(lb.virtual_ips[1].servers.length).to eq 2
     
     
