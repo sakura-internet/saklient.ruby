@@ -2,6 +2,7 @@
 
 require_relative 'errors/saklient_exception'
 require 'uri'
+require 'date'
 
 module Saklient
 
