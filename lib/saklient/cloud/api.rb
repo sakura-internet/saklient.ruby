@@ -472,7 +472,7 @@ module Saklient
         Saklient::Util::validate_type(name, 'String')
         ret = Saklient::Cloud::API.new(@_client.clone_instance)
         suffix = ''
-        suffix = '-test' if name == 'is1x' || name == 'is1y'
+        suffix = '-test' if name == 'is1x' || name == 'is1y' || name == 'is1z' || name == 'tk1s'
         ret._client.set_api_root('https://secure.sakura.ad.jp/cloud' + suffix + '/')
         ret._client.set_api_root_suffix('zone/' + name)
         return ret
